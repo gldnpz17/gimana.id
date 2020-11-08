@@ -1,0 +1,43 @@
+﻿using AutoMapper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TanyakanIdApi.DTOs.Request;
+using TanyakanIdApi.DTOs.Response;
+using TanyakanIdApi.Entities.Entities;
+using TanyakanIdApi.Entities.ValueObjects;
+
+namespace TanyakanIdApi.Common.Mapper
+{
+    public class MapperConfig
+    {
+        public MapperConfiguration GetConfiguration()
+        {
+            return new MapperConfiguration(
+                (config) =>
+                {
+                    config.CreateMap<ArticleHistory, ArticleHistoryDto>();
+                    config.CreateMap<ArticleIssue, ArticleIssueDto>();
+                    config.CreateMap<ArticlePart, ArticlePartDto>();
+                    config.CreateMap<ArticleRating, ArticleRatingDto>();
+                    config.CreateMap<ArticleStep, ArticleStepDto>();
+                    config.CreateMap<AuthToken, AuthTokenDto>();
+                    config.CreateMap<Article, DetailedArticleDto>();
+                    config.CreateMap<User, DetailedUserDto>();
+                    config.CreateMap<Image, ImageDto>();
+                    config.CreateMap<Article, SimpleArticleDto>();
+                    config.CreateMap<User, SimpleUserDto>();
+                    config.CreateMap<UserEmail, UserEmailDto>();
+                    config.CreateMap<User, UserIdDto>();
+                    config.CreateMap<UserPrivilege, UserPrivilegeDto>();
+
+                    config.CreateMap<CreateImageDto, Image>();
+
+                    config.CreateMap<CreateArticlePartDto, ArticlePart>();
+                    config.CreateMap<CreateArticleStepDto, ArticleIssue>();
+                });
+        }
+    }
+}
