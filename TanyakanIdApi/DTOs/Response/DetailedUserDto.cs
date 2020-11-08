@@ -13,7 +13,7 @@ namespace TanyakanIdApi.DTOs.Response
         public List<UserPrivilegeDto> Privileges { get; set; }
         public ImageDto ProfilePicture { get; set; }
         public UserEmailDto Email { get; set; }
-        public bool IsBanned { get; set; } 
-        public virtual DateTime BanLiftedDate { get; set; }
+        public DateTime BanLiftedDate { get; set; }
+        public List<SimpleArticleDto> ContributedArticles { get; set; }
     }
 }

@@ -52,6 +52,11 @@ namespace TanyakanIdApi.Controllers
             _config = config;
         }
 
+        /// <summary>
+        /// Read user by id.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.AuthenticatedUsersOnlyPolicy)]
         [HttpGet("{userId}")]
         public async Task<ActionResult<DetailedUserDto>> ReadUserById([FromRoute]string userId) 
@@ -63,6 +68,11 @@ namespace TanyakanIdApi.Controllers
             return Ok(output);
         }
 
+        /// <summary>
+        /// Send email verification message.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.AuthenticatedUsersOnlyPolicy)]
         [HttpPost("{userId}/send-email-verification-message")]
         public async Task<ActionResult> SendEmailVerificationMessage([FromRoute]string userId)
@@ -92,6 +102,12 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Verify email.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpPost("{userId}/verify-email")]
         public async Task<ActionResult> VerifyEmail([FromRoute]string userId, [FromQuery]string token)
         {
@@ -114,6 +130,12 @@ namespace TanyakanIdApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Ban user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.ModeratorOnlyPolicy)]
         [HttpPost("{userId}/ban")]
@@ -128,6 +150,12 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Grant privilege.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.AdminOnlyPolicy)]
         [HttpPost("{userId}/privileges")]
         public async Task<ActionResult> GrantPrivilege([FromRoute]string userId, [FromBody]GrantPrivilegeDto dto)
@@ -141,6 +169,12 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Revoke privilege.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.AdminOnlyPolicy)]
         [HttpDelete("{userId}/privileges")]
         public async Task<ActionResult> RevokePrivilege([FromRoute]string userId, [FromBody]RevokePrivilegeDto dto)
@@ -156,6 +190,11 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Delete user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpDelete("{userId}")]
         public async Task<ActionResult> DeleteUser([FromRoute]string userId) 
         {
@@ -168,6 +207,10 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Get user id.
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.AuthenticatedUsersOnlyPolicy)]
         [HttpGet("get-user-id")]
         public async Task<ActionResult<UserIdDto>> GetUserId()

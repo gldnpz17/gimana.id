@@ -27,6 +27,20 @@ namespace TanyakanIdApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            var config =
+                new ApiConfig()
+                {
+                    AuthTokenLength = 32,
+                    PasswordResetTokenLength = 32,
+                    EmailVerificationTokenLength = 32,
+                    EmailVerificationTokenLifetime = new TimeSpan(30, 0, 0, 0),
+                    PasswordResetTokenLifetime = new TimeSpan(2, 0, 0),
+                    ApiBaseAddress = Environment.GetEnvironmentVariable("API_BASE_ADDRESS")
+                };
+
+            services.AddSingleton(typeof(ApiConfig), config);
+    
+
             services.AddSwaggerDocument(
                 (config) =>
                 {
@@ -57,26 +71,32 @@ namespace TanyakanIdApi
             #region init db
             var dbContext = new AppDbContext();
 
-            dbContext.Users.Add(
+            if (dbContext.Users.Count() == 0)
+            {
+                var salt = new SecurePasswordSaltGenerator().GenerateSecureRandomString();
+                var hasher = new PasswordHasher();
+
+                dbContext.Users.Add(
                 new User()
                 {
                     Id = Guid.NewGuid(),
-                    Username = "admin",
+                    Username = Environment.GetEnvironmentVariable("INIT_ADMIN_USERNAME"),
                     Email = new UserEmail()
                     {
-                        EmailAddress = "goldenpanzer17@gmail.com",
+                        EmailAddress = Environment.GetEnvironmentVariable("INIT_ADMIN_EMAIL"),
                         IsVerified = true
                     },
                     BanLiftedDate = DateTime.MinValue,
                     Privileges = new List<UserPrivilege>() { new UserPrivilege() { PrivilegeName = "Admin" } },
                     PasswordCredential = new PasswordCredential()
                     {
-                        HashedPassword = "7aUjVyYk+LCwYsqFc+QJt2psYGPvU0+upOMc5gN1INWpU2W6Cy1TYBC8GqLz2Ivvewbil4in2ZYM47sial3E2aSqddQB2oKiPYSg9SKLypk3OclNUvOCvEWyeRKxwPTwwMQoaJbyVVh0a5wxmUSGWK/UJQORGCYiFNBq7Sh2mYt5/f3rIYfTYx23jhAYwPNhDKSHx6LsPQQY31I6XXvlIIv3KIR7Fae/5v9D4SLZTfMkeYpFAW+cTCH4iagHETRfaOS938x1tkXmO0LAEopVOy+WhqWsHwaZg96J9U9i71aZa4yk5Lja51dmEhlfYEJtXxpc0bKDWU2PmQ4rekHxWw==",
-                        PasswordSalt = "dcU9mccExbfd189crlqTTvWFhG76Z5vfItdnF/tGUy4H1FKGM+y4OgGrFK36BT4OkSspri4poshIj9v3fiDFvw=="
+                        HashedPassword = hasher.HashPassword(Environment.GetEnvironmentVariable("INIT_ADMIN_PASSWORD"), salt),
+                        PasswordSalt = salt
                     }
                 });
 
-            dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
             #endregion
             services.AddSingleton(typeof(AppDbContext), dbContext);
 
@@ -108,17 +128,6 @@ namespace TanyakanIdApi
             services.AddSingleton(
                 typeof(IAlphanumericTokenGenerator),
                 new AlphanumericTokenGenerator());
-
-            services.AddSingleton(
-                new ApiConfig()
-                {
-                    AuthTokenLength = 32,
-                    PasswordResetTokenLength = 32,
-                    EmailVerificationTokenLength = 32,
-                    EmailVerificationTokenLifetime = new TimeSpan(30, 0, 0, 0),
-                    PasswordResetTokenLifetime = new TimeSpan(2, 0, 0),
-                    ApiBaseAddress = Environment.GetEnvironmentVariable("API_BASE_ADDRESS")
-                });
 
             services.AddAuthorization(
                 (config) =>

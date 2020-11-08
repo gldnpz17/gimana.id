@@ -14,9 +14,13 @@
       "launchUrl": "/swagger",
       "environmentVariables": {
         "EMAIL_CREDENTIAL_ADDRESS": "nokanabatsuyo@gmail.com",
+        "INIT_ADMIN_PASSWORD": "password",
         "EMAIL_CREDENTIAL_PASSWORD": "2VXrQzFXf7BvpyF",
         "API_BASE_ADDRESS": "https://localhost:44304/",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "INIT_ADMIN_USERNAME": "admin",
+        "INIT_ADMIN_EMAIL": "goldenpanzer17@gmail.com",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "TANYAKAN_ID_CONNECTION_STRING": "User ID = dzlqwsccsphrvg; Password = 72ce073ea8a7961dfcf6b61e5bc09ff45f40b45d77b5a3890227a3602092510e; Server = ec2-34-197-188-147.compute-1.amazonaws.com; Port = 5432; Database = dfp0cjka01agjp; SslMode = Require; Trust Server Certificate = true;"
       }
     },
     "TanyakanIdApi": {

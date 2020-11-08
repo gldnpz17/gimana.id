@@ -48,7 +48,12 @@ namespace TanyakanIdApi.Controllers
             _config = config;
             _mapper = mapper;
         }
-
+        
+        /// <summary>
+        /// Log in.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         public async Task<ActionResult<AuthTokenDto>> Login([FromBody]LoginDto dto)
         {
@@ -80,6 +85,11 @@ namespace TanyakanIdApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Log out.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost("logout")]
         public async Task<ActionResult> Logout([FromBody]LogoutDto dto)
         {
@@ -92,6 +102,11 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Sign up.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost("sign-up")]
         public async Task<ActionResult> SignUp([FromBody]SignUpDto dto)
         {
@@ -122,6 +137,11 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Send password reset message.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost("send-password-reset-message")]
         public async Task<ActionResult> SendPasswordResetMessage([FromBody]SendPasswordResetMessageDto dto)
         {
@@ -151,6 +171,11 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Reset password.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost("reset-password")]
         public async Task<ActionResult> ResetPassword([FromBody]ResetPasswordDto dto)
         {

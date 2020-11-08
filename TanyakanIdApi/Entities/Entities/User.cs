@@ -17,5 +17,6 @@ namespace TanyakanIdApi.Entities.Entities
         public virtual DateTime BanLiftedDate { get; set; }
         public virtual PasswordCredential PasswordCredential { get; set; }
         public virtual IList<AuthToken> AuthTokens { get; set; } = new List<AuthToken>();
+        public virtual IList<Article> Articles { get; set; } = new List<Article>();
     }
 }

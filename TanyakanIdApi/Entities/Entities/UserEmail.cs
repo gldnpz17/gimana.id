@@ -8,6 +8,8 @@ namespace TanyakanIdApi.Entities.Entities
 {
     public class UserEmail
     {
+        public virtual Guid UserId { get; set; }
+        public virtual User User { get; set; }
         public virtual string EmailAddress { get; set; }
         public virtual bool IsVerified { get; set; }
         public virtual EmailVerificationToken VerificationToken { get; set; }

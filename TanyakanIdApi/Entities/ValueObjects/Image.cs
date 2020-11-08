@@ -10,12 +10,12 @@ namespace TanyakanIdApi.Entities.ValueObjects
     public class Image : ValueObject
     {
         public string FileFormat { get; set; }
-        public byte[] Data { get; set; }
+        public string Base64EncodedData { get; set; }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return FileFormat;
-            yield return Data;
+            yield return Base64EncodedData;
         }
     }
 }

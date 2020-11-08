@@ -24,8 +24,14 @@ namespace TanyakanIdApi.Common.Mapper
                     config.CreateMap<ArticleRating, ArticleRatingDto>();
                     config.CreateMap<ArticleStep, ArticleStepDto>();
                     config.CreateMap<AuthToken, AuthTokenDto>();
-                    config.CreateMap<Article, DetailedArticleDto>();
-                    config.CreateMap<User, DetailedUserDto>();
+                    config.CreateMap<Article, DetailedArticleDto>()
+                    .ForMember(
+                        dto => dto.Contributors, 
+                        exp => exp.MapFrom(ori => ori.Users));
+                    config.CreateMap<User, DetailedUserDto>()
+                    .ForMember(
+                        dto => dto.ContributedArticles,
+                        exp => exp.MapFrom(ori => ori.Articles));
                     config.CreateMap<Image, ImageDto>();
                     config.CreateMap<Article, SimpleArticleDto>();
                     config.CreateMap<User, SimpleUserDto>();
@@ -37,6 +43,8 @@ namespace TanyakanIdApi.Common.Mapper
 
                     config.CreateMap<CreateArticlePartDto, ArticlePart>();
                     config.CreateMap<CreateArticleStepDto, ArticleIssue>();
+                    config.CreateMap<CreateArticlePartDto, ArticlePart>();
+                    config.CreateMap<CreateArticleStepDto, ArticleStep>();
                 });
         }
     }

@@ -17,29 +17,13 @@ namespace TanyakanIdApi.Infrastructure.DataAccess
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
-            optionsBuilder.UseInMemoryDatabase("TestDB");
+            //optionsBuilder.UseInMemoryDatabase("TestDB");
+            optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("TANYAKAN_ID_CONNECTION_STRING"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var newUser = new User()
-            {
-                Id = Guid.NewGuid(),
-                Username = "admin",
-                Email = new UserEmail()
-                {
-                    EmailAddress = "goldenpanzer17@gmail.com",
-                    IsVerified = true
-                },
-                BanLiftedDate = DateTime.MinValue,
-                Privileges = new List<UserPrivilege>() { new UserPrivilege() { PrivilegeName = "Admin"} },
-                PasswordCredential = new PasswordCredential()
-                {
-                    HashedPassword = "7aUjVyYk+LCwYsqFc+QJt2psYGPvU0+upOMc5gN1INWpU2W6Cy1TYBC8GqLz2Ivvewbil4in2ZYM47sial3E2aSqddQB2oKiPYSg9SKLypk3OclNUvOCvEWyeRKxwPTwwMQoaJbyVVh0a5wxmUSGWK/UJQORGCYiFNBq7Sh2mYt5/f3rIYfTYx23jhAYwPNhDKSHx6LsPQQY31I6XXvlIIv3KIR7Fae/5v9D4SLZTfMkeYpFAW+cTCH4iagHETRfaOS938x1tkXmO0LAEopVOy+WhqWsHwaZg96J9U9i71aZa4yk5Lja51dmEhlfYEJtXxpc0bKDWU2PmQ4rekHxWw==",
-                    PasswordSalt = "dcU9mccExbfd189crlqTTvWFhG76Z5vfItdnF/tGUy4H1FKGM+y4OgGrFK36BT4OkSspri4poshIj9v3fiDFvw=="
-                }
-            };
-
+            modelBuilder.HasPostgresExtension("uuid-ossp");
             modelBuilder.Entity<UserEmail>(
                 (b) =>
                 {
@@ -51,7 +35,23 @@ namespace TanyakanIdApi.Infrastructure.DataAccess
                     b
                     .HasOne(e => e.PasswordCredential)
                     .WithOne(e => e.User)
-                    .HasForeignKey<PasswordCredential>(e => e.UserId);
+                    .HasForeignKey<PasswordCredential>(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                    b
+                    .HasOne(e => e.Email)
+                    .WithOne()
+                    .HasForeignKey<UserEmail>(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                    b
+                    .HasMany(e => e.Privileges)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                    b
+                    .Property(e => e.Id)
+                    .HasDefaultValueSql("uuid_generate_v4()");
 
                     b.OwnsOne(e => e.ProfilePicture);
                 });
@@ -59,23 +59,33 @@ namespace TanyakanIdApi.Infrastructure.DataAccess
                 (b) =>
                 {
                     b.OwnsOne(e => e.HeroImage);
+
+                    b
+                    .Property(e => e.Id)
+                    .HasDefaultValueSql("uuid_generate_v4()");
                 });
             modelBuilder.Entity<ArticleHistory>(
                 (b) =>
                 {
-                    b.HasKey(e => e.Version);
+                    b.Property<Guid>("Id").HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.HasKey("Id");
 
                     b.OwnsOne(e => e.HeroImage);
                 });
             modelBuilder.Entity<ArticlePart>(
                 (b) =>
                 {
-                    b.HasKey(e => e.PartNumber);
+                    b.Property<Guid>("Id").HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.HasKey("Id");
                 });
             modelBuilder.Entity<ArticleStep>(
                 (b) =>
                 {
-                    b.HasKey(e => e.StepNumber);
+                    b.Property<Guid>("Id").HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.HasKey("Id");
                 });
             modelBuilder.Entity<AuthToken>(
                 (b) =>
@@ -101,6 +111,20 @@ namespace TanyakanIdApi.Infrastructure.DataAccess
                 (b) =>
                 {
                     b.HasKey(e => e.PrivilegeName);
+                });
+            modelBuilder.Entity<ArticleIssue>(
+                (b) =>
+                {
+                    b
+                    .Property(e => e.Id)
+                    .HasDefaultValueSql("uuid_generate_v4()");
+                });
+            modelBuilder.Entity<ArticleRating>(
+                (b) =>
+                {
+                    b
+                    .Property(e => e.Id)
+                    .HasDefaultValueSql("uuid_generate_v4()");
                 });
 
             base.OnModelCreating(modelBuilder);

@@ -31,6 +31,10 @@ namespace TanyakanIdApi.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Read all articles.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("")]
         public async Task<ActionResult<List<SimpleArticleDto>>> ReadAllArticles()
         {
@@ -42,6 +46,11 @@ namespace TanyakanIdApi.Controllers
             return output;
         }
 
+        /// <summary>
+        /// Read article by id.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
         [HttpGet("{articleId}")]
         public async Task<ActionResult<DetailedArticleDto>> ReadArticlebyId([FromRoute]string articleId) 
         {
@@ -52,6 +61,11 @@ namespace TanyakanIdApi.Controllers
             return output;
         }
 
+        /// <summary>
+        /// Create article.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.EmailVerifiedPolicy)]
         [HttpPost("")]
@@ -63,11 +77,34 @@ namespace TanyakanIdApi.Controllers
                 Description = dto.Description,
                 HeroImage = _mapper.Map<Image>(dto.HeroImage)
             };
-            dto.Parts.ForEach(i => newArticle.Parts.Add(_mapper.Map<ArticlePart>(i)));
+
+            for(int partCount = 0; partCount < dto.Parts.Count; partCount++)
+            {
+                var newPart = new ArticlePart()
+                {
+                    PartNumber = partCount + 1,
+                    Title = dto.Parts[partCount].Title,
+                    Description = dto.Parts[partCount].Description
+                };
+
+                for(int stepCount = 0; stepCount < dto.Parts[partCount].Steps.Count; stepCount++)
+                {
+                    var newStep = new ArticleStep()
+                    {
+                        StepNumber = stepCount + 1,
+                        Title = dto.Parts[partCount].Steps[stepCount].Title,
+                        Description = dto.Parts[partCount].Steps[stepCount].Description
+                    };
+
+                    newPart.Steps.Add(newStep);
+                }
+
+                newArticle.Parts.Add(newPart);
+            }
 
             var currentUser = await GetCurrentUser();
 
-            newArticle.Contributors.Add(currentUser);
+            newArticle.Users.Add(currentUser);
 
             await _appDbContext.Articles.AddAsync(newArticle);
 
@@ -76,6 +113,12 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Update article.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.EmailVerifiedPolicy)]
         [HttpPut("{articleId}")]
@@ -85,15 +128,15 @@ namespace TanyakanIdApi.Controllers
 
             var currentUser = await GetCurrentUser();
 
-            if (!article.Contributors.Contains(currentUser))
+            if (!article.Users.Contains(currentUser))
             {
-                article.Contributors.Add(currentUser);
+                article.Users.Add(currentUser);
             }
 
             var newHistory =
                 new ArticleHistory()
                 {
-                    Version = article.History.Count + 1,
+                    Version = article.Histories.Count + 1,
                     TimeStamp = DateTime.Now,
                     Title = article.Title,
                     Description = article.Description,
@@ -101,9 +144,9 @@ namespace TanyakanIdApi.Controllers
                     Parts = article.Parts,
                     Issues = article.Issues,
                     Ratings = article.Ratings,
-                    Contributors = article.Contributors
+                    Contributors = article.Users
                 };
-            article.History.Add(newHistory);
+            article.Histories.Add(newHistory);
 
             article.Title = dto.Title;
             article.Description = dto.Description;
@@ -115,6 +158,11 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Delete article.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.ModeratorOnlyPolicy)]
         [HttpDelete("{articleId}")]
@@ -129,6 +177,12 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
         
+        /// <summary>
+        /// Undo changes to an article.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.ModeratorOnlyPolicy)]
         [HttpPost("{articleId}")]
@@ -136,32 +190,37 @@ namespace TanyakanIdApi.Controllers
         {
             var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            var history = article.History.FirstOrDefault(i => i.Version == dto.Version);
+            var history = article.Histories.FirstOrDefault(i => i.Version == dto.Version);
 
             article.Title = history.Title;
             article.Description = history.Description;
             article.HeroImage = history.HeroImage;
-            article.Contributors = history.Contributors;
+            article.Users = history.Contributors;
             article.Parts = history.Parts;
             article.Issues = history.Issues;
             article.Ratings = history.Ratings;
 
             //remove histories
             var historiesToDelete = new List<ArticleHistory>();
-            foreach (var i in article.History)
+            foreach (var i in article.Histories)
             {
-                if (i.Version > dto.Version)
+                if (i.Version >= dto.Version)
                 {
                     historiesToDelete.Add(i);
                 }
             }
-            historiesToDelete.ForEach(i => article.History.Remove(i));
+            historiesToDelete.ForEach(i => article.Histories.Remove(i));
 
             await _appDbContext.SaveChangesAsync();
 
             return Ok();
         }
 
+        /// <summary>
+        /// Read all article issues.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
         [HttpGet("{articleId}/issues")]
         public async Task<ActionResult<List<ArticleIssueDto>>> ReadAllArticleIssues([FromRoute]string articleId)
         {
@@ -170,6 +229,12 @@ namespace TanyakanIdApi.Controllers
             return _mapper.Map<List<ArticleIssueDto>>(article.Issues);
         }
 
+        /// <summary>
+        /// Create issue.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.ModeratorOnlyPolicy)]
         [HttpPost("{articleId}/issues")]
@@ -193,6 +258,12 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Mark issue as resolved.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <param name="issueId"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.EmailVerifiedPolicy)]
         [HttpPost("{articleId}/issues/{issueId}/mark-as-resolved")]
@@ -209,6 +280,12 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Delete issue.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <param name="issueId"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.ModeratorOnlyPolicy)]
         [HttpDelete("{articleId}/issues/{issueId}")]
@@ -225,6 +302,11 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Read all ratings.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
         [HttpGet("{articleId}/ratings")]
         public async Task<ActionResult<List<ArticleRatingDto>>> ReadAllRatings([FromRoute]string articleId)
         {
@@ -235,6 +317,12 @@ namespace TanyakanIdApi.Controllers
             return Ok(_mapper.Map<List<ArticleRatingDto>>(ratings));
         }
 
+        /// <summary>
+        /// Create rating.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.EmailVerifiedPolicy)]
         [HttpPost("{articleId}/ratings")]
@@ -257,7 +345,13 @@ namespace TanyakanIdApi.Controllers
 
             return Ok();
         }
-
+        
+        /// <summary>
+        /// Delete rating.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <param name="ratingId"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.ModeratorOnlyPolicy)]
         [HttpDelete("{articleId}/ratings/{ratingId}")]
@@ -274,6 +368,11 @@ namespace TanyakanIdApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Get an article's version history.
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.EmailVerifiedPolicy)]
         [HttpGet("{articleId}/previous-versions")]
@@ -281,7 +380,7 @@ namespace TanyakanIdApi.Controllers
         {
             var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            var histories = article.History;
+            var histories = article.Histories;
 
             var output = _mapper.Map<List<ArticleHistoryDto>>(histories);
 

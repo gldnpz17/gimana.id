@@ -9,6 +9,6 @@ namespace TanyakanIdApi.DTOs.Response
     public class ImageDto
     {
         public string FileFormat { get; set; }
-        public byte[] Data { get; set; }
+        public string Base64EncodedData { get; set; }
     }
 }
