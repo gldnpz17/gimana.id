@@ -94,7 +94,7 @@ namespace TanyakanIdApi.Controllers
                 new Email()
                 {
                     Recipient = user.Email.EmailAddress,
-                    Body = $"<a href=\"{_config.ApiBaseAddress}/{User.FindFirst("UserId")}/verify-email?token={newToken}\">",
+                    Body = $"<a href=\"{_config.ApiBaseAddress}/api/Users/{User.FindFirst("UserId").Value}/verify-email?token={newToken}\">click here to verify</a>",
                     EmailBodyType = EmailBodyType.HTML,
                     Subject = "Email Verification"
                 });
@@ -108,7 +108,7 @@ namespace TanyakanIdApi.Controllers
         /// <param name="userId"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        [HttpPost("{userId}/verify-email")]
+        [HttpGet("{userId}/verify-email")]
         public async Task<ActionResult> VerifyEmail([FromRoute]string userId, [FromQuery]string token)
         {
             var user = await _appDbContext.Users.FirstOrDefaultAsync(i => i.Id == Guid.Parse(userId));

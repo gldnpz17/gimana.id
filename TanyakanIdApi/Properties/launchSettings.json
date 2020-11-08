@@ -16,7 +16,7 @@
         "EMAIL_CREDENTIAL_ADDRESS": "nokanabatsuyo@gmail.com",
         "INIT_ADMIN_PASSWORD": "password",
         "EMAIL_CREDENTIAL_PASSWORD": "2VXrQzFXf7BvpyF",
-        "API_BASE_ADDRESS": "https://localhost:44304/",
+        "API_BASE_ADDRESS": "https://localhost:44304",
         "INIT_ADMIN_USERNAME": "admin",
         "INIT_ADMIN_EMAIL": "goldenpanzer17@gmail.com",
         "ASPNETCORE_ENVIRONMENT": "Development",
