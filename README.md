@@ -5,7 +5,7 @@ API preview: [w.i.p]
 ## Technologies
 * NET Standard 2.0
 * ASP.NET Core (web framework)
-* Autofac (dependency injection)
+* Entity Framework Core (O/RM)
 * AutoMapper (object-object mapper)
-* MediatR (Mediator for CQRS)
-* FluentValidation (input validation)
+* PostgreSQL (RDBMS)
+* NSwag (API preview and documentation)
