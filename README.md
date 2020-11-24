@@ -1,9 +1,12 @@
-# TanyakanId
-The backend for "tanyakan.id", a group project for DTETI FT UGM's enterpreneurship course.  
+# gimana.id
+Description Here  
 API preview: [w.i.p]
 
 ## Technologies
-* NET Standard 2.0
+Frontend:  
+* lorem ipsum
+Backend:  
+* NET Standard
 * ASP.NET Core (web framework)
 * Entity Framework Core (O/RM)
 * AutoMapper (object-object mapper)
