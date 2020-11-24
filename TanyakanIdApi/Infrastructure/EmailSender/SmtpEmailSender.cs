@@ -6,7 +6,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TanyakanIdApi.Infrastructure.EmailSender
+namespace GimanaIdApi.Infrastructure.EmailSender
 {
     public class SmtpEmailSender : IEmailSender
     {

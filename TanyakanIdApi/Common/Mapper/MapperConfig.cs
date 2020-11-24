@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TanyakanIdApi.DTOs.Request;
-using TanyakanIdApi.DTOs.Response;
-using TanyakanIdApi.Entities.Entities;
-using TanyakanIdApi.Entities.ValueObjects;
+using GimanaIdApi.DTOs.Request;
+using GimanaIdApi.DTOs.Response;
+using GimanaIdApi.Entities.Entities;
+using GimanaIdApi.Entities.ValueObjects;
 
-namespace TanyakanIdApi.Common.Mapper
+namespace GimanaIdApi.Common.Mapper
 {
     public class MapperConfig
     {

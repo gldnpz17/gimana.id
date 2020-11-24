@@ -9,17 +9,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSwag.Generation.Processors.Security;
-using TanyakanIdApi.Common.Authentication;
-using TanyakanIdApi.Common.Config;
-using TanyakanIdApi.Common.Mapper;
-using TanyakanIdApi.Entities.Entities;
-using TanyakanIdApi.Infrastructure.AlphanumericTokenGenerator;
-using TanyakanIdApi.Infrastructure.DataAccess;
-using TanyakanIdApi.Infrastructure.EmailSender;
-using TanyakanIdApi.Infrastructure.PasswordHasher;
-using TanyakanIdApi.Infrastructure.SecurePasswordSaltGenerator;
+using GimanaIdApi.Common.Authentication;
+using GimanaIdApi.Common.Config;
+using GimanaIdApi.Common.Mapper;
+using GimanaIdApi.Entities.Entities;
+using GimanaIdApi.Infrastructure.AlphanumericTokenGenerator;
+using GimanaIdApi.Infrastructure.DataAccess;
+using GimanaIdApi.Infrastructure.EmailSender;
+using GimanaIdApi.Infrastructure.PasswordHasher;
+using GimanaIdApi.Infrastructure.SecurePasswordSaltGenerator;
 
-namespace TanyakanIdApi
+namespace GimanaIdApi
 {
     public class Startup
     {
@@ -48,7 +48,7 @@ namespace TanyakanIdApi
                     new SecurityDefinitionAppender("AuthToken",
                     new NSwag.OpenApiSecurityScheme
                     {
-                        Type = NSwag.OpenApiSecuritySchemeType.ApiKey,
+                        Type = NSwag.OpenApiSecuritySchemeType.Undefined,
                         Name = "Auth-Token",
                         In = NSwag.OpenApiSecurityApiKeyLocation.Header,
                     }));
@@ -58,8 +58,8 @@ namespace TanyakanIdApi
                     (document) =>
                     {
                         document.Info.Version = "v1";
-                        document.Info.Title = "tanyakan.id API";
-                        document.Info.Description = "The backend API for tanyakan.id, a group project for DTETI FT UGM's enterpreunership course.";
+                        document.Info.Title = "gimana.id API";
+                        document.Info.Description = "The backend API for gimana.id, a group project for DTETI FT UGM's enterpreunership course.";
                         document.Info.Contact = new NSwag.OpenApiContact()
                         {
                             Name = "Firdaus Bisma Suryakusuma",

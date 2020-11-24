@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TanyakanIdApi.Common.Config
+namespace GimanaIdApi.Common.Config
 {
     public class ApiConfig
     {

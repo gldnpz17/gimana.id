@@ -1,4 +1,4 @@
-﻿namespace TanyakanIdApi.Infrastructure.AlphanumericTokenGenerator
+﻿namespace GimanaIdApi.Infrastructure.AlphanumericTokenGenerator
 {
     public interface IAlphanumericTokenGenerator
     {

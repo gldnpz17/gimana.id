@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TanyakanIdApi.Entities.Entities
+namespace GimanaIdApi.Entities.Entities
 {
     public class ArticlePart
     {

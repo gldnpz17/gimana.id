@@ -1,4 +1,4 @@
-﻿namespace TanyakanIdApi.Infrastructure.SecurePasswordSaltGenerator
+﻿namespace GimanaIdApi.Infrastructure.SecurePasswordSaltGenerator
 {
     public interface ISecurePasswordSaltGenerator
     {

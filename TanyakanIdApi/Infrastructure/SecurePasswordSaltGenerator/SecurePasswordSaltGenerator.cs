@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TanyakanIdApi.Infrastructure.SecurePasswordSaltGenerator
+namespace GimanaIdApi.Infrastructure.SecurePasswordSaltGenerator
 {
     public class SecurePasswordSaltGenerator : ISecurePasswordSaltGenerator
     {

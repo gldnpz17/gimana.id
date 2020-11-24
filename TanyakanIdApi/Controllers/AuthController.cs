@@ -7,17 +7,17 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TanyakanIdApi.Common.Config;
-using TanyakanIdApi.DTOs.Request;
-using TanyakanIdApi.DTOs.Response;
-using TanyakanIdApi.Entities.Entities;
-using TanyakanIdApi.Infrastructure.AlphanumericTokenGenerator;
-using TanyakanIdApi.Infrastructure.DataAccess;
-using TanyakanIdApi.Infrastructure.EmailSender;
-using TanyakanIdApi.Infrastructure.PasswordHasher;
-using TanyakanIdApi.Infrastructure.SecurePasswordSaltGenerator;
+using GimanaIdApi.Common.Config;
+using GimanaIdApi.DTOs.Request;
+using GimanaIdApi.DTOs.Response;
+using GimanaIdApi.Entities.Entities;
+using GimanaIdApi.Infrastructure.AlphanumericTokenGenerator;
+using GimanaIdApi.Infrastructure.DataAccess;
+using GimanaIdApi.Infrastructure.EmailSender;
+using GimanaIdApi.Infrastructure.PasswordHasher;
+using GimanaIdApi.Infrastructure.SecurePasswordSaltGenerator;
 
-namespace TanyakanIdApi.Controllers
+namespace GimanaIdApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

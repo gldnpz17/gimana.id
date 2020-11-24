@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TanyakanIdApi.Entities.Common
+namespace GimanaIdApi.Entities.Common
 {
     public abstract class ValueObject
     {

@@ -11,9 +11,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using TanyakanIdApi.Infrastructure.DataAccess;
+using GimanaIdApi.Infrastructure.DataAccess;
 
-namespace TanyakanIdApi.Common.Authentication
+namespace GimanaIdApi.Common.Authentication
 {
     public class ValidateRandomTokenAuthenticationHandler : AuthenticationHandler<RandomTokenAuthenticationSchemeOptions>
     {

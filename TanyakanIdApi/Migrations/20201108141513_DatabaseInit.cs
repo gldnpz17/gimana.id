@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TanyakanIdApi.Migrations
+namespace GimanaIdApi.Migrations
 {
     public partial class DatabaseInit : Migration
     {

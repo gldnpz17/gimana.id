@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TanyakanIdApi.Infrastructure.EmailSender
+namespace GimanaIdApi.Infrastructure.EmailSender
 {
     public enum EmailBodyType
     {

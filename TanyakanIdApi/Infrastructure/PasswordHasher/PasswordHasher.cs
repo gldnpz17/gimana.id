@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TanyakanIdApi.Infrastructure.PasswordHasher
+namespace GimanaIdApi.Infrastructure.PasswordHasher
 {
     public class PasswordHasher : IPasswordHasher
     {

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using TanyakanIdApi.Infrastructure.DataAccess;
+using GimanaIdApi.Infrastructure.DataAccess;
 
-namespace TanyakanIdApi.Migrations
+namespace GimanaIdApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20201108141513_DatabaseInit")]

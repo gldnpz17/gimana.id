@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TanyakanIdApi.Infrastructure.AlphanumericTokenGenerator
+namespace GimanaIdApi.Infrastructure.AlphanumericTokenGenerator
 {
     public class AlphanumericTokenGenerator : IAlphanumericTokenGenerator
     {

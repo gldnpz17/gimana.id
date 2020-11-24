@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TanyakanIdApi.Common.Authentication
+namespace GimanaIdApi.Common.Authentication
 {
     public class RandomTokenAuthenticationSchemeOptions : AuthenticationSchemeOptions
     {

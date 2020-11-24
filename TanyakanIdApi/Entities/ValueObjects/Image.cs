@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TanyakanIdApi.Entities.Common;
+using GimanaIdApi.Entities.Common;
 
-namespace TanyakanIdApi.Entities.ValueObjects
+namespace GimanaIdApi.Entities.ValueObjects
 {
     public class Image : ValueObject
     {

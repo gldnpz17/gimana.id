@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TanyakanIdApi.Entities.ValueObjects;
+using GimanaIdApi.Entities.ValueObjects;
 
-namespace TanyakanIdApi.Entities.Entities
+namespace GimanaIdApi.Entities.Entities
 {
     public class ArticleHistory
     {

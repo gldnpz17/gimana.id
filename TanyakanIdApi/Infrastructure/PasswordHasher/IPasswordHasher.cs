@@ -1,4 +1,4 @@
-﻿namespace TanyakanIdApi.Infrastructure.PasswordHasher
+﻿namespace GimanaIdApi.Infrastructure.PasswordHasher
 {
     public interface IPasswordHasher
     {

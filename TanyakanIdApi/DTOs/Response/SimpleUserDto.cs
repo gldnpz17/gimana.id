@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TanyakanIdApi.DTOs.Response
+namespace GimanaIdApi.DTOs.Response
 {
     public class SimpleUserDto
     {

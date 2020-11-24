@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TanyakanIdApi.Common.Authentication;
-using TanyakanIdApi.DTOs.Request;
-using TanyakanIdApi.DTOs.Response;
-using TanyakanIdApi.Entities.Entities;
-using TanyakanIdApi.Entities.ValueObjects;
-using TanyakanIdApi.Infrastructure.DataAccess;
+using GimanaIdApi.Common.Authentication;
+using GimanaIdApi.DTOs.Request;
+using GimanaIdApi.DTOs.Response;
+using GimanaIdApi.Entities.Entities;
+using GimanaIdApi.Entities.ValueObjects;
+using GimanaIdApi.Infrastructure.DataAccess;
 
-namespace TanyakanIdApi.Controllers
+namespace GimanaIdApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

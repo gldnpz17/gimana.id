@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TanyakanIdApi.Entities.Entities;
-using TanyakanIdApi.Entities.ValueObjects;
+using GimanaIdApi.Entities.Entities;
+using GimanaIdApi.Entities.ValueObjects;
 
-namespace TanyakanIdApi.Infrastructure.DataAccess
+namespace GimanaIdApi.Infrastructure.DataAccess
 {
     public class AppDbContext : DbContext
     {

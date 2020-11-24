@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TanyakanIdApi.DTOs.Request
+namespace GimanaIdApi.DTOs.Request
 {
     public class RevertArticleDto
     {
