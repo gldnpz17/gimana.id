@@ -19,11 +19,22 @@ using GimanaIdApi.Infrastructure.EmailSender;
 using GimanaIdApi.Infrastructure.PasswordHasher;
 using GimanaIdApi.Infrastructure.SecurePasswordSaltGenerator;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using GimanaId.Infrastructure.Mocks.MockEmailSender;
+using GimanaId.Infrastructure.Mocks.InMemoryDataAccess;
+using Microsoft.Net.Http.Headers;
 
 namespace GimanaIdApi
 {
     public class Startup
     {
+        private IWebHostEnvironment _env;
+
+        public Startup(
+            IWebHostEnvironment env)
+        {
+            _env = env;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -40,7 +51,6 @@ namespace GimanaIdApi
                 };
 
             services.AddSingleton(typeof(ApiConfig), config);
-    
 
             services.AddSwaggerDocument(
                 (config) =>
@@ -70,7 +80,27 @@ namespace GimanaIdApi
                 });
 
             #region init db
-            var dbContext = new AppDbContext();
+            AppDbContext dbContext = null;
+            if (_env.IsDevelopment())
+            {
+                var devDatabaseType = Environment.GetEnvironmentVariable("DEV_DATABASE_TYPE");
+
+                switch (devDatabaseType)
+                {
+                    case "Concrete":
+                        dbContext = new AppDbContext();
+                        break;
+                    case "InMemory":
+                        dbContext = new InMemoryAppDbContext();
+                        break;
+                    default:
+                        throw new Exception($"environment variable DEV_DATABASE_TYPE has invalid value({devDatabaseType}).");
+                }
+            }
+            else if (_env.IsProduction())
+            {
+                dbContext = new AppDbContext();
+            }
 
             if (dbContext.Users.Count() == 0)
             {
@@ -112,11 +142,20 @@ namespace GimanaIdApi
                 })
                 .AddScheme<RandomTokenAuthenticationSchemeOptions, ValidateRandomTokenAuthenticationHandler>("RandomTokenScheme", (options) => { });
 
-            services.AddSingleton(
-                typeof(IEmailSender),
-                new SmtpEmailSender(
-                    Environment.GetEnvironmentVariable("EMAIL_CREDENTIAL_ADDRESS"),
-                    Environment.GetEnvironmentVariable("EMAIL_CREDENTIAL_PASSWORD")));
+            if (_env.IsDevelopment())
+            {
+                services.AddSingleton(
+                    typeof(IEmailSender),
+                    new MockEmailSender());
+            }
+            else if (_env.IsProduction()) 
+            {
+                services.AddSingleton(
+                    typeof(IEmailSender),
+                    new SmtpEmailSender(
+                        Environment.GetEnvironmentVariable("EMAIL_CREDENTIAL_ADDRESS"),
+                        Environment.GetEnvironmentVariable("EMAIL_CREDENTIAL_PASSWORD")));
+            }
 
             services.AddSingleton(
                 typeof(IPasswordHasher),
@@ -149,17 +188,20 @@ namespace GimanaIdApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseRouting();
 
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
+            if (_env.IsDevelopment()) 
+            {
+                app.UseOpenApi();
+                app.UseSwaggerUi3();
+            }
 
             app.UseAuthentication();
 
@@ -174,7 +216,7 @@ namespace GimanaIdApi
             {
                 spa.Options.SourcePath = "ClientApp/gimana-id";
 
-                if (env.IsDevelopment())
+                if (_env.IsDevelopment())
                 {
                     spa.UseReactDevelopmentServer("start");
                 }

@@ -19,17 +19,29 @@
         "API_BASE_ADDRESS": "https://localhost:44304",
         "INIT_ADMIN_USERNAME": "admin",
         "INIT_ADMIN_EMAIL": "goldenpanzer17@gmail.com",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "TANYAKAN_ID_CONNECTION_STRING": "User ID = dzlqwsccsphrvg; Password = 72ce073ea8a7961dfcf6b61e5bc09ff45f40b45d77b5a3890227a3602092510e; Server = ec2-34-197-188-147.compute-1.amazonaws.com; Port = 5432; Database = dfp0cjka01agjp; SslMode = Require; Trust Server Certificate = true;"
+        "MAIN_DATABASE_CONNECTION_STRING": "User ID = dzlqwsccsphrvg; Password = 72ce073ea8a7961dfcf6b61e5bc09ff45f40b45d77b5a3890227a3602092510e; Server = ec2-34-197-188-147.compute-1.amazonaws.com; Port = 5432; Database = dfp0cjka01agjp; SslMode = Require; Trust Server Certificate = true;",
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "TanyakanIdApi": {
+    "GimanaId": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
+    },
+    "DevEnv": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "DEV_DATABASE_TYPE": "InMemory",
+        "INIT_ADMIN_PASSWORD": "password",
+        "API_BASE_ADDRESS": "https://localhost:5001",
+        "INIT_ADMIN_USERNAME": "admin",
+        "INIT_ADMIN_EMAIL": "test@testmail.com",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }

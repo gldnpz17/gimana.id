@@ -1,36 +1,31 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GimanaIdApi.Entities.Entities;
+using GimanaIdApi.Infrastructure.DataAccess;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using GimanaIdApi.Entities.Entities;
-using GimanaIdApi.Entities.ValueObjects;
 
-namespace GimanaIdApi.Infrastructure.DataAccess
+namespace GimanaId.Infrastructure.Mocks.InMemoryDataAccess
 {
-    public class AppDbContext : DbContext
+    public class InMemoryAppDbContext : AppDbContext
     {
-        public DbSet<Article> Articles { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<AuthToken> AuthTokens { get; set; }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
-            //optionsBuilder.UseInMemoryDatabase("TestDB");
-            optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("MAIN_DATABASE_CONNECTION_STRING"));
+            optionsBuilder.UseInMemoryDatabase("TestDB");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasPostgresExtension("uuid-ossp");
             modelBuilder.Entity<UserEmail>(
                 (b) =>
                 {
                     b.HasKey(e => e.EmailAddress);
                 });
             modelBuilder.Entity<User>(
-                (b) => 
+                (b) =>
                 {
                     b
                     .HasOne(e => e.PasswordCredential)
@@ -51,7 +46,7 @@ namespace GimanaIdApi.Infrastructure.DataAccess
 
                     b
                     .Property(e => e.Id)
-                    .HasDefaultValueSql("uuid_generate_v4()");
+                    .HasDefaultValue(Guid.NewGuid());
 
                     b.OwnsOne(e => e.ProfilePicture);
                 });
@@ -62,12 +57,13 @@ namespace GimanaIdApi.Infrastructure.DataAccess
 
                     b
                     .Property(e => e.Id)
-                    .HasDefaultValueSql("uuid_generate_v4()");
+                    .HasDefaultValue(Guid.NewGuid());
                 });
             modelBuilder.Entity<ArticleHistory>(
                 (b) =>
                 {
-                    b.Property<Guid>("Id").HasDefaultValueSql("uuid_generate_v4()");
+                    b.Property<Guid>("Id")
+                    .HasDefaultValue(Guid.NewGuid());
 
                     b.HasKey("Id");
 
@@ -76,14 +72,16 @@ namespace GimanaIdApi.Infrastructure.DataAccess
             modelBuilder.Entity<ArticlePart>(
                 (b) =>
                 {
-                    b.Property<Guid>("Id").HasDefaultValueSql("uuid_generate_v4()");
+                    b.Property<Guid>("Id")
+                    .HasDefaultValue(Guid.NewGuid());
 
                     b.HasKey("Id");
                 });
             modelBuilder.Entity<ArticleStep>(
                 (b) =>
                 {
-                    b.Property<Guid>("Id").HasDefaultValueSql("uuid_generate_v4()");
+                    b.Property<Guid>("Id")
+                    .HasDefaultValue(Guid.NewGuid());
 
                     b.HasKey("Id");
                 });
@@ -117,17 +115,18 @@ namespace GimanaIdApi.Infrastructure.DataAccess
                 {
                     b
                     .Property(e => e.Id)
-                    .HasDefaultValueSql("uuid_generate_v4()");
+                    .HasDefaultValue(Guid.NewGuid());
                 });
             modelBuilder.Entity<ArticleRating>(
                 (b) =>
                 {
                     b
                     .Property(e => e.Id)
-                    .HasDefaultValueSql("uuid_generate_v4()");
+                    .HasDefaultValue(Guid.NewGuid());
                 });
 
             base.OnModelCreating(modelBuilder);
         }
+
     }
 }
