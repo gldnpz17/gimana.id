@@ -1,12 +1,15 @@
-# gimana.id
-Description Here  
-API preview: [w.i.p]
+# [Gimana.id](https://gimana.id)
 
-## Technologies
-Frontend:    
-* lorem ipsum  
+Sebuah platform *crowdsourced* yang bertujuan untuk membantu orang-orang melakukan sesuatu.
 
-Backend:  
+API preview: *(coming soon)*
+
+## Technologies used
+
+### Front-end
+* React.js  
+
+### Back-end
 * NET Standard
 * ASP.NET Core (web framework)
 * Entity Framework Core (O/RM)
