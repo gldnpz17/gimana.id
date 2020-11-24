@@ -18,6 +18,7 @@ using GimanaIdApi.Infrastructure.DataAccess;
 using GimanaIdApi.Infrastructure.EmailSender;
 using GimanaIdApi.Infrastructure.PasswordHasher;
 using GimanaIdApi.Infrastructure.SecurePasswordSaltGenerator;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace GimanaIdApi
 {
@@ -139,6 +140,11 @@ namespace GimanaIdApi
                     config.AddPolicy(AuthorizationPolicyConstants.AuthenticatedUsersOnlyPolicy, policy => policy.RequireClaim("UserId"));
                 });
 
+            services.AddSpaStaticFiles(config =>
+            {
+                config.RootPath = "ClientApp/gimana-id/build";
+            });
+
             services.AddControllers();
         }
 
@@ -162,6 +168,16 @@ namespace GimanaIdApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp/gimana-id";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer("start");
+                }
             });
         }
     }
