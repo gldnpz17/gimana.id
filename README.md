@@ -1,4 +1,4 @@
-# [Gimana.id](https://gimana.id)
+# [gimana.id](https://gimana.id)
 
 Sebuah platform *crowdsourced* yang bertujuan untuk membantu orang-orang melakukan sesuatu.
 
