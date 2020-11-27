@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
+
+html {
+    font-size: 87.5%;
+    font-family: sans-serif;
+    
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
