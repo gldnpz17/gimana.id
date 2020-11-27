@@ -38,6 +38,7 @@ const Header = () => (
             <a href="#">Jelajahi topik</a>
             <a href="#">Tentang kami</a>
             <a href="#">Ingin berkontribusi?</a>
+            <Link to="/authentication-experiment">Experiment with the authentication</Link>
         </Part>
     </MainContainer>
 );
