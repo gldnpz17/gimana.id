@@ -181,7 +181,7 @@ namespace GimanaIdApi
 
             services.AddSpaStaticFiles(config =>
             {
-                config.RootPath = "ClientApp/gimana-id/build";
+                config.RootPath = "ClientApp/build";
             });
 
             services.AddControllers();
@@ -214,7 +214,7 @@ namespace GimanaIdApi
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp/gimana-id";
+                spa.Options.SourcePath = "ClientApp";
 
                 if (_env.IsDevelopment())
                 {
