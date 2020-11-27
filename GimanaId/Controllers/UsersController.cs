@@ -90,14 +90,13 @@ namespace GimanaIdApi.Controllers
 
             await _appDbContext.SaveChangesAsync();
 
-            _emailSender.SendEmail(
-                new Email()
-                {
-                    Recipient = user.Email.EmailAddress,
-                    Body = $"<a href=\"{_config.ApiBaseAddress}/api/Users/{User.FindFirst("UserId").Value}/verify-email?token={newToken}\">click here to verify</a>",
-                    EmailBodyType = EmailBodyType.HTML,
-                    Subject = "Email Verification"
-                });
+            _emailSender.SendEmail(new Email()
+            {
+                Recipient = user.Email.EmailAddress,
+                Body = $"<a href=\"{_config.ApiBaseAddress}/api/Users/{userId}/verify-email?token={newToken}\">click here to verify</a>",
+                EmailBodyType = EmailBodyType.HTML,
+                Subject = "Email Verification"
+            });
 
             return Ok();
         }

@@ -30,6 +30,7 @@ namespace GimanaIdApi.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ApiConfig _config;
         private readonly IMapper _mapper;
+        private readonly UsersController _usersController;
 
         public AuthController(
             AppDbContext appDbContext,
@@ -38,7 +39,8 @@ namespace GimanaIdApi.Controllers
             IAlphanumericTokenGenerator alphanumericTokenGenerator,
             IEmailSender emailSender,
             ApiConfig config,
-            IMapper mapper)
+            IMapper mapper,
+            UsersController usersController)
         {
             _appDbContext = appDbContext;
             _passwordHasher = passwordHasher;
@@ -47,6 +49,7 @@ namespace GimanaIdApi.Controllers
             _emailSender = emailSender;
             _config = config;
             _mapper = mapper;
+            _usersController = usersController;
         }
         
         /// <summary>
@@ -133,6 +136,8 @@ namespace GimanaIdApi.Controllers
             await _appDbContext.Users.AddAsync(newUser);
 
             await _appDbContext.SaveChangesAsync();
+
+            await _usersController.SendEmailVerificationMessage(newUser.Id.ToString());
 
             return Ok();
         }
