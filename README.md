@@ -10,7 +10,7 @@ API preview: *(coming soon)*
 * React.js  
 
 ### Back-end
-* NET Standard
+* .NET Standard
 * ASP.NET Core (web framework)
 * Entity Framework Core (O/RM)
 * AutoMapper (object-object mapper)
