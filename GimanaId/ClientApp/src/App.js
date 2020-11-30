@@ -4,14 +4,14 @@ import { createGlobalStyle } from "styled-components";
 import Header from "./components/header";
 
 // Pages for each route
-import registerPage from "./pages/sign-up";
+import authenticationPage from "./pages/sign-up";
 import authExperimentPage from "./pages/authentication-experiment";
 
 export default () => (
     <BrowserRouter>
         <Header />
         <Switch>
-            <Route path="/daftar"                    component={registerPage} />
+            <Route path="/daftar"                    component={authenticationPage} />
             <Route path="/authentication-experiment" component={authExperimentPage} />
 
             {/* 404 page */}

@@ -2,13 +2,16 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import stockCard from "../components/card";
+import stockButton from "../components/button";
+import LabeledInput from "../components/labeled-input";
 
 const PageContainer = styled.div`
-    min-height: 100vh;
+    min-height: 90vh;
 
     background-color: #3399D2; /* Subject to change */
 
     display: flex;
+    align-items: center;
 `;
 
 const ExplanationPart = styled.div`
@@ -37,7 +40,51 @@ const CompanionText = styled.p`
 
 const AuthCard = styled(stockCard)`
     width: 25rem;
-    height: 50rem;
+    padding: 2em;
+    margin: 2rem 10rem;
+
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.25);
+
+    position: relative;
+    z-index: 1;
+
+    &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        width: 130%;
+        height: 100%;
+        top: 8%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgb(255 255 255 / 0.2);
+    }
+`;
+
+const MainForm = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const FormTitle = styled.h1`
+    text-align: center;
+    font-size: 1.5em;
+
+    margin: 0;
+    margin-bottom: 0.25em;
+`;
+
+const AdditionalText = styled.p`
+    text-align: center;
+    font-size: 0.9em;
+
+    margin: 0;
+    margin-bottom: 2em;
+`;
+
+const Button = styled(stockButton)`
+    margin-top: 1em;
 `;
 
 export default () => {
@@ -53,23 +100,15 @@ export default () => {
             </ExplanationPart>
             <EntryPart>
                 <AuthCard>
-                    <h1>Buat akun baru</h1>
-                    <p>Sudah pernah mendaftar? <Link to="/masuk">Klik di sini untuk masuk</Link>.</p>
-                    <form>
-                        <label htmlFor="email">E-mail</label>
-                        <input name="email" type="text" autoFocus />
-
-                        <label htmlFor="username"><i>Username</i></label>
-                        <input name="username" type="text" autoComplete="username" />
-
-                        <label htmlFor="password">Kata sandi</label>
-                        <input name="password" type="password" autoComplete="new-password" />
-
-                        <label htmlFor="repeat-password">Ulangi kata sandi</label>
-                        <input name="repeat-password" type="password" autoComplete="new-password" />
-
-                        <button onClick={e => { e.preventDefault(); }}>Daftar</button>
-                    </form>
+                    <FormTitle>Buat akun baru</FormTitle>
+                    <AdditionalText>Sudah pernah mendaftar? <Link to="/masuk">Klik di sini untuk masuk</Link>.</AdditionalText>
+                    <MainForm>
+                        <LabeledInput name="email"           title="Alamat e-mail"            type="email"    autoFocus />
+                        <LabeledInput name="username"        title={<i>Username</i>}   type="text"     autoComplete="username" />
+                        <LabeledInput name="password"        title="Kata sandi"        type="password" autoComplete="new-password" />
+                        <LabeledInput name="repeat-password" title="Ulangi kata sandi" type="password" autoComplete="new-password" />
+                        <Button backgroundColor="#23CC20" onClick={e => { e.preventDefault(); }}>Daftar</Button>
+                    </MainForm>
                 </AuthCard>
             </EntryPart>
         </PageContainer>
