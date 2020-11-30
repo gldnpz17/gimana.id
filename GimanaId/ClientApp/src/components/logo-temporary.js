@@ -1,17 +1,30 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-const Wrapper = styled.h1`
-    font-family: "Fredoka One";
-    font-weight: normal;
-
+const LinkWrapper = styled(Link)`
     display: block;
-    margin: 0 1em;
+    margin: 0 1em !important; /* FIXME */
 
-    color: darkgreen;
+    h1 {
+        margin: 0;
+
+        font-family: "Fredoka One";
+        font-weight: normal;
+        
+        color: #3399D2;
+    }
+
+    &, &:hover {
+        text-decoration: none !important; /* FIXME */
+    }
+
+    &:hover {
+        filter: brightness(1.1);
+    }
 `;
 
-const Logo = () => (
-    <Wrapper>Gimana.id</Wrapper>
+export default () => (
+    <LinkWrapper to="/">
+        <h1>Gimana.id</h1>
+    </LinkWrapper>
 );
-
-export default Logo;

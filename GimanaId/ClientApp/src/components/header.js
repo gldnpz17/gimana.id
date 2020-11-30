@@ -12,13 +12,15 @@ const MainContainer = styled.header`
 
     display: flex;
     align-items: center;
+    justify-content: space-between;
 `;
 
 const Part = styled.div`
     display: flex;
     align-items: center;
 
-    &.left {
+    /* FIXME: Separate the behavior between left part and right part */
+    &.left, &.right {
         a {
             color: #0a0a0a;
             text-decoration: none;
@@ -37,8 +39,12 @@ const Header = () => (
             <Logo />
             <a href="#">Jelajahi topik</a>
             <a href="#">Tentang kami</a>
-            <a href="#">Ingin berkontribusi?</a>
+            <Link to="/daftar">Ingin berkontribusi?</Link>
+        </Part>
+        <Part className="right">
             <Link to="/authentication-experiment">Experiment with the authentication</Link>
+            <Link to="/masuk">Masuk</Link>
+            <Link to="/daftar">Daftar</Link>
         </Part>
     </MainContainer>
 );
