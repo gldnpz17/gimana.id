@@ -1,4 +1,5 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { createGlobalStyle } from "styled-components";
 
 import Header from "./components/header";
 
@@ -6,7 +7,7 @@ import Header from "./components/header";
 import registerPage from "./pages/sign-up";
 import authExperimentPage from "./pages/authentication-experiment";
 
-const App = () => (
+export default () => (
     <BrowserRouter>
         <Header />
         <Switch>
@@ -16,7 +17,12 @@ const App = () => (
             {/* 404 page */}
             <Route>Page not found.</Route>
         </Switch>
+        {process.env.NODE_ENV === "development" ? <DebuggingOutlines /> : null}
     </BrowserRouter>
 );
 
-export default App;
+const DebuggingOutlines = createGlobalStyle`
+    * {
+        outline: 1px solid rgb(255 0 0 / 0.25);
+    }
+`;
