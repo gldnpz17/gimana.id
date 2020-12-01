@@ -24,7 +24,7 @@ const Input = styled.input`
         padding: 0.8em;
         background-color: rgb(0 0 0 / 0.075);
 
-        transition: background-color 0.2s, box-shadow 0.1s;
+        transition: background-color 0.2s;
 
         &:focus {
             /* Some resets */
@@ -37,9 +37,9 @@ const Input = styled.input`
     }
 `;
 
-export default ({ name, title, type, ...rest }) => (
+export default ({ name, title, type, inputRef, ...rest }) => (
     <Wrapper>
         <Label htmlFor={name}>{title}</Label>
-        <Input name={name} type={type} {...rest} />
+        <Input name={name} type={type} ref={inputRef} {...rest} />
     </Wrapper>
 );

@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Fragment, useContext } from "react";
 
+import AuthContext from "./authentication-context";
 import Logo from "./logo-temporary";
 
 const MainContainer = styled.header`
@@ -33,20 +35,30 @@ const Part = styled.div`
     }
 `;
 
-const Header = () => (
-    <MainContainer>
-        <Part className="left">
-            <Logo />
-            <a href="#">Jelajahi topik</a>
-            <a href="#">Tentang kami</a>
-            <Link to="/daftar">Ingin berkontribusi?</Link>
-        </Part>
-        <Part className="right">
-            <Link to="/authentication-experiment">Experiment with the authentication</Link>
-            <Link to="/masuk">Masuk</Link>
-            <Link to="/daftar">Daftar</Link>
-        </Part>
-    </MainContainer>
-);
+const Header = () => {
+    const authStatus = useContext(AuthContext);
+    
+    return (
+        <MainContainer>
+            <Part className="left">
+                <Logo />
+                <a href="#">Jelajahi topik</a>
+                <a href="#">Tentang kami</a>
+                <Link to="/daftar">Ingin berkontribusi?</Link>
+            </Part>
+            <Part className="right">
+                {authStatus.isLoggedIn ? (
+                    <p>User Id: {authStatus.userId}</p>
+                ) : (
+                    <Fragment>
+                        <Link to="/masuk">Masuk</Link>
+                        <Link to="/daftar">Daftar</Link>
+                    </Fragment>
+                )}
+
+            </Part>
+        </MainContainer>
+    );
+}
 
 export default Header;

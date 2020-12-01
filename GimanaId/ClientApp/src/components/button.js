@@ -10,6 +10,7 @@ export default styled.button`
 
     margin: 0;
     padding: 0.5em 1em;
+    border-radius: 0.25rem;
 
     font-size: inherit;
     font-family: inherit;
@@ -30,5 +31,10 @@ export default styled.button`
     &:active {
         filter: brightness(0.9);
         transform: translateY(5%);
+    }
+
+    &[disabled] {
+        background-color: grey;
+        color: lightgrey;
     }
 `;
