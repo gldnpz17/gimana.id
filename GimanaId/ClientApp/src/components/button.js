@@ -20,17 +20,19 @@ export default styled.button`
     color: ${props => props.textColor ? props.textColor : "white"};
     box-shadow: ${initialBoxShadow}, 0 0.1em 0.25em rgb(0 0 0 / 0.25);
 
-    cursor: pointer;
-    transition: filter 0.1s, box-shadow 0.4s, transform 0.15s;
+    &:not([disabled]) {
+        cursor: pointer;
+        transition: filter 0.1s, box-shadow 0.4s, transform 0.15s;
 
-    &:hover {
-        filter: brightness(1.1);
-        box-shadow: ${initialBoxShadow}, 0 0.25em 0.5em rgb(0 0 0 / 0.5);
-    }
+        &:hover {
+            filter: brightness(1.1);
+            box-shadow: ${initialBoxShadow}, 0 0.25em 0.5em rgb(0 0 0 / 0.5);
+        }
 
-    &:active {
-        filter: brightness(0.9);
-        transform: translateY(5%);
+        &:active {
+            filter: brightness(0.9);
+            transform: translateY(5%);
+        }
     }
 
     &[disabled] {
