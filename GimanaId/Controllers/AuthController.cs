@@ -78,9 +78,23 @@ namespace GimanaIdApi.Controllers
                 user.AuthTokens.Add(newToken);
                 await _appDbContext.SaveChangesAsync();
 
-                var output = _mapper.Map<AuthTokenDto>(newToken);
+                CookieOptions tokenCookieOptions = new CookieOptions()
+                {
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    HttpOnly = true,
+                    Expires = DateTime.Now.AddDays(1)
+                };
 
-                return Ok(output);
+                // Temporary workaround to disable HTTPS requirement on dev environment
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+                {
+                    tokenCookieOptions.Secure = false;
+                }
+
+                Response.Cookies.Append("session-token", newToken.Token, tokenCookieOptions);
+
+                return Ok();
             }
             else
             {
@@ -101,6 +115,8 @@ namespace GimanaIdApi.Controllers
             _appDbContext.AuthTokens.Remove(authToken);
 
             await _appDbContext.SaveChangesAsync();
+
+            Response.Cookies.Delete("session-token");
 
             return Ok();
         }
