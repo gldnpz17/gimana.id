@@ -93,7 +93,6 @@ namespace GimanaIdApi.Controllers
                 }
 
                 Response.Cookies.Append("session-token", newToken.Token, tokenCookieOptions);
-
                 return Ok();
             }
             else
@@ -108,16 +107,15 @@ namespace GimanaIdApi.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost("logout")]
-        public async Task<ActionResult> Logout([FromBody]LogoutDto dto)
+        public async Task<ActionResult> Logout()
         {
-            var authToken = await _appDbContext.AuthTokens.FirstOrDefaultAsync(i => i.Token == dto.Token);
+            var currentToken = Request.Cookies["session-token"]; // Token stored on browser cookies
 
+            var authToken = await _appDbContext.AuthTokens.FirstOrDefaultAsync(i => i.Token == currentToken);
             _appDbContext.AuthTokens.Remove(authToken);
-
             await _appDbContext.SaveChangesAsync();
 
             Response.Cookies.Delete("session-token");
-
             return Ok();
         }
 

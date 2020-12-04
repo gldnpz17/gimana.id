@@ -42,6 +42,7 @@ namespace GimanaIdApi.Common.Authentication
 
             if (token == null)
             {
+                // Probably place a mechanism for removing the existing cookie here?
                 return AuthenticateResult.Fail("Invalid session token supplied.");
             }
             else
