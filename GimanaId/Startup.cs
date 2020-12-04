@@ -169,20 +169,18 @@ namespace GimanaIdApi
                 typeof(IAlphanumericTokenGenerator),
                 new AlphanumericTokenGenerator());
 
-            services.AddAuthorization(
-                (config) =>
-                {
-                    config.AddPolicy(AuthorizationPolicyConstants.EmailVerifiedPolicy, policy => policy.RequireClaim("EmailVerified", "True"));
-                    config.AddPolicy(AuthorizationPolicyConstants.IsNotBannedPolicy, policy => policy.RequireClaim("IsBanned", "False"));
-                    config.AddPolicy(AuthorizationPolicyConstants.ModeratorOnlyPolicy, policy => policy.RequireClaim("IsModerator", "True"));
-                    config.AddPolicy(AuthorizationPolicyConstants.AdminOnlyPolicy, policy => policy.RequireClaim("IsAdmin", "True"));
-                    config.AddPolicy(AuthorizationPolicyConstants.AuthenticatedUsersOnlyPolicy, policy => policy.RequireClaim("UserId"));
-                });
-
-            services.AddSpaStaticFiles(config =>
+            services.AddAuthorization(config =>
             {
-                config.RootPath = "ClientApp/build";
+                config.AddPolicy(AuthorizationPolicyConstants.EmailVerifiedPolicy, policy => policy.RequireClaim("EmailVerified", "True"));
+                config.AddPolicy(AuthorizationPolicyConstants.IsNotBannedPolicy, policy => policy.RequireClaim("IsBanned", "False"));
+                config.AddPolicy(AuthorizationPolicyConstants.ModeratorOnlyPolicy, policy => policy.RequireClaim("IsModerator", "True"));
+                config.AddPolicy(AuthorizationPolicyConstants.AdminOnlyPolicy, policy => policy.RequireClaim("IsAdmin", "True"));
+                config.AddPolicy(AuthorizationPolicyConstants.AuthenticatedUsersOnlyPolicy, policy => policy.RequireClaim("UserId"));
             });
+
+            services.AddSpaStaticFiles(config => config.RootPath = "ClientApp/build");
+
+            services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddMvc().AddControllersAsServices();
         }
