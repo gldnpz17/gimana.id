@@ -2,7 +2,7 @@
 
 Sebuah platform *crowdsourced* yang bertujuan untuk membantu orang-orang melakukan sesuatu.
 
-API preview: *(coming soon)*
+Preview: *(coming soon)*
 
 ## Technologies used
 
