@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { createGlobalStyle } from "styled-components";
 
 import { AuthProvider } from "./components/authentication-context";
+import { getUserId } from "./authentication";
 
 import Header from "./components/header";
 
@@ -18,16 +19,10 @@ export default () => {
     useEffect(() => {
         const storedToken = localStorage.getItem("authToken");
         if (storedToken) {
-            fetch("api/Users/get-user-id", {
-                method: "GET",
-                headers: {
-                    "accept": "text/plain",
-                    "Auth-Token": storedToken
-                }
-            }).then(response => response.json()).then(data => {
+            getUserId(storedToken).then(id => {
                 setUserInfo({
                     isLoggedIn: true,
-                    userId: data.id
+                    userId: id
                 });
             })
         }

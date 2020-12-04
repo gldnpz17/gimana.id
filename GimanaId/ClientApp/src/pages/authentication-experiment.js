@@ -18,7 +18,7 @@ const AuthenticationExperimentPage = () => {
     }
 
     function signUp(u, p, m) {
-        fetch("api/Auth/sign-up", {
+        fetch("api/auth/sign-up", {
             method: "POST",
             headers: {
                 "accept": "application/json",
@@ -36,7 +36,7 @@ const AuthenticationExperimentPage = () => {
     }
 
     function logIn(u, p) {
-        fetch("api/Auth/login", {
+        fetch("api/auth/login", {
             method: "POST",
             headers: {
                 "accept": "text/plain",
