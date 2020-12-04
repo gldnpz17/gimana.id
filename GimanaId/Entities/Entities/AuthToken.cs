@@ -11,5 +11,7 @@ namespace GimanaIdApi.Entities.Entities
         public virtual User User { get; set; }
         public virtual string Token { get; set; }
         public virtual DateTime CreatedAt { get; set; }
+        public virtual string UserAgent { get; set; }
+        public virtual string IPAddress { get; set; }
     }
 }

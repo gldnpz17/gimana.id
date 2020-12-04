@@ -72,7 +72,9 @@ namespace GimanaIdApi.Controllers
                 {
                     User = user,
                     Token = _alphanumericTokenGenerator.GenerateAlphanumericToken(_config.PasswordResetTokenLength),
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    UserAgent = Request.Headers["User-Agent"].FirstOrDefault(),
+                    IPAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString()
                 };
 
                 user.AuthTokens.Add(newToken);

@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GimanaIdApi.Infrastructure.DataAccess;
+using System.Net;
 
 namespace GimanaIdApi.Common.Authentication
 {
@@ -46,6 +47,20 @@ namespace GimanaIdApi.Common.Authentication
             }
             else
             {
+                //verify user agent
+                var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
+                if (token.UserAgent != userAgent) 
+                {
+                    return AuthenticateResult.Fail("User agent in token doesn't match the user agent used.");
+                }
+
+                //verify ip address
+                var ipAddress = Request.HttpContext.Connection.RemoteIpAddress;
+                if (token.IPAddress != ipAddress.ToString()) 
+                {
+                    return AuthenticateResult.Fail("IP address registered in token doesn't match the ip address the request is sent from.");
+                }
+
                 var user = token.User;
 
                 var claims = 

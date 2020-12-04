@@ -59,7 +59,7 @@ namespace GimanaIdApi
                     new SecurityDefinitionAppender("AuthToken",
                     new NSwag.OpenApiSecurityScheme
                     {
-                        Type = NSwag.OpenApiSecuritySchemeType.Undefined,
+                        Type = NSwag.OpenApiSecuritySchemeType.ApiKey,
                         Name = "Auth-Token",
                         In = NSwag.OpenApiSecurityApiKeyLocation.Header,
                     }));
