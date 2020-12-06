@@ -36,7 +36,19 @@ const Part = styled.div`
 `;
 
 const Header = () => {
-    const authStatus = useContext(AuthContext);
+    const authStatus = useContext(authContext);
+
+    function testHandleLogOut(e) {
+        e.preventDefault();
+
+        fetch("api/auth/logout", {
+            method: "POST"
+        }).then(() => {
+            window.location.reload();
+        }, reason => {
+            alert(`Error logging you out. Reason: ${reason}`);
+        });
+    }
     
     return (
         <MainContainer>
@@ -47,13 +59,18 @@ const Header = () => {
                 <Link to="/daftar">Ingin berkontribusi?</Link>
             </Part>
             <Part className="right">
-                {authStatus.isLoggedIn ? (
-                    <p>User Id: {authStatus.userId}</p>
-                ) : (
-                    <Fragment>
-                        <Link to="/masuk">Masuk</Link>
-                        <Link to="/daftar">Daftar</Link>
-                    </Fragment>
+                {authStatus && (
+                    authStatus.isLoggedIn ? (
+                        <Fragment>
+                            <p>Halo, <b>{authStatus.username}</b>!</p>
+                            <a href="#" onClick={testHandleLogOut}>Keluar dari akun</a>
+                        </Fragment>
+                    ) : (
+                        <Fragment>
+                            <Link to="/masuk">Masuk</Link>
+                            <Link to="/daftar">Daftar</Link>
+                        </Fragment>
+                    )
                 )}
 
             </Part>
