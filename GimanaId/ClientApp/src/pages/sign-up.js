@@ -48,7 +48,7 @@ export default () => {
                 </CompanionText>
             </ExplanationPart>
             <EntryPart>
-                <AuthCard />
+                <AuthCard mode="signup" />
             </EntryPart>
         </PageContainer>
     );

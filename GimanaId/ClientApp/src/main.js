@@ -10,8 +10,10 @@ import { getCurrentUserInfo } from "./utils/authentication";
 import Header from "./components/header";
 
 // Pages for each route
-import authenticationPage from "./pages/sign-up";
-import authExperimentPage from "./pages/authentication-experiment";
+import HomePage from "./pages/home";
+import RegisterPage from "./pages/sign-up";
+import LoginPage from "./pages/log-in";
+import AuthExperimentPage from "./pages/authentication-experiment";
 
 // Main app entry point
 const App = () => {
@@ -49,8 +51,12 @@ const App = () => {
             <AuthProvider value={userInfo}>
                 <Header />
                 <Switch>
-                    <Route path="/daftar"                    component={authenticationPage} />
-                    <Route path="/authentication-experiment" component={authExperimentPage} />
+                    <Route exact path="/" component={HomePage} />
+                    <Route path="/daftar" component={RegisterPage} />
+                    <Route path="/masuk"  component={LoginPage} />
+
+                    {/* For some fun things */}
+                    <Route path="/authentication-experiment" component={AuthExperimentPage} />
 
                     {/* 404 page */}
                     <Route>Page not found.</Route>
