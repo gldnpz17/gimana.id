@@ -141,6 +141,7 @@ namespace GimanaIdApi
                     config.DefaultScheme = "RandomTokenScheme";
                 })
                 .AddScheme<RandomTokenAuthenticationSchemeOptions, ValidateRandomTokenAuthenticationHandler>("RandomTokenScheme", (options) => { });
+                // Do we need to add `.AddCookie()` here?
 
             if (_env.IsDevelopment())
             {

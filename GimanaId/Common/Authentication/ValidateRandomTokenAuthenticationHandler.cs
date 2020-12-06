@@ -32,18 +32,19 @@ namespace GimanaIdApi.Common.Authentication
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            var tokenString = Request.Headers["Auth-Token"].FirstOrDefault();
+            var tokenString = Request.Cookies["session-token"];
 
             if (tokenString == null)
             {
-                return AuthenticateResult.Fail("No auth token found in header.");
+                return AuthenticateResult.Fail("No session token found in request cookies.");
             }
 
             var token = await _appDbContext.AuthTokens.FirstOrDefaultAsync(i => i.Token == tokenString);
 
             if (token == null)
             {
-                return AuthenticateResult.Fail("Invalid auth token supplied.");
+                // Probably place a mechanism for removing the existing cookie here?
+                return AuthenticateResult.Fail("Invalid session token supplied.");
             }
             else
             {
