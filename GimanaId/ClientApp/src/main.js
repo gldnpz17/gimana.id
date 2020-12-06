@@ -2,8 +2,9 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { createGlobalStyle } from "styled-components";
 
-import { AuthProvider } from "./components/authentication-context";
-import { getUserId } from "./authentication";
+// Authentication-related
+import { AuthProvider } from "./utils/auth-context";
+import { getUserId } from "./utils/authentication";
 
 import Header from "./components/header";
 

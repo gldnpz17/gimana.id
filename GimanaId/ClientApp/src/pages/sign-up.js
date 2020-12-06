@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-import AuthCard from "../components/authentication-card";
+import AuthCard from "../components/auth-card";
 
 const PageContainer = styled.div`
     min-height: 90vh;
