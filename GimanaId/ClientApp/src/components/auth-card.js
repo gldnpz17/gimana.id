@@ -2,6 +2,9 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useState, useRef } from "react";
 
+// Authentication mechanisms
+import { logIn, signUp } from "../utils/authentication";
+
 // The imported components starting with lowercase are going to be re-styled later
 import stockCard from "./card";
 import stockButton from "./button";
@@ -70,61 +73,70 @@ const AuthCard = ({ mode }) => {
         email: useRef(null)
     };
 
-    const callAuth = (apiUrl, jsonBody) => fetch(apiUrl, {
-        method: "POST",
-        headers: {
-            "accept": "application/json",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(jsonBody)
-    });
+    async function doLogIn() {
+        try {
+            await logIn(
+                refs.username.current.value,
+                refs.password.current.value
+            );
+            window.location.reload();
+        }
+        catch (err) {
+            console.error(err);
+            alert("Error logging you in");
+        }
+    }
 
-    function handleClick(e, functionToExecute) {
+    async function doSignUp() {
+        try {
+            await signUp(
+                refs.username.current.value,
+                refs.password.current.value,
+                refs.email.current.value
+            );
+            await doLogIn();
+        }
+        catch (err) {
+            console.error(err);
+            alert("There is some error happening while signing you up");
+        }
+    }
+
+    function handleClick(e, handlerFunction) {
         e.preventDefault();
-        functionToExecute();
+        handlerFunction();
     }
 
-    // doLogIn
-    function logIn(e) {
-        e.preventDefault();
+    switch (mode) {
+        case "signup":
+            return (
+                <Card>
+                    <FormTitle>Buat akun baru</FormTitle>
+                    <AdditionalText>Sudah pernah mendaftar? <Link to="/masuk">Klik di sini untuk masuk</Link>.</AdditionalText>
+                    <MainForm>
+                        <LabeledInput name="email" title="Alamat e-mail" type="email" autoFocus inputRef={refs.email} />
+                        <LabeledInput name="username" title="Username" type="text" autoComplete="username" inputRef={refs.username}/>
+                        <LabeledInput name="password" title="Kata sandi" type="password" autoComplete="new-password" inputRef={refs.password} />
+                        <LabeledInput name="repeat-password" title="Ulangi kata sandi" type="password" autoComplete="new-password" />
+                        <Button backgroundColor="#23CC20" onClick={e => { handleClick(e, doSignUp) }}>Daftar</Button>
+                    </MainForm>
+                </Card>
+            );
 
-        callAuth("api/Auth/login", {
-            username: refs.username.current.value,
-            password: refs.password.current.value
-        }).then(response => response.json()).then(data => {
-            localStorage.setItem("authToken", data.token);
-        }, () => {
-            alert("Login failed!");
-        });
-    }
-
-    if (mode === "signup") {
-        return (
-            <Card>
-                <FormTitle>Buat akun baru</FormTitle>
-                <AdditionalText>Sudah pernah mendaftar? <Link to="/masuk">Klik di sini untuk masuk</Link>.</AdditionalText>
-                <MainForm>
-                    <LabeledInput name="email" title="Alamat e-mail" type="email" autoFocus inputRef={refs.email} />
-                    <LabeledInput name="username" title="Username" type="text" autoComplete="username" inputRef={refs.username}/>
-                    <LabeledInput name="password" title="Kata sandi" type="password" autoComplete="new-password" inputRef={refs.password} />
-                    <LabeledInput name="repeat-password" title="Ulangi kata sandi" type="password" autoComplete="new-password" inputRef={refs.username} />
-                    <Button backgroundColor="#23CC20" onClick={e => { e.preventDefault(); }}>Daftar</Button>
-                </MainForm>
-            </Card>
-        );
-    }
-
-    return (
-        <Card>
-            <FormTitle>Selamat datang kembali!<br/>Silakan masuk.</FormTitle>
-            <MainForm>
-                <LabeledInput name="username" title="Username" type="text" autoComplete="username" autoFocus inputRef={refs.username} />
-                <LabeledInput name="password" title="Kata sandi" type="password" autoComplete="current-password" inputRef={refs.password} />
-                <Button backgroundColor="#23CC20" onClick={logIn}>Masuk</Button>
-                <AdditionalText>Lupa kata sandi? <a href="#">Klik di sini</a>.</AdditionalText>
-            </MainForm>
-        </Card>
-    );
+        case "login":
+        default:
+            return (
+                <Card>
+                    <FormTitle>Selamat datang kembali!<br/>Silakan masuk.</FormTitle>
+                    <MainForm>
+                        <LabeledInput name="username" title="Username" type="text" autoComplete="username" autoFocus inputRef={refs.username} />
+                        <LabeledInput name="password" title="Kata sandi" type="password" autoComplete="current-password" inputRef={refs.password} />
+                        <Button backgroundColor="#23CC20" onClick={e => { handleClick(e, doLogIn) }}>Masuk</Button>
+                        <AdditionalText>Lupa kata sandi? <a href="#">Klik di sini</a>.</AdditionalText>
+                    </MainForm>
+                </Card>
+            );
+    }    
 }
 
 export default AuthCard;

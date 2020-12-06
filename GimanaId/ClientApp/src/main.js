@@ -4,30 +4,45 @@ import { createGlobalStyle } from "styled-components";
 
 // Authentication-related
 import { AuthProvider } from "./utils/auth-context";
-import { getUserId } from "./utils/authentication";
+import { getCurrentUserInfo } from "./utils/authentication";
 
+// Common page elements
 import Header from "./components/header";
 
 // Pages for each route
 import authenticationPage from "./pages/sign-up";
 import authExperimentPage from "./pages/authentication-experiment";
 
-export default () => {
-    const [userInfo, setUserInfo] = useState({
-        isLoggedIn: false
-    });
+// Main app entry point
+const App = () => {
+    const [userInfo, setUserInfo] = useState(null);
+
+    // Populate user info on authenticated
+    async function checkAuthenticatedStatus() {
+        try {
+            const userInfo = await getCurrentUserInfo();
+
+            setUserInfo({
+                isLoggedIn: true,
+                username: userInfo.username
+            });
+        }
+        catch (e) {
+            if (e.status === 401) {
+                setUserInfo({
+                    isLoggedIn: false
+                })
+            }
+            else {
+                console.error(e);
+                alert("Error making userInfo request to the server.");
+            }
+        }
+    }
 
     useEffect(() => {
-        const storedToken = localStorage.getItem("authToken");
-        if (storedToken) {
-            getUserId(storedToken).then(id => {
-                setUserInfo({
-                    isLoggedIn: true,
-                    userId: id
-                });
-            })
-        }
-    }, [])
+        checkAuthenticatedStatus();
+    }, []);
 
     return (
         <BrowserRouter>
@@ -46,6 +61,9 @@ export default () => {
     )
 };
 
+export default App;
+
+// Show layout outlines on dev environment
 const DebuggingOutlines = createGlobalStyle`
     * {
         outline: 1px solid rgb(255 0 0 / 0.25);
