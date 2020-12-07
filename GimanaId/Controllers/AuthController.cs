@@ -84,9 +84,14 @@ namespace GimanaIdApi.Controllers
                 {
                     Secure = true,
                     SameSite = SameSiteMode.Strict,
-                    HttpOnly = true,
-                    Expires = DateTime.Now.AddDays(1)
+                    HttpOnly = true
                 };
+
+                if (dto.RememberMe)
+                {
+                    // I don't know if this alone is sufficient
+                    tokenCookieOptions.Expires = DateTime.Now.AddMonths(1);
+                }
 
                 // Temporary workaround to disable HTTPS requirement on dev environment
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
@@ -131,7 +136,7 @@ namespace GimanaIdApi.Controllers
         {
             var passwordSalt = _securePasswordSaltGenerator.GenerateSecureRandomString();
 
-            var newPassworCredential = new PasswordCredential()
+            var newPasswordCredential = new PasswordCredential()
             {
                 HashedPassword = _passwordHasher.HashPassword(dto.Password, passwordSalt),
                 PasswordSalt = passwordSalt
@@ -140,7 +145,7 @@ namespace GimanaIdApi.Controllers
             var newUser = new User()
             {
                 Username = dto.Username,
-                PasswordCredential = newPassworCredential,
+                PasswordCredential = newPasswordCredential,
                 Email = new UserEmail()
                 {
                     EmailAddress = dto.Email,

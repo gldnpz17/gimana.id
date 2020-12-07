@@ -10,14 +10,14 @@ function catchErrors(response) {
     return response;
 }
 
-export async function logIn(username, password) {
+export async function logIn(username, password, rememberMe) {
     return await fetch(`api/auth/login`, {
         method: "POST",
         headers: {
             accept: "application/json",
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password, rememberMe })
         // credentials: "omit" // We don't need the auth/session token cookies here
     });
 }

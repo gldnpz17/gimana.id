@@ -70,14 +70,16 @@ const AuthCard = ({ mode }) => {
     const refs = {
         username: useRef(null),
         password: useRef(null),
-        email: useRef(null)
+        email: useRef(null),
+        rememberMe: useRef(null)
     };
 
     async function doLogIn() {
         try {
             await logIn(
                 refs.username.current.value,
-                refs.password.current.value
+                refs.password.current.value,
+                refs.rememberMe.current ? refs.rememberMe.current.checked : false
             );
             window.location.reload();
         }
@@ -131,6 +133,7 @@ const AuthCard = ({ mode }) => {
                     <MainForm>
                         <LabeledInput name="username" title="Username" type="text" autoComplete="username" autoFocus inputRef={refs.username} />
                         <LabeledInput name="password" title="Kata sandi" type="password" autoComplete="current-password" inputRef={refs.password} />
+                        <label><input type="checkbox" ref={refs.rememberMe} />Masuk otomatis pada kunjungan berikutnya</label>
                         <Button backgroundColor="#23CC20" onClick={e => { handleClick(e, doLogIn) }}>Masuk</Button>
                         <AdditionalText>Lupa kata sandi? <a href="#">Klik di sini</a>.</AdditionalText>
                     </MainForm>
