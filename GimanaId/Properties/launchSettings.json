@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "dev-iisExpress": {
+    "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
@@ -20,7 +20,7 @@
         "INIT_ADMIN_EMAIL": "test@testmail.com"
       }
     },
-    "dev-kestrel": {
+    "GimanaId (Kestrel)": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
