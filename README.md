@@ -4,7 +4,7 @@ Sebuah platform *crowdsourced* yang bertujuan untuk membantu orang-orang melakuk
 
 Preview: *(coming soon)*
 
-## Technologies used
+## Frameworks & Libraries used
 
 ### Front-end
 * React.js  
