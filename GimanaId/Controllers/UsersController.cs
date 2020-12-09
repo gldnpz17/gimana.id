@@ -19,6 +19,7 @@ using GimanaIdApi.Infrastructure.DataAccess;
 using GimanaIdApi.Infrastructure.EmailSender;
 using GimanaIdApi.Infrastructure.PasswordHasher;
 using GimanaIdApi.Infrastructure.SecurePasswordSaltGenerator;
+using GimanaId.DTOs.Response;
 
 namespace GimanaIdApi.Controllers
 {
@@ -218,6 +219,25 @@ namespace GimanaIdApi.Controllers
 
             return output;
         }
+        
+        /// <summary>
+        /// Check whether or not a given username is available.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpGet("check-username-availability/{username}")]
+        public async Task<ActionResult<UsernameAvailabilityDto>> CheckUsernameAvailability([FromRoute]string username)
+        {
+            var user = await _appDbContext.Users.FirstOrDefaultAsync(i => i.Username == username);
+
+            var output = new UsernameAvailabilityDto()
+            {
+                IsAvailable = (user == null)
+            };
+
+            return Ok(output);
+        }
+
 
         private async Task<User> GetCurrentUser()
         {
