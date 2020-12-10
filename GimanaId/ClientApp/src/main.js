@@ -13,7 +13,9 @@ import Header from "./components/header";
 import HomePage from "./pages/home";
 import RegisterPage from "./pages/sign-up";
 import LoginPage from "./pages/log-in";
+
 import AuthExperimentPage from "./pages/authentication-experiment";
+import ArticlesExperimentPage from "./pages/collections-experiment";
 
 // Main app entry point
 const App = () => {
@@ -57,6 +59,7 @@ const App = () => {
 
                     {/* For some fun things */}
                     <Route path="/authentication-experiment" component={AuthExperimentPage} />
+                    <Route path="/articles-exp" component={ArticlesExperimentPage} />
 
                     {/* 404 page */}
                     <Route>Page not found.</Route>
