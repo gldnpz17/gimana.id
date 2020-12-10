@@ -13,6 +13,7 @@ import Header from "./components/header";
 import HomePage from "./pages/home";
 import RegisterPage from "./pages/sign-up";
 import LoginPage from "./pages/log-in";
+import DashboardPage from "./pages/dashboard";
 
 import AuthExperimentPage from "./pages/authentication-experiment";
 import ArticlesExperimentPage from "./pages/collections-experiment";
@@ -28,7 +29,7 @@ const App = () => {
 
             setUserInfo({
                 isLoggedIn: true,
-                username: userInfo.username
+                ...userInfo
             });
         }
         catch (e) {
@@ -56,6 +57,8 @@ const App = () => {
                     <Route exact path="/" component={HomePage} />
                     <Route path="/daftar" component={RegisterPage} />
                     <Route path="/masuk"  component={LoginPage} />
+
+                    <Route path="/dasbor" component={DashboardPage} />
 
                     {/* For some fun things */}
                     <Route path="/authentication-experiment" component={AuthExperimentPage} />

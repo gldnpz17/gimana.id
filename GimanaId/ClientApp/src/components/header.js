@@ -63,7 +63,7 @@ const Header = () => {
                     authStatus.isLoggedIn ? (
                         <Fragment>
                             <p>Halo, <b>{authStatus.username}</b>!</p>
-                            <Link to="articles-exp">Test tambah artikel baru</Link>
+                            <Link to="/dasbor">Dasbor</Link>
                             <a href="#" onClick={testHandleLogOut}>Keluar dari akun</a>
                         </Fragment>
                     ) : (
