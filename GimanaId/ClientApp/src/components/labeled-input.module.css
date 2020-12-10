@@ -1,0 +1,85 @@
+.wrapper {
+    margin: 0.5em;
+    width: 100%;
+}
+
+.accompanyingLabel {
+    display: block;
+
+    font-size: inherit;
+
+    margin: 0;
+    margin-bottom: 0.25em;
+}
+
+/* .auth-input[type=text|password|email] */
+.authInputField {
+    display: block;
+    font-family: inherit;
+    width: 100%; /* FIXME? */
+
+    border: none;
+    padding: 0.8em;
+    background-color: rgb(0 0 0 / 0.075);
+
+    transition: background-color 0.2s;
+}
+
+.authInputField:hover {
+    background-color: rgb(0 0 0 / 0.05);
+}
+
+.authInputField:focus {
+    /* Some resets */
+    border: none;
+    outline: none;
+
+    box-shadow: 0 0 0.05em 0.1em #3399D2;
+    background-color: white;
+}
+
+.accompanyingMessage {
+    margin: 0.25em 0;
+    font-size: 0.8em;
+
+    max-height: 5em; /* FIXME */
+    animation: invalid-text-reveal 0.4s;
+}
+
+.invalidMessage {
+    display: none;
+    color: white;
+    font-weight: bold;
+
+    margin: 0;
+    padding: 0.25em;
+    text-align: center;
+    background-color: orangered;
+    box-shadow: 0 0 0.05rem 0.1rem orangered; /* FIXME: Code/style duplication */
+
+    animation: invalid-wiggle 0.4s, invalid-text-reveal 0.4s;
+}
+
+.authInputField.showInvalidity:invalid {
+    box-shadow: 0 0 0.05em 0.1em orangered;
+    animation: invalid-wiggle 0.4s;
+}
+
+.authInputField.showInvalidity:invalid + .invalidMessage {
+    display: block;
+}
+
+@keyframes invalid-wiggle {
+    25%, 75% {
+        transform: translateX(-2%);
+    }
+    50% {
+        transform: translateX(2%);
+    }
+}
+
+@keyframes invalid-text-reveal {
+    from {
+        max-height: 0;
+    }
+}

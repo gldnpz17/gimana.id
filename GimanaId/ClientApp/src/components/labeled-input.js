@@ -1,45 +1,41 @@
-import styled from "styled-components";
+import { useState } from "react";
 
-const Wrapper = styled.div`
-    margin: 0.5em;
-    width: 100%;
-`;
+import styles from "./labeled-input.module.css";
 
-const Label = styled.label`
-    display: block;
+const LabeledInput = ({ name,
+                        title,
+                        type,
+                        inputRef,
+                        customError, // or `customMessage` or `accompanyingMessage`?
+                        onBlur,
+                        ...rest }) => {
+    const [showInvalidity, setShowInvalidity] = useState(false);
 
-    font-size: inherit;
+    return (
+        <div className={styles.wrapper}>
+            <label className={styles.accompanyingLabel} htmlFor={name}>{title}</label>
+            <input
+                className={[styles.authInputField, showInvalidity ? styles.showInvalidity : null].join(" ")}
+                name={name}
+                type={type}
+                ref={inputRef}
+                onBlur={ev => {
+                    showInvalidity || setShowInvalidity(true);
+                    onBlur && onBlur(ev);
+                }}
+                {...rest}
+            />
+            <p className={[styles.accompanyingMessage, styles.invalidMessage].join(" ")}>Isian tidak valid</p>
+            {customError ?
+                <p
+                    className={styles.accompanyingMessage}
+                    style={{ color: customError.color ?? `grey` }}
+                >
+                    {customError.message}
+                </p>
+            : null}
+        </div>
+    );
+}
 
-    margin: 0;
-    margin-bottom: 0.25em;
-`;
-
-const Input = styled.input`
-    display: block;
-    font-family: inherit;
-    width: 100%; /* FIXME? */
-
-    &[type=text], &[type=password], &[type=email] {
-        border: none;
-        padding: 0.8em;
-        background-color: rgb(0 0 0 / 0.075);
-
-        transition: background-color 0.2s;
-
-        &:focus {
-            /* Some resets */
-            border: none;
-            outline: none;
-
-            box-shadow: 0 0 0.05em 0.1em #3399D2;
-            background-color: white;
-        }
-    }
-`;
-
-export default ({ name, title, type, inputRef, ...rest }) => (
-    <Wrapper>
-        <Label htmlFor={name}>{title}</Label>
-        <Input name={name} type={type} ref={inputRef} {...rest} />
-    </Wrapper>
-);
+export default LabeledInput;
