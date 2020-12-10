@@ -232,6 +232,7 @@ namespace GimanaIdApi.Controllers
 
             var output = new UsernameAvailabilityDto()
             {
+                Username = username,
                 IsAvailable = (user == null)
             };
 

@@ -54,23 +54,24 @@ const SignUpCard = () => {
     // Now-already-dispatched timeout
     const [runningTimeout, assignRunningTimeout] = useState(null);
 
-    // Dummy thing before the actual mechanism is ready
-    async function _dummyUsernameAvailabilityChecker(uname) {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                const returnable = {
-                    username: uname,
-                    availableStatus: uname === "admin" ? false : true
-                }
-                resolve(returnable);
-            }, 1000);
-        })
-    }
-
     async function checkUsernameAvailability(uname) {
-        const avail = await _dummyUsernameAvailabilityChecker(uname);
-        setUsernameAvailability(avail);
-        return avail; // Because setState is async, we can't rely on that, so we just directly return the result if we need them for additional checking
+        let avail; // Declaring here so that it's accessible within the entire try-catch-finally blocks
+
+        try {
+            const response = await fetch(`api/users/check-username-availability/${uname}`);
+            avail = await response.json();
+        }
+        catch (err) {
+            avail = {
+                username: uname,
+                isAvailable: null,
+                error: err
+            };
+            console.error(err);
+        }
+        finally {
+            return avail; 
+        }
     }
 
     function onUsernameChange(ev) {
@@ -87,7 +88,8 @@ const SignUpCard = () => {
 
             assignRunningTimeout(
                 setTimeout(async () => {
-                    await checkUsernameAvailability(value);
+                    const avail = await checkUsernameAvailability(value);
+                    setUsernameAvailability(avail);
                 }, 500)
             );
         }
@@ -108,7 +110,7 @@ const SignUpCard = () => {
                 };
         }
 
-        switch (usernameAvailability.availableStatus) {
+        switch (usernameAvailability.isAvailable) {
             case true:
                 return {
                     color: "green",
@@ -120,6 +122,13 @@ const SignUpCard = () => {
                     color: "red",
                     message: <>Maaf, <b>{usernameAvailability.username}</b> telah digunakan.</>
                 };
+
+            case null:
+            default:
+                return {
+                    color: "red",
+                    message: <>Terjadi eror dalam memeriksa ketersediaan username <b>{usernameAvailability.username}</b>.</>
+                }
         }
     }
 
@@ -133,16 +142,17 @@ const SignUpCard = () => {
         ev.preventDefault();
         console.log(ev.target);
 
-        // FIXME
+        // We need this because setState is async so we can't rely on that for getting the current value
         let _usernameAvailability = usernameAvailability;
 
         if (_usernameAvailability === null || _usernameAvailability === "loading") {
             _usernameAvailability = await checkUsernameAvailability(usernameValue);
+            setUsernameAvailability(_usernameAvailability);
         }
 
         //#region -- A set of early returns in case the form is still invalid
 
-        if (!_usernameAvailability.availableStatus) {
+        if (!_usernameAvailability.isAvailable) {
             alert(`The username "${usernameValue}" is already taken. Please try another!`)
             return;
         }
@@ -154,11 +164,11 @@ const SignUpCard = () => {
 
         //#endregion
 
-        // If the code reached this point, we assume that the form is already valid(ated)
+        // If the code reached this point, we assume that the form is already valid
         try {
             await signUp(usernameValue, passwordValue, emailValue);
             await logIn(usernameValue, passwordValue);
-            // window.location.reload();
+            window.location.reload();
         }
         catch (err) {
             console.error(err);
