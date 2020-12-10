@@ -129,7 +129,33 @@ namespace GimanaIdApi
                 dbContext.SaveChanges();
             }
             #endregion
-            services.AddSingleton(typeof(AppDbContext), dbContext);
+            services.AddTransient(
+                typeof(AppDbContext), 
+                (serviceProvider) => 
+                {
+                    if (_env.IsDevelopment())
+                    {
+                        var devDatabaseType = Environment.GetEnvironmentVariable("DEV_DATABASE_TYPE");
+
+                        switch (devDatabaseType)
+                        {
+                            case "Concrete":
+                                return new AppDbContext();
+                            case "InMemory":
+                                return new InMemoryAppDbContext();
+                            default:
+                                throw new Exception($"environment variable DEV_DATABASE_TYPE has invalid value({devDatabaseType}).");
+                        }
+                    }
+                    else if (_env.IsProduction())
+                    {
+                        return new AppDbContext();
+                    }
+                    else
+                    {
+                        throw new Exception("unknown environment type.");
+                    }                    
+                });
 
             services.AddSingleton(
                 typeof(IMapper), 
