@@ -13,6 +13,7 @@ import Header from "./components/header";
 import HomePage from "./pages/home";
 import RegisterPage from "./pages/sign-up";
 import LoginPage from "./pages/log-in";
+import ArticlePage from "./pages/article";
 import DashboardPage from "./pages/dashboard";
 
 import AuthExperimentPage from "./pages/authentication-experiment";
@@ -57,6 +58,7 @@ const App = () => {
                     <Route exact path="/" component={HomePage} />
                     <Route path="/daftar" component={RegisterPage} />
                     <Route path="/masuk"  component={LoginPage} />
+                    <Route path="/artikel/:articleGuid" component={ArticlePage} />
 
                     <Route path="/dasbor" component={DashboardPage} />
 

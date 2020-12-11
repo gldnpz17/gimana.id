@@ -1,5 +1,5 @@
 import { useEffect, useContext } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect, useHistory, Link } from "react-router-dom";
 
 import s from "./dashboard.module.css";
 
@@ -42,8 +42,7 @@ const DashboardPage = () => {
                     {/* Probably refresh global userInfo state on each route visit OR provide a state-refresh action context? */}
                     {userInfo?.contributedArticles.map(entry => (
                         <li key={entry.id}>
-                            {/* TODO: Change all of this to using <Link /> */}
-                            <a href={`#${entry.id}`}>{entry.title}</a>
+                            <Link to={`/artikel/${entry.id}`}>{entry.title}</Link>
                         </li>
                     ))}
                 </ul>
