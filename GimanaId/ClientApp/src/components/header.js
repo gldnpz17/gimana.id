@@ -15,6 +15,8 @@ const MainContainer = styled.header`
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    font-family: "Barlow", sans-serif;
 `;
 
 const Part = styled.div`

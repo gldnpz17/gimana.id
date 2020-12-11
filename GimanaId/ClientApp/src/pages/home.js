@@ -23,7 +23,7 @@ const MainHeroText = styled.h1`
 `;
 
 const ComplementaryHeroText = styled.p`
-    font-family: "Red Hat Display", sans-serif;
+    font-family: "Barlow", sans-serif;
     font-size: 1.5em;
 
     margin: 0;

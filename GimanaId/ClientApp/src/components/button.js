@@ -13,8 +13,8 @@ export default styled.button`
     border-radius: 0.25rem;
 
     font-size: inherit;
-    font-family: inherit;
-    font-weight: 500;
+    font-family: "Barlow", "Nunito Sans", sans-serif;
+    font-weight: 600;
 
     background-color: ${props => props.backgroundColor ? props.backgroundColor : "skyblue"};
     color: ${props => props.textColor ? props.textColor : "white"};

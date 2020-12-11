@@ -1,9 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,400;0,500;0,700;1,900&family=Red+Hat+Text:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap&text=Gimana.id");
+@import url("https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,700&family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 html {
     font-size: 87.5%;
-    font-family: "Red Hat Text", sans-serif;
+    font-family: "Nunito Sans", sans-serif;
     
     box-sizing: border-box;
 }
@@ -18,5 +18,5 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Red Hat Display", sans-serif;
+    font-family: "Barlow", sans-serif;
 }
