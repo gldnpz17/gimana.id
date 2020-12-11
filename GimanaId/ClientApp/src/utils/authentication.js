@@ -11,7 +11,7 @@ function catchErrors(response) {
 }
 
 export async function logIn(username, password, rememberMe) {
-    return await fetch(`api/auth/login`, {
+    return await fetch(`/api/auth/login`, {
         method: "POST",
         headers: {
             accept: "application/json",
@@ -23,7 +23,7 @@ export async function logIn(username, password, rememberMe) {
 }
 
 export async function signUp(username, password, email) {
-    return await fetch(`api/auth/sign-up`, {
+    return await fetch(`/api/auth/sign-up`, {
         method: "POST",
         headers: {
             accept: "application/json",
@@ -35,7 +35,7 @@ export async function signUp(username, password, email) {
 }
 
 export async function getCurrentUserId() {
-    const response = await fetch(`api/users/get-user-id`, {
+    const response = await fetch(`/api/users/get-user-id`, {
         headers: {
             "accept": "text/plain"
         }
@@ -46,7 +46,7 @@ export async function getCurrentUserId() {
 }
 
 export async function getUserInfo(userId) {
-    const response = await fetch(`api/users/${userId}`, {
+    const response = await fetch(`/api/users/${userId}`, {
         headers: {
             "accept": "text/plain"
         }
