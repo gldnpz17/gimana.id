@@ -1,0 +1,106 @@
+.pageWrapper {
+    max-width: 1250px; /* Actual value is to be decided later */
+    margin: 0 auto;
+
+    padding: 2rem;
+
+    animation: initial-page-entry 0.75s 0.25s backwards; /* TEMPORARY STYLING */  /* or change `backwards` to `both`? */
+}
+
+.heroSection {
+    display: flex;
+    color: white;
+
+    margin: 2rem 0;
+}
+
+.heroTexts {
+    flex-grow: 1;
+}
+
+.heroTitle {
+    font-size: 2.5em;
+    margin: 0;
+    margin-bottom: 0.8em;
+}
+
+.heroImage {
+    /* FIXME: don't use hardcoded pixel value, probably use rem instead (or pair it with max-width/height) */
+    width: 500px;
+    height: 375px;
+    object-fit: cover;
+
+    border-radius: 0.5rem;
+    border: 0.25rem solid white;
+    box-shadow: 0 0 0 0.5rem rgb(0 0 0 / 0.1), 0 0 0.25rem rgb(0 0 0 / 0.25);
+
+    flex-shrink: 0;
+    margin-left: 2rem;
+}
+
+.partWrapper {
+    display: block;
+    max-width: 80ch;
+    margin: 5em auto; /* probably change this to account for ads */ /* Vertical margin is to be decided (later) */
+
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 0.25);
+
+    padding: 2em;
+}
+
+.partTitle {
+    font-size: 1.5em;
+    font-weight: 300;
+
+    margin: 0;
+}
+
+.partTitle:first-line {
+    font-weight: bold;
+    border-bottom: 0.1em dashed currentColor;
+}
+
+.stepsContainer {
+    /* Some resets to the default UA stylings */
+    margin: 0;
+    padding: 0;
+}
+
+.stepWrapper {
+    display: flex;
+    align-items: flex-start;
+
+    margin: 1.5em 0; /* To be decided (later) */
+}
+
+.stepNumberMarker {
+    font-size: 2em;
+    font-family: "Barlow", sans-serif;
+    font-weight: bold;
+    font-style: italic;
+    color: white;
+
+    background-color: #3399D2; /* ? */
+    border-radius: 0.25rem;
+    padding: 0.25em 0.5em;
+
+    margin-right: 0.5em; /* To be decided later (or probably just put the margin in the paragraph element instead */
+}
+
+.stepText {
+    margin: 0;
+}
+
+.stepText:first-line {
+    font-weight: bold;
+}
+
+/* TEMPORARY STYLING */
+@keyframes initial-page-entry {
+    from {
+        transform: translateY(10vh);
+        opacity: 0;
+    }
+}
