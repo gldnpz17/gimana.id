@@ -5,7 +5,7 @@ import s from "./dashboard.module.css";
 
 import Button from "../components/button";
 
-import AuthContext from "../utils/auth-context";
+import AuthContext from "../components/auth-context";
 
 const DashboardPage = () => {
     const userInfo = useContext(AuthContext);

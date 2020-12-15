@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useRef } from "react";
 
-import { logIn } from "../utils/authentication";
+import { logIn } from "../api/authentication";
 
 import AuthCard, { FinePrint, AuthForm, FormTitle, AuthButton } from "../components/auth-card";
 import LabeledInput from "../components/labeled-input";

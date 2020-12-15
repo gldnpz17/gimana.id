@@ -5,7 +5,7 @@ import { useState } from "react";
 import AuthCard, { FormTitle, FinePrint, AuthForm, AuthButton } from "../components/auth-card";
 import LabeledInput from "../components/labeled-input";
 
-import { signUp, logIn } from "../utils/authentication";
+import { signUp, logIn } from "../api/authentication";
 
 const PageContainer = styled.div`
     min-height: 90vh;

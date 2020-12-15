@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { createGlobalStyle } from "styled-components";
 
 // Authentication-related
-import { AuthProvider } from "./utils/auth-context";
-import { getCurrentUserInfo } from "./utils/authentication";
+import { AuthProvider } from "./components/auth-context";
+import { getCurrentUserInfo } from "./api/authentication";
 
 // Common page elements
 import Header from "./components/header";

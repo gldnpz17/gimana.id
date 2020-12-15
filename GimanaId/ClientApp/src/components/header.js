@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Fragment, useContext } from "react";
 
-import authContext from "../utils/auth-context";
+import authContext from "./auth-context";
 import Logo from "./logo-temporary";
 
 const MainContainer = styled.header`
