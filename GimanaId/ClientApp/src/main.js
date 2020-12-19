@@ -19,6 +19,7 @@ import LoginPage from "./pages/log-in";
 import ArticlePage from "./pages/article";
 import ArticleEditorPage from "./pages/article-editor";
 
+import UserPage from "./pages/user/user-page";
 import DashboardPage from "./pages/dashboard";
 
 import AuthExperimentPage from "./pages/authentication-experiment";
@@ -72,7 +73,7 @@ const App = () => {
                     <Route path="/artikel/:articleGuid/edit"><ArticleEditorPage mode="edit" /></Route>
                     <Route path="/artikel/:articleGuid" component={ArticlePage} />
 
-                    <Route path="/dasbor" component={DashboardPage} />
+                    <Route path="/anda" component={UserPage} />
 
                     {/* For some fun things */}
                     <Route path="/authentication-experiment" component={AuthExperimentPage} />
