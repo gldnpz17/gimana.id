@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const TestArticleCollectionsPage = () => {
     const blanks = {
@@ -24,6 +24,14 @@ const TestArticleCollectionsPage = () => {
     const [mainArticleData, setMainArticleData] = useState(blanks.meta);
     const [parts, setParts] = useState([blanks.part]);
 
+    const [particularTextAreaHeight, setParticularTextAreaHeight] = useState("auto");
+    // const descTextArea = useRef(); // reminder: use ref for the timeout state in signup page
+
+    // useEffect(() => {
+    //     // setParticularTextAreaHeight("auto"); // Find out why we need this
+    //     setParticularTextAreaHeight(descTextArea.current.scrollHeight + "px");
+    // }, [mainArticleData.description]);
+
 
     // Set one part of the whole state object/value
     function partiallyUpdateStateObject(stateSetterFunction, newProperty) {
@@ -32,6 +40,8 @@ const TestArticleCollectionsPage = () => {
             ...newProperty
         }));
     }
+
+    const [numberofRows, setNumberofRows] = useState(1);
 
     function addPart() {
         const currentParts = [...parts];
@@ -81,8 +91,21 @@ const TestArticleCollectionsPage = () => {
                         }} />
                     </label>
                     <label>Deskripsi
-                        <textarea value={mainArticleData.description} onChange={ev => {
+                        <textarea style={{ height: particularTextAreaHeight }} value={mainArticleData.description} onChange={ev => {
+                            // setParticularTextAreaHeight("auto");
+                            // ev.target.style.height = "auto";
                             partiallyUpdateStateObject(setMainArticleData, { description: ev.target.value });
+                            // setParticularTextAreaHeight(ev.target.scrollHeight + "px");
+                            // ev.target.style.height = ev.target.scrollHeight + 4 + "px";
+
+                            // const?
+
+                            if (ev.target.style.height !== ev.target.scrollHeight + 4 + "px") {
+                                ev.target.style.height = "auto";
+                                ev.target.style.height = ev.target.scrollHeight + 4 + "px";
+                            }
+
+                            console.log(ev);
                         }} />
                     </label>
                     <ul>
@@ -98,10 +121,12 @@ const TestArticleCollectionsPage = () => {
                                     }} />
                                 </label>
                                 <label>Deskripsi:
-                                    <textarea value={part.description} onChange={ev => {
+                                    <textarea style={{ display: "block", resize: "none" }} rows={numberofRows} value={part.description} onChange={ev => {
                                         const val = [...parts];
                                         val[partIndex].description = ev.target.value;
                                         setParts(val);
+                                        console.log(ev.target.scrollHeight);
+                                        setNumberofRows(Math.floor(ev.target.scrollHeight / 19));
                                     }} />
                                 </label>
                                 <ul>

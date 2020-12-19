@@ -9,15 +9,22 @@ import { getCurrentUserInfo } from "./api/authentication";
 // Common page elements
 import Header from "./components/header";
 
-// Pages for each route
+//#region Page components for each route
+
 import HomePage from "./pages/home";
+
 import RegisterPage from "./pages/sign-up";
 import LoginPage from "./pages/log-in";
+
 import ArticlePage from "./pages/article";
+import ArticleEditorPage from "./pages/article-editor";
+
 import DashboardPage from "./pages/dashboard";
 
 import AuthExperimentPage from "./pages/authentication-experiment";
 import ArticlesExperimentPage from "./pages/collections-experiment";
+
+//#endregion
 
 // Main app entry point
 const App = () => {
@@ -56,8 +63,13 @@ const App = () => {
                 <Header />
                 <Switch>
                     <Route exact path="/" component={HomePage} />
+
                     <Route path="/daftar" component={RegisterPage} />
                     <Route path="/masuk"  component={LoginPage} />
+
+                    {/* create-new */}
+                    <Route path="/artikel/buat-baru"><ArticleEditorPage mode="new" /></Route>
+                    <Route path="/artikel/:articleGuid/edit"><ArticleEditorPage mode="edit" /></Route>
                     <Route path="/artikel/:articleGuid" component={ArticlePage} />
 
                     <Route path="/dasbor" component={DashboardPage} />

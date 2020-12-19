@@ -56,3 +56,63 @@
 .userContributionsSection h1 {
     font-weight: normal;
 }
+
+.contributedArticlesListingContainer {
+    display: flex;
+}
+
+.articleEntryWrapperAnchor {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.articleEntryWrapperAnchor:hover .articleEntryCard {
+    border-color: skyblue;
+}
+
+.articleEntryWrapperAnchor:hover h2 {
+    color: skyblue;
+    text-decoration: underline;
+}
+
+.articleEntryCard {
+    composes: card from "../components/card.module.css";
+
+    display: flex;
+
+    padding: 0.5rem;
+}
+
+.articleEntryCard > img {
+    height: 3em;
+    width: 4em;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.articleEntryCard h2 {
+    margin: 0;
+    margin-bottom: 0.25em;
+
+    font-size: 1.1em;
+}
+
+.articleEntryCard p {
+    font-size: 0.9em;
+
+    margin: 0;
+    margin-top: 0.1em;
+}
+
+.articleEditActionButton {
+    display: block;
+    text-decoration: none;
+
+    transition: background-color 0.1s; /* TEMPORARY STYLING */
+}
+
+/* TEMPORARY STYLING */
+.articleEditActionButton:hover {
+    background-color: rgb(0 0 0 / 0.1);
+}

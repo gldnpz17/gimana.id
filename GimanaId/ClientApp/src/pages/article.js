@@ -1,107 +1,86 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { createGlobalStyle } from "styled-components";
 
-// import {}
+import { fetchArticle } from "../api/article";
 
-import c from "./article.module.css";
+// import cm from "../components/article-common.module.css";
+import c from "./article-common.module.css";
 
-// Global styles specific to this page
-const ArticlePageGlobalStyle = createGlobalStyle`
-    body {
-        background-color: #3399D2; /* Subject to change */
+// // Move these to a separate article-common.js file?
+// const HeroSection = ({ children, ...props }) => (
+//     <section {...props}>
+//         {children}
+//     </section>
+// );
+
+// const Text = ({ mode, component, className, rows, children, onChange, ...rest }) => {
+//     if (mode === "edit" || mode === "new") {
+//         return <textarea className={[c.editable, className].join(" ")} rows={rows} value={children} onChange={onChange} />;
+//     }
+//     const Component = component;
+//     return <Component className={className} {...rest}>{children}</Component>;
+// }
+
+async function getArticleData(articleGuid, stateSetter) {
+    try {
+        const jsonResponse = await fetchArticle(articleGuid);
+        stateSetter(jsonResponse);
     }
-`;
+    catch (err) {
+        stateSetter({
+            error: err
+        });
+        console.log(err);
+    }
+}
 
 const ArticlePage = () => {
     const { articleGuid } = useParams();
 
-    const mockOrStubArticleData = {
-        "id": "string",
-        "title": "string",
-        "description": "string",
-        "heroImage": {
-            "fileFormat": "string",
-            "base64EncodedData": "string"
-        },
-        "parts": [
-            {
-                "partNumber": 1,
-                "title": "string",
-                "description": "string",
-                "steps": [
-                    {
-                        "stepNumber": 1,
-                        "title": "string",
-                        "description": "string"
-                    }
-                ]
-            }
-        ],
-        "contributors": [
-            {
-                "id": "string",
-                "username": "string",
-                "profilePicture": {
-                    "fileFormat": "string",
-                    "base64EncodedData": "string"
-                }
-            }
-        ]
-    };
-
-    const [articleData, setArticleData] = useState(null); // previously/originally was null
-
-    async function fetchArticleData() {
-        try {
-            const response = await fetch(`/api/articles/${articleGuid}`);
-
-            // FIXME: Place all of this in the "utils/authentication.js" file (unified in a single file)
-            if (!response.ok) {
-                throw response;
-            }
-
-            const data = await response.json();
-            setArticleData(data);
-        }
-        catch (err) {
-            setArticleData({
-                error: err
-            });
-            console.log(err);
-        }
-    }
+    const [data, setData] = useState(null);
 
     useEffect(() => {
-        fetchArticleData();
-    }, [])
+        getArticleData(articleGuid, setData);
+    }, []);
 
-    return articleData ? (
+    return data ? (
         <article className={c.pageWrapper}>
-            <ArticlePageGlobalStyle />
             <section className={c.heroSection}>
                 <div className={c.heroTexts}>
-                    <h1 className={c.heroTitle}>{articleData.title || "Terjadi eror dalam memuat konten artikel ini."}</h1>
-                    <p className={c.heroDescription}>{articleData.description || `${articleData.error.status}: ${articleData.error.statusText}`}</p>
+                    <h1
+                        // m/ode="edit"
+                        // component="div"
+                        className={c.heroTitle}
+                        // onChange={({ target: { value } }) => {
+                        //     const prev = data;
+                        //     prev.title = value;
+                        //     setData(prev);
+                        // }}
+                    >{data.title || "Terjadi eror dalam memuat konten artikel ini."}</h1>
+                    <p className={c.heroDescription}>{data.description || `${data.error.status}: ${data.error.statusText}`}</p>
                 </div>
                 <img className={c.heroImage} src="https://source.unsplash.com/random" alt="Hero image" />
             </section>
-            {articleData.parts?.map(part => (
-                <section key={`part${part.partNumber}`} className={c.partWrapper}>
-                    <h1 className={c.partTitle}> {/* or h2? */}
-                        Bagian {part.partNumber}
-                        <br />
-                        {part.title}
-                    </h1>
+            {data.parts?.map(part => (
+                <section key={`part${part.partNumber}`} className={c.partCard}>
+                    <div className={c.partHeading}>
+                        <h2 className={c.partNumber}>Bagian {part.partNumber}</h2>
+                        <p className={c.partTitle}>{part.title}</p>
+                    </div>
                     <ul className={c.stepsContainer}>
                         {part.steps?.map(step => (
-                            <li key={`part${part.partNumber}-step${step.stepNumber}`} className={c.stepWrapper}>
-                                <div className={c.stepNumberMarker}>{step.stepNumber}</div>
+                            <li key={`part${part.partNumber}-step${step.stepNumber}`} className={c.stepItemContainer}>
+                                {Math.random() < 0.25 ? (
+                                    <img className={c.stepImage} src="https://source.unsplash.com/random" alt={step.title} />
+                                ) : null}
+                                <div className={c.stepExplanationWrapper}>
+                                    <div className={c.stepNumberMarker}>{step.stepNumber}</div>
                                 <p className={c.stepText}>
-                                    {step.title}
-                                    <br />
-                                    {step.description}
-                                </p>
+                                        {step.title}
+                                        <br />
+                                        {step.description}
+                                    </p>
+                                </div>
                             </li>
                         ))}
                     </ul>
@@ -114,3 +93,5 @@ const ArticlePage = () => {
 };
 
 export default ArticlePage;
+
+export { getArticleData };

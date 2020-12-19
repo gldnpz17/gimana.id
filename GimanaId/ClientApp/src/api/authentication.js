@@ -1,14 +1,4 @@
-// Authentication logics go here
-// Create a utils/ directory/file instead?
-
-function catchErrors(response) {
-    if (!response.ok) {
-        const { status, statusText } = response;
-        throw { status, statusText }; // Or throw the whole/entire response object instead?
-    }
-
-    return response;
-}
+import { catchBadResponses } from "./utils";
 
 export async function logIn(username, password, rememberMe) {
     return await fetch(`/api/auth/login`, {
@@ -39,7 +29,7 @@ export async function getCurrentUserId() {
         headers: {
             "accept": "text/plain"
         }
-    }).then(res => catchErrors(res));
+    }).then(catchBadResponses);
 
     const data = await response.json();
     return data.id;
@@ -50,7 +40,11 @@ export async function getUserInfo(userId) {
         headers: {
             "accept": "text/plain"
         }
-    }).then(res => catchErrors(res));
+    }).then(catchBadResponses);
+
+    // Or it can also be done this way:
+    // catchBadResponses(response);
+    // But it would add one more line
 
     return await response.json();
 }

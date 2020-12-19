@@ -1,0 +1,6 @@
+.card {
+    background-color: white;
+    border: 0.2rem solid var(--black); /* or 0.25rem? */
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.25); /* or 0 0.25rem 0.5rem? */
+}

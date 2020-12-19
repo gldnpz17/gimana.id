@@ -1,17 +1,29 @@
+:global(body) {
+    background-color: rgb(240 240 240); /* Subject to change */
+}
+
 .pageWrapper {
     max-width: 1250px; /* Actual value is to be decided later */
     margin: 0 auto;
 
-    padding: 2rem;
+    padding: 1rem;
 
     animation: initial-page-entry 0.75s 0.25s backwards; /* TEMPORARY STYLING */  /* or change `backwards` to `both`? */
 }
 
 .heroSection {
     display: flex;
-    color: white;
+    /* color: white; */
+    background-color: plum;
+    padding: 2.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.2rem 0.4rem rgb(0 0 0 / 0.1);
 
     margin: 2rem 0;
+
+    /* FIXME */
+    padding-bottom: 25rem;
+    margin-bottom: -25rem;
 }
 
 .heroTexts {
@@ -20,6 +32,8 @@
 
 .heroTitle {
     font-size: 2.5em;
+    text-transform: capitalize;
+
     margin: 0;
     margin-bottom: 0.8em;
 }
@@ -38,28 +52,36 @@
     margin-left: 2rem;
 }
 
-.partWrapper {
+.partCard {
+    composes: card from "../components/card.module.css";
     display: block;
     max-width: 80ch;
     margin: 5em auto; /* probably change this to account for ads */ /* Vertical margin is to be decided (later) */
 
-    background-color: white;
+    /* background-color: white;
     border-radius: 0.5rem;
-    box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 0.25);
+    border: 0.2rem solid black;
+    box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 0.25); */
 
     padding: 2em;
 }
 
-.partTitle {
+/* .partHeading {
     font-size: 1.5em;
-    font-weight: 300;
+} */
 
+.partNumber {
     margin: 0;
+    border-bottom: 0.1em dashed currentColor;
+    width: fit-content; /* HACK, to get the "underline" effect to fit the text content only */
+    font-size: 1.5em;
 }
 
-.partTitle:first-line {
-    font-weight: bold;
-    border-bottom: 0.1em dashed currentColor;
+.partTitle {
+    font-family: "Barlow", sans-serif;
+    font-weight: 300;
+    font-size: 1.5em;
+    margin: 0;
 }
 
 .stepsContainer {
@@ -68,11 +90,25 @@
     padding: 0;
 }
 
-.stepWrapper {
+.stepItemContainer {
+    display: block;
+    margin: 1.5em 0; /* To be decided (later) */
+}
+
+img.stepImage {
+    width: 100%; /* or max-width? */
+
+    /* TODO: What if the image is supposed to be tall and cannot be cut in any way? */
+    max-height: 25rem; /* or something like 50vh/80vh/60vh? Don't forget to account for the header */
+    object-fit: cover;
+
+    border-radius: 0.5rem;
+    box-shadow: 0 0.2rem 0.4rem rgb(0 0 0 / 0.1);
+}
+
+.stepExplanationWrapper {
     display: flex;
     align-items: flex-start;
-
-    margin: 1.5em 0; /* To be decided (later) */
 }
 
 .stepNumberMarker {

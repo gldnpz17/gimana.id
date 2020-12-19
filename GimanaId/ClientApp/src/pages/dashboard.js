@@ -7,6 +7,20 @@ import Button from "../components/button";
 
 import AuthContext from "../components/auth-context";
 
+const ArticleEntry = ({ articleUrlPath, title, viewsCount, lastUpdated, featuredImageUrl, ...theRestOfTheProps }) => (
+    <Link to={articleUrlPath} className={s.articleEntryWrapperAnchor}>
+        <article className={s.articleEntryCard} {...theRestOfTheProps}>
+            <img src={featuredImageUrl} alt={title} />
+            <div>
+                <h2>{title}</h2>
+                <p>Terakhir diedit pada {lastUpdated}</p>
+                <p>Dilihat {viewsCount} kali</p>
+            </div>
+            <Link to={`${articleUrlPath}/edit`} className={s.articleEditActionButton}>Edit</Link>
+        </article>
+    </Link>
+);
+
 const DashboardPage = () => {
     const userInfo = useContext(AuthContext);
 
@@ -17,7 +31,7 @@ const DashboardPage = () => {
     // Nope, apparently that's not how it works (Should it be inside an useEffect hook call?)
     // console.log(userInfo);
 
-    const histo = useHistory(); // FIXME, this is just a quick and dirty way to get it to navigate
+    const history = useHistory(); // FIXME, this is just a quick and dirty way to get it to navigate
 
     // TODO: Find out why the value is null at first, but then able to get the value after adding the null? propagation operator
     return (
@@ -25,7 +39,7 @@ const DashboardPage = () => {
             <div className={s.subHeader}>
                 <h1><span>{userInfo?.username} &gt; </span>Dasbor Anda</h1>
                 <Button backgroundColor="#23CC20" onClick={() => {
-                    histo.push("/articles-exp"); // FIXME, probably make a custom button-styled anchor/link instead
+                    history.push("/artikel/buat-baru"); // FIXME, probably make a custom button-styled anchor/link instead
                 }}>Tambah artikel baru</Button>
             </div>
             <section className={s.heroSection}>
@@ -36,16 +50,20 @@ const DashboardPage = () => {
                 </div>
             </section>
             <section className={s.userContributionsSection}>
-                <h1>Kontribusi Anda</h1>
-                <ul>
+                <h1>Kontribusi terakhir Anda</h1>
+                <div className={s.contributedArticlesListingContainer}>
                     {/* FIXME: This won't automatically refresh after adding an entry unless full page reload */}
                     {/* Probably refresh global userInfo state on each route visit OR provide a state-refresh action context? */}
                     {userInfo?.contributedArticles.map(entry => (
-                        <li key={entry.id}>
-                            <Link to={`/artikel/${entry.id}`}>{entry.title}</Link>
-                        </li>
+                        <ArticleEntry
+                            articleUrlPath={`/artikel/${entry.id}`}
+                            title={entry.title}
+                            viewsCount={693}
+                            lastUpdated="3 Januari 2021 08:56"
+                            featuredImageUrl="https://source.unsplash.com/random"
+                        />
                     ))}
-                </ul>
+                </div>
             </section>
         </>
     )
