@@ -220,6 +220,9 @@ namespace GimanaIdApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
+
             app.UseRouting();
 
             if (_env.IsDevelopment()) 

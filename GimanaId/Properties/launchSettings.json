@@ -12,24 +12,30 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "DEV_DATABASE_TYPE": "InMemory",
         "INIT_ADMIN_PASSWORD": "password",
         "API_BASE_ADDRESS": "https://localhost:5001",
         "INIT_ADMIN_USERNAME": "admin",
-        "INIT_ADMIN_EMAIL": "test@testmail.com"
+        "INIT_ADMIN_EMAIL": "test@testmail.com",
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "GimanaId (Kestrel)": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "DEV_DATABASE_TYPE": "InMemory",
         "INIT_ADMIN_PASSWORD": "password",
         "API_BASE_ADDRESS": "https://localhost:5001",
         "INIT_ADMIN_USERNAME": "admin",
-        "INIT_ADMIN_EMAIL": "test@testmail.com"
+        "INIT_ADMIN_EMAIL": "test@testmail.com",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "tetprod": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "Key": "Value"
       }
     }
   }
