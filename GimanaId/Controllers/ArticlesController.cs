@@ -13,6 +13,8 @@ using GimanaIdApi.DTOs.Response;
 using GimanaIdApi.Entities.Entities;
 using GimanaIdApi.Entities.ValueObjects;
 using GimanaIdApi.Infrastructure.DataAccess;
+using GimanaId.Infrastructure.DateTimeService;
+using GimanaId.DTOs.Response;
 
 namespace GimanaIdApi.Controllers
 {
@@ -22,13 +24,16 @@ namespace GimanaIdApi.Controllers
     {
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;
+        private readonly IDateTimeService _dateTimeService;
 
         public ArticlesController(
             AppDbContext appDbContext,
-            IMapper mapper)
+            IMapper mapper,
+            IDateTimeService dateTimeService)
         {
             _appDbContext = appDbContext;
             _mapper = mapper;
+            _dateTimeService = dateTimeService;
         }
 
         /// <summary>
@@ -69,13 +74,17 @@ namespace GimanaIdApi.Controllers
         [Authorize(Policy = AuthorizationPolicyConstants.IsNotBannedPolicy)]
         [Authorize(Policy = AuthorizationPolicyConstants.EmailVerifiedPolicy)]
         [HttpPost("")]
-        public async Task<ActionResult> CreateArticle([FromBody]CreateArticleDto dto)
+        public async Task<ActionResult<CreateArticleResponseDto>> CreateArticle([FromBody]CreateArticleDto dto)
         {
+            var newGuid = Guid.NewGuid();
+
             var newArticle = new Article()
             {
+                Id = newGuid,
                 Title = dto.Title,
                 Description = dto.Description,
-                HeroImage = _mapper.Map<Image>(dto.HeroImage)
+                HeroImage = _mapper.Map<Image>(dto.HeroImage),
+                DateCreated = _dateTimeService.GetCurrentDateTime()
             };
 
             for(int partCount = 0; partCount < dto.Parts.Count; partCount++)
@@ -110,7 +119,8 @@ namespace GimanaIdApi.Controllers
 
             await _appDbContext.SaveChangesAsync();
 
-            return Ok();
+            //fetch created article
+            return Ok(new CreateArticleResponseDto() { Id = newGuid });
         }
 
         /// <summary>

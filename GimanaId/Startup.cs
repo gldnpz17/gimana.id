@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using GimanaId.Infrastructure.Mocks.MockEmailSender;
 using GimanaId.Infrastructure.Mocks.InMemoryDataAccess;
 using Microsoft.Net.Http.Headers;
+using GimanaId.Infrastructure.DateTimeService;
 
 namespace GimanaIdApi
 {
@@ -187,6 +188,10 @@ namespace GimanaIdApi
             services.AddSingleton(
                 typeof(IPasswordHasher),
                 new PasswordHasher());
+
+            services.AddSingleton(
+                typeof(IDateTimeService),
+                new DateTimeService());
 
             services.AddSingleton(
                 typeof(ISecurePasswordSaltGenerator),

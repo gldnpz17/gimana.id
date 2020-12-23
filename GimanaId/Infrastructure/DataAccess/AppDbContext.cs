@@ -59,10 +59,6 @@ namespace GimanaIdApi.Infrastructure.DataAccess
                 (b) =>
                 {
                     b.OwnsOne(e => e.HeroImage);
-
-                    b
-                    .Property(e => e.Id)
-                    .HasDefaultValueSql("uuid_generate_v4()");
                 });
             modelBuilder.Entity<ArticleHistory>(
                 (b) =>
