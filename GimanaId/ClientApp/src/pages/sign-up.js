@@ -157,6 +157,10 @@ const SignUpCard = () => {
             return;
         }
 
+        if (doesPasswordMatch === null) {
+            setPasswordMatch(passwordValue === repeatPasswordValue);
+        }
+
         if (!doesPasswordMatch) {
             alert("Password doesn't match!");
             return;
@@ -195,7 +199,7 @@ const SignUpCard = () => {
                     value={passwordValue} onChange={e => { setPasswordValue(e.target.value) }}
                 />
                 <LabeledInput
-                    name="repeat-password" title="Ulangi kata sandi" required type="password" autoComplete="new-password"
+                    name="repeat-password" title="Ulangi kata sandi" type="password" autoComplete="new-password"
                     value={repeatPasswordValue} onChange={onRepeatPasswordChange}
                     customError={doesPasswordMatch === false ? {
                         color: "red",

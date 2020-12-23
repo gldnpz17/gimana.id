@@ -1,7 +1,7 @@
 import { useParams, useHistory } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-import { getArticleData } from "./article";
+import { getArticleData } from "./article-viewer";
 
 // import cm from "../components/article-common.module.css";
 // import c from "./article-editor.module.css";
@@ -74,6 +74,8 @@ const ArticleEditorPage = ({ mode }) => {
     const [articleDescription, setArticleDescription] = useState("");
     const [parts, setParts] = useState([blankPartItem]);
 
+    const originalArticleTitle = useRef(null);
+
     // function partiallyUpdateStateArrayValue(stateSetterFunction, ) {}
 
     const history = useHistory();
@@ -88,6 +90,7 @@ const ArticleEditorPage = ({ mode }) => {
                     return; // Early return in case there's an error
                 }
 
+                originalArticleTitle.current = data.title;
                 setArticleTitle(data.title);
                 setArticleDescription(data.description);
                 setParts(data.parts);
@@ -99,7 +102,7 @@ const ArticleEditorPage = ({ mode }) => {
         const areYouSure = window.confirm("Anda yakin ingin keluar? Segala perubahan yang anda buat akan terhapus/hilang.");
 
         if (areYouSure) {
-            history.push("/dasbor");
+            history.push("/anda/kontribusi");
         }
     }
 
@@ -131,12 +134,14 @@ const ArticleEditorPage = ({ mode }) => {
         }
     }
 
+    const  [uploadedImageTemporaryLocalUri, setUploadedImageTemporaryLocalUri] = useState("https://source.unsplash.com/random");
+
     return (
         <article className={viewer.pageWrapper}>
             <div className={editor.actionStrip}>
                 <p>
                     {mode === "edit" ? (
-                        <>Mengedit artikel <b>Lorem ipsum</b></>
+                        <>Mengedit artikel <b>{originalArticleTitle.current}</b></>
                     ) : (
                             <>Artikel baru</>
                         )}
@@ -162,7 +167,12 @@ const ArticleEditorPage = ({ mode }) => {
                         onChange={ev => { setArticleDescription(ev.target.value) }}
                     />
                 </div>
-                <img className={viewer.heroImage} src="https://source.unsplash.com/random" alt="Hero image" />
+                <img className={viewer.heroImage} src={uploadedImageTemporaryLocalUri} alt="Hero image" />
+                <input type="file" accept="image/*" onChange={ev => {
+                    setUploadedImageTemporaryLocalUri(
+                        URL.createObjectURL(ev.target.files[0])
+                    );
+                }} />
             </section>
             {parts.map((part, i) => (
                 <section className={viewer.partCard}>

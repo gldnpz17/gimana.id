@@ -1,70 +1,91 @@
 import styled from "styled-components";
-import { Fragment } from "react";
+import { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 
-const LandingSection = styled.section`
-    width: 100%;
-    height: 80vh;
-    padding: 2rem;
+import c from "./home.module.css";
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+import ArticleSearchBox from "../components/article-search-box";
+import ArticleCard from "../components/article-entry-card";
+import ArticleGrid from "../components/article-grid";
 
-    background: linear-gradient(45deg, #ab1691, #d81bb7); /* Temporary styling */
-    color: white;
-`;
+// Testing for the new logo concept/WIP (Logo in pure HTML and CSS)
+import TestLogo from "../components/logo-in-pure-html-css";
 
-const MainHeroText = styled.h1`
-    font-size: 2.5em;
+import { fetchArticleList } from "../api/article";
 
-    margin: 0;
-    margin-bottom: 0.5em;
-`;
+const Landing = () => {
+    const history = useHistory();
 
-const ComplementaryHeroText = styled.p`
-    font-family: "Barlow", sans-serif;
-    font-size: 1.5em;
-
-    margin: 0;
-    margin-bottom: 2em;
-`;
-
-const MainSearchInput = styled.input`
-    display: block;
-    border: none;
-    padding: 1em;
-
-    font-size: 1em;
-    font-family: inherit;
-
-    width: 100%;
-    max-width: 600px;
-
-    border-radius: 0.5em;
-    box-shadow: 0 0.4em 1em rgb(0 0 0 / 0.25);
-
-    &:focus {
-        /* Override user-agent focus style/ring */
-        outline: none;
-        box-shadow: 0 0 0 0.2em #90CAF9,
-                    0 0.4em 1em rgb(0 0 0 / 0.25);
+    function handleSearch(ev) {
+        ev.preventDefault();
+        console.log(ev);
+        history.push({
+            pathname: "/artikel",
+            state: {
+                preinputtedSearchQuery: ev.target[0].value // HACKY METHOD, probably use a Ref to the searchInput DOM element instead?
+            }
+        });
     }
-`;
 
-const Landing = () => (
-    <LandingSection>
-        <MainHeroText>Bingung caranya melakukan sesuatu?</MainHeroText>
-        <ComplementaryHeroText>Ayo pelajari di sini!</ComplementaryHeroText>
-        {/* [Ayo] tanyakan di sini! */}
-        <MainSearchInput type="text" placeholder="Cara ..." autoFocus />
-    </LandingSection>
-);
+    return (
+        <section className={c.landingSection}>
+            <h1 className={c.mainHeroText}>Bingung caranya melakukan sesuatu?</h1>
+            <p className={c.complementaryHeroText}>Ayo pelajari di sini!</p>
+            {/* [Ayo] tanyakan di sini! */}
+            <form className={c.hiddenFormWrapper} onSubmit={handleSearch}>
+                <ArticleSearchBox className={c.mainSearchInput} title="Cara ..." autoFocus />
+            </form>
+        </section>
+    );
+}
 
-const HomePage = () => (
-    <Fragment>
-        <Landing />
-    </Fragment>
-);
+// or: Newest(Submitted)Articles
+const MostPopularArticles = ({ data }) => (
+    <section className={c.popularArticlesSection}>
+        <h1 className={c.articlesSectionHeading}>Artikel terbaru</h1>
+        <div className={c.articlesContainer}>
+            {data.map(article => (
+                <ArticleCard
+                    path={"/artikel/" + article.id}
+                    title="Lorem ipsum!"
+                    featuredImageUrl="https://source.unsplash.com/random"
+                />
+            ))}
+        </div>
+    </section>
+)
+
+const HomePage = () => {
+    const [articleList, setArticleList] = useState([]);
+
+    async function getData() {
+        try {
+            const retrievedData = await fetchArticleList();
+            setArticleList(retrievedData);
+        }
+        catch (err) {
+            console.error(err);
+            alert("Terjadi eror dalam meminta daftar artikel: " + `${err.status} ${err.statusText}`);
+        }
+    }
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+
+    return (
+        <>
+            <div className={c.coloredSections}>
+                <Landing />
+                <ArticleGrid
+                    sectionTitle="Artikel terbaru"
+                    headingStyle={{ color: "white" }}
+                    articleList={articleList}
+                />
+            </div>
+        </>
+    );
+}
 
 export default HomePage;

@@ -9,6 +9,7 @@ const AuthCard = styled(Card)`
     margin: 2.5rem 3.75rem;
 
     box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.25);
+    border-radius: 0.5rem;
 
     position: relative;
     z-index: 1;
@@ -23,6 +24,7 @@ const AuthCard = styled(Card)`
         left: 50%;
         transform: translateX(-50%);
         background-color: rgb(255 255 255 / 0.2);
+        border-radius: inherit;
     }
 `;
 

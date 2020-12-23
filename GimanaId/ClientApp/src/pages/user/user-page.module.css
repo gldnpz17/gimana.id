@@ -33,6 +33,8 @@
     margin: 0 0.1rem;
 
     border-radius: 0.1rem;
+
+    transition: color 0.1s, background-color 0.1s;
 }
 
 .tabItem:hover {

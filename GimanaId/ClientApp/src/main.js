@@ -6,25 +6,27 @@ import { createGlobalStyle } from "styled-components";
 import { AuthProvider } from "./components/auth-context";
 import { getCurrentUserInfo } from "./api/authentication";
 
+// Router components used based on the user authentication status
+import { PrivateRoute, PublicOnlyRoute } from "./components/routes";
+
 // Common page elements
 import Header from "./components/header";
+import Footer from "./components/footer";
 
 //#region Page components for each route
-
 import HomePage from "./pages/home";
+import ArticleListingPage from "./pages/article-listing";
 
 import RegisterPage from "./pages/sign-up";
 import LoginPage from "./pages/log-in";
 
-import ArticlePage from "./pages/article";
+import ArticleViewerPage from "./pages/article-viewer";
 import ArticleEditorPage from "./pages/article-editor";
 
 import UserPage from "./pages/user/user-page";
-import DashboardPage from "./pages/dashboard";
 
 import AuthExperimentPage from "./pages/authentication-experiment";
 import ArticlesExperimentPage from "./pages/collections-experiment";
-
 //#endregion
 
 // Main app entry point
@@ -58,22 +60,31 @@ const App = () => {
         checkAuthenticatedStatus();
     }, []);
 
+    const authContextValues = {
+        userInfo: userInfo,
+        refreshUserInfo: () => {
+            checkAuthenticatedStatus();
+        }
+    }
+
     return (
         <BrowserRouter>
-            <AuthProvider value={userInfo}>
+            <AuthProvider value={authContextValues}>
                 <Header />
                 <Switch>
                     <Route exact path="/" component={HomePage} />
 
-                    <Route path="/daftar" component={RegisterPage} />
-                    <Route path="/masuk"  component={LoginPage} />
+                    <PublicOnlyRoute path="/daftar" component={RegisterPage} />
+                    <PublicOnlyRoute path="/masuk"  component={LoginPage} />
 
                     {/* create-new */}
                     <Route path="/artikel/buat-baru"><ArticleEditorPage mode="new" /></Route>
                     <Route path="/artikel/:articleGuid/edit"><ArticleEditorPage mode="edit" /></Route>
-                    <Route path="/artikel/:articleGuid" component={ArticlePage} />
+                    <Route path="/artikel/:articleGuid" component={ArticleViewerPage} />
 
-                    <Route path="/anda" component={UserPage} />
+                    <Route path="/artikel" component={ArticleListingPage} />
+
+                    <PrivateRoute path="/anda" component={UserPage} />
 
                     {/* For some fun things */}
                     <Route path="/authentication-experiment" component={AuthExperimentPage} />
@@ -84,6 +95,7 @@ const App = () => {
                 </Switch>
                 {process.env.NODE_ENV === "development" ? <DebuggingOutlines /> : null}
             </AuthProvider>
+            <Footer />
         </BrowserRouter>
     )
 };

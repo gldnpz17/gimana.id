@@ -1,0 +1,39 @@
+#gi, #ma, #na, #dotId {
+    display: inline-block;
+    font-family: "Fredoka One", sans-serif;
+}
+
+#gi, #ma, #na {
+    color: white;
+    padding: 0 0.1em;
+    box-shadow: 0 0 0 0.05em white;
+    font-size: 2em;
+}
+
+#gi, #na {
+    transform: rotate(-5deg);
+}
+
+#gi {
+    background-color: dodgerblue;
+}
+
+#ma {
+    transform: rotate(5deg);
+    background-color: teal;
+    /* margin: 0 0.1em; */
+}
+
+#na {
+    background-color: purple;
+}
+
+#dotId {
+    color: orangered;
+    font-size: 1.5em;
+    margin-left: 0.1em;
+}
+
+/* :global(.white) .square {
+    background-color: white;
+} */
