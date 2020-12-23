@@ -22,7 +22,6 @@
     },
     "GimanaId (Kestrel)": {
       "commandName": "Project",
-      "launchBrowser": true,
       "environmentVariables": {
         "DEV_DATABASE_TYPE": "InMemory",
         "INIT_ADMIN_PASSWORD": "password",
