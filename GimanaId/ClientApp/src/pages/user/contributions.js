@@ -1,5 +1,5 @@
 // const ArticleEntry = ()
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 
 import c from "./contributions.module.css";
@@ -11,9 +11,8 @@ import ArticleSearchBox from "../../components/article-search-box";
 
 import { ReactComponent as PencilIcon } from "../../assets/svg/pencil-alt.svg";
 
-
-const ArticleEntryCardWithActions = ({ articleUrlPath, title, viewsCount, lastUpdated, featuredImageUrl, ...rest }) => {
-    // const history = useHistory();
+const ArticleEntryCardWithActions = ({ articleUrlPath, title, viewsCount, dateCreated, featuredImageUrl, ...rest }) => {
+    const dateObject = new Date(dateCreated);
 
     return (
         <article className={c.articleCard} {...rest}>
@@ -21,12 +20,9 @@ const ArticleEntryCardWithActions = ({ articleUrlPath, title, viewsCount, lastUp
                 <Image className={c.featuredImage} src={featuredImageUrl} alt={title} />
                 <div className={c.textContainer}>
                     <h2>{title}</h2>
-                    <p>Terakhir diedit pada {lastUpdated}</p>
-                    <p>Dilihat {viewsCount} kali</p>
+                    <p>Dibuat pada {dateObject.toLocaleString("id-ID")}</p>
+                    {/* <p>Dilihat {viewsCount} kali</p> */}
                 </div>
-
-                {/* <button onClick={() => { history.push(`${articleUrlPath}/edit`) }}>Edit</button> */}
-                {/* TODO: Replace the above with an imported SVG icon (probably place it inside /assets) */}
             </Link>
             {/* Link role="button"? */}
             <Link to={`${articleUrlPath}/edit`} className={c.actionButton}>
@@ -73,8 +69,7 @@ const ContributionsPage = () => {
                             articleUrlPath={`/artikel/${article.id}`}
                             title={article.title}
                             featuredImageUrl="https://source.unsplash.com/random"
-                            lastUpdated="x"
-                            viewsCount="n"
+                            dateCreated={article.dateCreated}
                         />
                     ))}
             </div>

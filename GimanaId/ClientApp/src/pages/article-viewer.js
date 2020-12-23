@@ -1,11 +1,15 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
 import { createGlobalStyle } from "styled-components";
 
 import { fetchArticle } from "../api/article";
 
 // import cm from "../components/article-common.module.css";
 import c from "./article-common.module.css";
+
+import AuthContext from "../components/auth-context";
+
+import Button from "../components/button";
 
 // // Move these to a separate article-common.js file?
 // const HeroSection = ({ children, ...props }) => (
@@ -49,21 +53,21 @@ const ArticlePage = () => {
         getArticleData(articleGuid, setData);
     }, []);
 
+    const { userInfo } = useContext(AuthContext);
+    const history = useHistory();
+
+    const date = new Date(data?.dateCreated);
+
     return data ? (
         <article className={c.pageWrapper}>
             <section className={c.heroSection}>
                 <div className={c.heroTexts}>
-                    <h1
-                        // m/ode="edit"
-                        // component="div"
-                        className={c.heroTitle}
-                        // onChange={({ target: { value } }) => {
-                        //     const prev = data;
-                        //     prev.title = value;
-                        //     setData(prev);
-                        // }}
-                    >{data.title || "Terjadi eror dalam memuat konten artikel ini."}</h1>
+                    <h1 className={c.heroTitle}>{data.title || "Terjadi eror dalam memuat konten artikel ini."}</h1>
+                    <p>Dibuat pada {date.toLocaleString("id-ID")}</p>
                     <p className={c.heroDescription}>{data.description || `${data.error.status}: ${data.error.statusText}`}</p>
+                    {userInfo?.isLoggedIn && userInfo.contributedArticles.filter(item => item.id === articleGuid).length > 0 ? <Button onClick={() => {
+                        history.push(`/artikel/${articleGuid}/edit`);
+                    }}>Edit artikel ini</Button> : null}
                 </div>
                 <img className={c.heroImage} src="https://source.unsplash.com/random" alt="Hero image" />
             </section>

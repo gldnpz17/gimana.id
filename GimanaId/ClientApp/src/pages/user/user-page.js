@@ -32,15 +32,15 @@ const UserPage = () => {
             <div className={c.header}>
                 <ul className={c.tabsContainer}>
                     <TabLinkItem exact to={currentTabUrlPath}>Dasbor</TabLinkItem>
-                    <TabLinkItem to={`${currentTabUrlPath}/kontribusi`}>(Artikel) Kontribusi Anda</TabLinkItem>
-                    <TabLinkItem to={`${currentTabUrlPath}/profil`}>Pengaturan Profil</TabLinkItem>
+                    <TabLinkItem to={`${currentTabUrlPath}/kontribusi`}>Kontribusi Anda</TabLinkItem>
+                    {/* <TabLinkItem to={`${currentTabUrlPath}/profil`}>Pengaturan Profil</TabLinkItem> */}
                 </ul>
             </div>
             <div className={c.contentWrapper}>
                 <Switch>
                     <Route exact path={currentTabUrlPath} component={PreviousOldFormerTestDashboardPage} />
                     <Route path={currentTabUrlPath + "/kontribusi"} component={Contributions} />
-                    <Route path={currentTabUrlPath + "/profil"}>Atur serta-merta/seluk beluk tentang profil kamu di sini!</Route>
+                    {/* <Route path={currentTabUrlPath + "/profil"}>Atur serta-merta/seluk beluk tentang profil kamu di sini!</Route> */}
                 </Switch>
             </div>
         </>
