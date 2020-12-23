@@ -1,0 +1,12 @@
+.container {
+    background-color: #333333;
+    color: white;
+
+    padding: 2rem;
+}
+
+.copyrightText {
+    margin: 0 auto;
+    text-align: center;
+    width: fit-content;
+}

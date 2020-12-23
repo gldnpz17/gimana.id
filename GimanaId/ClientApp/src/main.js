@@ -11,6 +11,7 @@ import { PrivateRoute, PublicOnlyRoute } from "./components/routes";
 
 // Common page elements
 import Header from "./components/header";
+import Footer from "./components/footer";
 
 //#region Page components for each route
 import HomePage from "./pages/home";
@@ -94,6 +95,7 @@ const App = () => {
                 </Switch>
                 {process.env.NODE_ENV === "development" ? <DebuggingOutlines /> : null}
             </AuthProvider>
+            <Footer />
         </BrowserRouter>
     )
 };
