@@ -45,10 +45,38 @@ textarea {
     box-shadow: 0 0.2rem 0.4rem rgb(0 0 0 / 0.2); */
 }
 
+.heroImageUpload {
+    position: relative;
+}
+
 .partActions {
     display: flex;
     justify-content: space-between;
 }
+
+.stepImageUpload {
+    height: 10rem;
+    position: relative;
+}
+
+.stepImageUpload::before, .heroImageUpload::before {
+    position: absolute;
+    content: "Klik untuk menambahkan gambar";
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    color: white;
+    background-color: #7e8087;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 
 .addStepButton {
     align-items: center;

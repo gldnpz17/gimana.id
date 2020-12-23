@@ -69,7 +69,9 @@ const ArticlePage = () => {
                         history.push(`/artikel/${articleGuid}/edit`);
                     }}>Edit artikel ini</Button> : null}
                 </div>
-                <img className={c.heroImage} src="https://source.unsplash.com/random" alt="Hero image" />
+                {data.heroImage?.base64EncodedData ? (
+                    <img className={c.heroImage} src={data.heroImage.base64EncodedData} alt="Featured image" />
+                ) : null}
             </section>
             {data.parts?.map(part => (
                 <section key={`part${part.partNumber}`} className={c.partCard}>
@@ -80,8 +82,8 @@ const ArticlePage = () => {
                     <ul className={c.stepsContainer}>
                         {part.steps?.map(step => (
                             <li key={`part${part.partNumber}-step${step.stepNumber}`} className={c.stepItemContainer}>
-                                {Math.random() < 0.25 ? (
-                                    <img className={c.stepImage} src="https://source.unsplash.com/random" alt={step.title} />
+                                {step.image.base64EncodedData ? (
+                                    <img className={c.stepImage} src={step.image.base64EncodedData} alt={step.title} />
                                 ) : null}
                                 <div className={c.stepExplanationWrapper}>
                                     <div className={c.stepNumberMarker}>{step.stepNumber}</div>
@@ -116,7 +118,7 @@ const ArticlePage = () => {
             </section>
         </article>
     ) : (
-        <p>Memuat konten artikel dengan (gu)id {articleGuid}...</p>
+        <p>Memuat konten artikel dengan id {articleGuid}...</p>
     );
 };
 

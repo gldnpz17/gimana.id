@@ -99,6 +99,7 @@
 }
 
 img.stepImage {
+    display: block;
     width: 100%; /* or max-width? */
 
     /* TODO: What if the image is supposed to be tall and cannot be cut in any way? */

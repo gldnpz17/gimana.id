@@ -59,7 +59,11 @@ const ArticleEditorPage = ({ mode }) => {
 
     const blankStepItem = {
         title: "",
-        description: ""
+        description: "",
+        image: {
+            fileFormat: "",
+            base64EncodedData: null
+        }
     };
 
     const blankPartItem = {
@@ -72,6 +76,7 @@ const ArticleEditorPage = ({ mode }) => {
 
     const [articleTitle, setArticleTitle] = useState("");
     const [articleDescription, setArticleDescription] = useState("");
+    const [articleFeaturedImage, setArticleFeaturedImage] = useState(null);
     const [parts, setParts] = useState([blankPartItem]);
 
     const originalArticleTitle = useRef(null);
@@ -120,6 +125,10 @@ const ArticleEditorPage = ({ mode }) => {
                 body: JSON.stringify({
                     title: articleTitle,
                     description: articleDescription,
+                    heroImage: {
+                        fileFormat: "",
+                        base64EncodedData: articleFeaturedImage
+                    },
                     parts: parts
                 })
             }
@@ -127,7 +136,7 @@ const ArticleEditorPage = ({ mode }) => {
 
         if (submissionResponse.ok) {
             alert("Artikel berhasil disimpan!");
-            
+
             let id;
             if (mode === "edit") {
                 id = articleGuid;
@@ -143,8 +152,6 @@ const ArticleEditorPage = ({ mode }) => {
         }
     }
 
-    const  [uploadedImageTemporaryLocalUri, setUploadedImageTemporaryLocalUri] = useState("https://source.unsplash.com/random");
-
     return (
         <article className={viewer.pageWrapper}>
             <div className={editor.actionStrip}>
@@ -156,8 +163,8 @@ const ArticleEditorPage = ({ mode }) => {
                         )}
                 </p>
                 <div className={editor.actionButtons}>
-                    <Button backgroundColor="darkred" onClick={confirmExit}>Buang perubahaan</Button>
-                    <Button backgroundColor="green" onClick={testHandleSubmit}>Simpan perubahan</Button>
+                    <Button backgroundColor="#c6262e" onClick={confirmExit}>Batalkan perubahan</Button>
+                    <Button backgroundColor="#68b723" onClick={testHandleSubmit}>Simpan artikel</Button>
                 </div>
             </div>
             <section className={viewer.heroSection}>
@@ -176,11 +183,23 @@ const ArticleEditorPage = ({ mode }) => {
                         onChange={ev => { setArticleDescription(ev.target.value) }}
                     />
                 </div>
-                <img className={viewer.heroImage} src={uploadedImageTemporaryLocalUri} alt="Hero image" />
-                <input type="file" accept="image/*" onChange={ev => {
-                    setUploadedImageTemporaryLocalUri(
-                        URL.createObjectURL(ev.target.files[0])
-                    );
+                <img
+                    className={[
+                        viewer.heroImage,
+                        editor.heroImageUpload
+                    ].join(" ")}
+                    src={articleFeaturedImage || "hey you aren't supposed to read this (this is a workaround so that the ::before pseudoelement can be shown)"}
+                    alt="Hero image"
+                    onClick={ev => {
+                        ev.target.nextSibling.click();
+                    }}
+                />
+                <input type="file" accept="image/*" style={{ display: "none" }} onChange={ev => {
+                    const fileReader = new FileReader();
+                    fileReader.onloadend = event => {
+                        setArticleFeaturedImage(event.target.result);
+                    };
+                    fileReader.readAsDataURL(ev.target.files[0]);
                 }} />
             </section>
             {parts.map((part, i) => (
@@ -210,6 +229,29 @@ const ArticleEditorPage = ({ mode }) => {
                     <ul className={viewer.stepsContainer}>
                         {part.steps?.map((step, j) => (
                             <li className={viewer.stepItemContainer}>
+                                <img
+                                    className={[
+                                        viewer.stepImage,
+                                        step.image.base64EncodedData ? null : editor.stepImageUpload
+                                    ].join(" ")}
+                                    src={step.image.base64EncodedData || "hey, you aren't supposed to be here / read this"}
+                                    onClick={ev => {
+                                        // console.log(ev);
+                                        ev.target.nextSibling.click();
+                                    }}
+                                />
+                                <input type="file" accept="image/*" style={{ display: "none" }} onChange={ev => {
+                                    const fileReader = new FileReader();
+                                    fileReader.onloadend = event => {
+                                        const prevParts = [...parts];
+                                        // console.log(prev[i]);
+                                        prevParts[i].steps[j].image.base64EncodedData = event.target.result;
+                                        console.log(event.target.result);
+                                        setParts(prevParts);
+                                    };
+                                    fileReader.readAsDataURL(ev.target.files[0]);
+                                    // console.log("yo");
+                                }} />
                                 <div className={viewer.stepExplanationWrapper}>
                                     <div className={viewer.stepNumberMarker}>{j + 1}</div>
                                     <div style={{ flexGrow: "1" }}>
