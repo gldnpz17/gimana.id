@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GimanaIdApi.Entities.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,6 @@ namespace GimanaIdApi.DTOs.Request
     {
         public virtual string Title { get; set; }
         public virtual string Description { get; set; }
+        public virtual CreateImageDto Image { get; set; }
     }
 }

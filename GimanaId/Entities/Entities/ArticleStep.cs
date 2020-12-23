@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GimanaIdApi.Entities.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,6 @@ namespace GimanaIdApi.Entities.Entities
         public virtual int StepNumber { get; set; }
         public virtual string Title { get; set; }
         public virtual string Description { get; set; }
+        public virtual Image Image { get; set; }
     }
 }

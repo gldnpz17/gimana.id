@@ -20,6 +20,8 @@ using GimanaIdApi.Infrastructure.EmailSender;
 using GimanaIdApi.Infrastructure.PasswordHasher;
 using GimanaIdApi.Infrastructure.SecurePasswordSaltGenerator;
 using GimanaId.DTOs.Response;
+using GimanaId.DTOs.Request;
+using GimanaIdApi.Entities.ValueObjects;
 
 namespace GimanaIdApi.Controllers
 {
@@ -239,6 +241,28 @@ namespace GimanaIdApi.Controllers
             return Ok(output);
         }
 
+        /// <summary>
+        /// Update user profile
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPut("{userId}")]
+        public async Task<ActionResult> UpdateUser([FromRoute]string userId, [FromBody]UpdateUserDto dto)
+        {
+            if ((await GetCurrentUser()).Id != Guid.Parse(userId))
+            {
+                return Unauthorized();
+            }
+
+            var user = await _appDbContext.Users.FirstOrDefaultAsync(i => i.Id == Guid.Parse(userId));
+
+            user.ProfilePicture = _mapper.Map<Image>(dto.ProfilePicture);
+
+            await _appDbContext.SaveChangesAsync();
+
+            return Ok();
+        }
 
         private async Task<User> GetCurrentUser()
         {

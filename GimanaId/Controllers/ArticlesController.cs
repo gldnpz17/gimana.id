@@ -102,7 +102,8 @@ namespace GimanaIdApi.Controllers
                     {
                         StepNumber = stepCount + 1,
                         Title = dto.Parts[partCount].Steps[stepCount].Title,
-                        Description = dto.Parts[partCount].Steps[stepCount].Description
+                        Description = dto.Parts[partCount].Steps[stepCount].Description,
+                        Image = _mapper.Map<Image>(dto.Parts[partCount].Steps[stepCount].Image)
                     };
 
                     newPart.Steps.Add(newStep);

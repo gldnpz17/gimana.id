@@ -81,6 +81,8 @@ namespace GimanaIdApi.Infrastructure.DataAccess
                 {
                     b.Property<Guid>("Id").HasDefaultValueSql("uuid_generate_v4()");
 
+                    b.OwnsOne(e => e.Image);
+
                     b.HasKey("Id");
                 });
             modelBuilder.Entity<AuthToken>(
