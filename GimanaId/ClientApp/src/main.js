@@ -25,9 +25,28 @@ import ArticleEditorPage from "./pages/article-editor";
 
 import UserPage from "./pages/user/user-page";
 
-import AuthExperimentPage from "./pages/authentication-experiment";
-import ArticlesExperimentPage from "./pages/collections-experiment";
+import NotFoundPage from "./pages/not-found";
 //#endregion
+
+// Declare main app/website routes
+const MainRoutes = () => (
+    <Switch>
+        <Route exact path="/" component={HomePage} />
+
+        <PublicOnlyRoute path="/daftar" component={RegisterPage} />
+        <PublicOnlyRoute path="/masuk" component={LoginPage} />
+
+        <PrivateRoute path="/artikel/baru"><ArticleEditorPage mode="new" /></PrivateRoute>
+        <PrivateRoute path="/artikel/:articleGuid/edit"><ArticleEditorPage mode="edit" /></PrivateRoute>
+        <Route path="/artikel/:articleGuid" component={ArticleViewerPage} />
+
+        <Route path="/artikel" component={ArticleListingPage} />
+
+        <PrivateRoute path="/anda" component={UserPage} />
+
+        <Route component={NotFoundPage} />
+    </Switch>
+);
 
 // Main app entry point
 const App = () => {
@@ -71,31 +90,10 @@ const App = () => {
         <BrowserRouter>
             <AuthProvider value={authContextValues}>
                 <Header />
-                <Switch>
-                    <Route exact path="/" component={HomePage} />
-
-                    <PublicOnlyRoute path="/daftar" component={RegisterPage} />
-                    <PublicOnlyRoute path="/masuk"  component={LoginPage} />
-
-                    {/* create-new */}
-                    <Route path="/artikel/buat-baru"><ArticleEditorPage mode="new" /></Route>
-                    <Route path="/artikel/:articleGuid/edit"><ArticleEditorPage mode="edit" /></Route>
-                    <Route path="/artikel/:articleGuid" component={ArticleViewerPage} />
-
-                    <Route path="/artikel" component={ArticleListingPage} />
-
-                    <PrivateRoute path="/anda" component={UserPage} />
-
-                    {/* For some fun things */}
-                    <Route path="/authentication-experiment" component={AuthExperimentPage} />
-                    <Route path="/articles-exp" component={ArticlesExperimentPage} />
-
-                    {/* 404 page */}
-                    <Route>Page not found.</Route>
-                </Switch>
+                <MainRoutes />
+                <Footer />
                 {process.env.NODE_ENV === "development" ? <DebuggingOutlines /> : null}
             </AuthProvider>
-            <Footer />
         </BrowserRouter>
     )
 };

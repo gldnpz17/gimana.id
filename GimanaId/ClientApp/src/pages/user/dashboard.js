@@ -50,7 +50,7 @@ const DashboardPage = () => {
                         {userInfo?.contributedArticles.length > 0 ? `Kamu telah berkontribusi ${userInfo.contributedArticles.length} artikel.` : "Ayo mulai berkontribusi sekarang!"}
                     </p>
                     <Button className={s.createNewArticleButton} onClick={() => {
-                        history.push("/artikel/buat-baru"); // FIXME, probably make a custom button-styled anchor/link instead
+                        history.push("/artikel/baru"); // FIXME, probably make a custom button-styled anchor/link instead
                     }}>Tambah artikel baru</Button>
                 </div>
             </section>
