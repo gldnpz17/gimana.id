@@ -38,7 +38,7 @@ const Header = () => {
     function testHandleLogOut(e) {
         e.preventDefault();
 
-        fetch("api/auth/logout", {
+        fetch("/api/auth/logout", {
             method: "POST"
         }).then(() => {
             window.location.reload();
@@ -74,6 +74,9 @@ const Header = () => {
                 <SearchBox />
                 <Link to="/artikel" className={headerStyles.navItem}>Jelajahi artikel</Link>
                 {/* <Link to="/tentang" className={headerStyles.navItem}>Tentang kami</Link> */}
+                {process.env.NODE_ENV === "development" ? (
+                    <a href="/swagger" className={headerStyles.navItem}>Go to Swagger</a>
+                ) : null}
             </nav>
             <nav className={headerStyles.part}>
                 {userInfo ? (
