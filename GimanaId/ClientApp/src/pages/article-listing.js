@@ -50,7 +50,7 @@ const ArticleListingPage = () => {
             <h1 className={c.mainPageTitle}>Jelajahi artikel</h1>
             <ArticleSearchBox
                 className={c.searchBox}
-                title="Cari artikel yang kamu inginkan/cari"
+                title="Cari artikel"
                 autoFocus
                 value={searchQuery}
                 onChange={ev => { setSearchQuery(ev.target.value) }}

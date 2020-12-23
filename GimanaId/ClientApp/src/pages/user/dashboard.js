@@ -49,7 +49,7 @@ const DashboardPage = () => {
                 <div>
                     <h1 className={s.userGreeting}>Hai, <b>{userInfo?.username}</b>.</h1>
                     <p className={s.userSupportingText}>
-                        {userInfo?.contributedArticles.length > 0 ? `Kamu telah berkontribusi ${userInfo.contributedArticles.length} artikel.` : "Ayo mulai berkontribusi sekarang!"}
+                        {userInfo?.contributedArticles.length > 0 ? `Anda telah berkontribusi ${userInfo.contributedArticles.length} artikel.` : "Ayo mulai berkontribusi sekarang!"}
                     </p>
                     <Button className={s.createNewArticleButton} onClick={() => {
                         history.push("/artikel/baru"); // FIXME, probably make a custom button-styled anchor/link instead
@@ -57,7 +57,7 @@ const DashboardPage = () => {
                 </div>
             </section>
             <ArticleGridSection
-                sectionTitle="Kontribusi terakhir anda"
+                sectionTitle="Kontribusi terakhir Anda"
                 headingStyle={{
                     color: "white"
                 }}
