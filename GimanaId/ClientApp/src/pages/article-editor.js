@@ -99,7 +99,7 @@ const ArticleEditorPage = ({ mode }) => {
     }, []);
 
     function confirmExit() {
-        const areYouSure = window.confirm("Anda yakin ingin keluar? Segala perubahan yang anda buat akan terhapus/hilang.");
+        const areYouSure = window.confirm("Anda yakin ingin keluar? Segala perubahan yang anda buat akan terhapus.");
 
         if (areYouSure) {
             history.push("/anda/kontribusi");
@@ -126,11 +126,20 @@ const ArticleEditorPage = ({ mode }) => {
         );
 
         if (submissionResponse.ok) {
-            alert("Article submitted/updated successfully!");
-            history.push(mode === "edit" ? `/artikel/${articleGuid}` : `/anda/kontribusi`);
+            alert("Artikel berhasil disimpan!");
+            
+            let id;
+            if (mode === "edit") {
+                id = articleGuid;
+            }
+            else {
+                const responseData = await submissionResponse.json();
+                id = responseData.id;
+            }
+            history.push(`/artikel/${id}`);
         }
         else {
-            console.log(submissionResponse);
+            console.error(submissionResponse);
         }
     }
 
