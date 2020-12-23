@@ -55,7 +55,7 @@ const LoginCard = () => {
                 />
                 <label><input type="checkbox" ref={refs.rememberMe} />Masuk otomatis pada kunjungan berikutnya</label>
                 <AuthButton backgroundColor="#23CC20" onClick={e => { /*setSubmitAttempt(true)*/ }}>Masuk</AuthButton>
-                <FinePrint>Lupa kata sandi? <a href="#">Klik di sini</a>.</FinePrint>
+                {/* <FinePrint>Lupa kata sandi? <a href="#">Klik di sini</a>.</FinePrint> */}
             </AuthForm>
         </AuthCard>
     );

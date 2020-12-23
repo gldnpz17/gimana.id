@@ -29,7 +29,7 @@ const EntryPart = styled.div`
 
 const CatchPhrase = styled.h1`
     font-weight: normal;
-    font-family: "Red Hat Display", sans-serif;
+    font-family: "Barlow", sans-serif;
 
     &:first-of-type {
         font-weight: bold;
@@ -37,7 +37,7 @@ const CatchPhrase = styled.h1`
 `;
 
 const CompanionText = styled.p`
-    font-family: "Red Hat Text", sans-serif;
+    font-family: "Nunito Sans", sans-serif;
 `;
 
 const SignUpCard = () => {
@@ -218,8 +218,8 @@ const SignUpPage = () => (
             <CatchPhrase>Ingin berkontribusi?</CatchPhrase>
             <CatchPhrase>Silakan membuat akun terlebih dahulu.</CatchPhrase>
             <CompanionText>
-                Data yang anda masukkan akan dijaga sesuai dengan <Link to="/privasi">kebijakan privasi kami</Link>.
-                Dengan berkontribusi, Anda turut serta dalam mengembangkan koleksi yang dimiliki oleh <b>gimana.id</b>.
+                {/* Data yang anda masukkan akan dijaga sesuai dengan <Link to="/privasi">kebijakan privasi kami</Link>. */}
+                Dengan berkontribusi, Anda turut serta dalam mengembangkan koleksi yang dimiliki oleh <b>Gimana.id</b>.
             </CompanionText>
         </ExplanationPart>
         <EntryPart>
