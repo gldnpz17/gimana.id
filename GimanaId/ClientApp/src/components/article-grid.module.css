@@ -1,0 +1,19 @@
+.mainContainer {
+    padding: 2rem;
+}
+
+.headingText {
+    /* font-weight: 300; */
+    /* font-size: 2em; */
+    font-weight: normal;
+
+    margin: 0;
+    margin-bottom: 2rem;
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    grid-template-rows: auto;
+    gap: 1.5rem 1rem;
+}

@@ -1,0 +1,21 @@
+.mainPageTitle {
+    font-size: 2.25em;
+    font-weight: 300;
+
+    width: fit-content;
+    margin: 2rem auto;
+}
+
+.searchBox {
+    max-width: 25rem;
+    margin: 0 auto;
+}
+
+.articleGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    grid-template-rows: auto;
+    gap: 1.5rem 1rem;
+
+    margin: 2rem;
+}

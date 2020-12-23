@@ -1,0 +1,51 @@
+.containerBox {
+    display: flex;
+    align-items: center;
+
+    background-color: white;
+    border-radius: 0.5rem;
+
+    --initial-box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 0.1);
+    box-shadow: var(--initial-box-shadow);
+    /* justify-content: stretch; */
+
+    /* padding: 1em;- */
+
+    --placeholder-color: rgb(0 0 0 / 0.5);
+}
+
+.visuallyHiddenLabel {
+    display: none;
+}
+
+.icon {
+    display: block;
+    height: 1.5em;
+    width: auto;
+    margin-left: 1em;
+    fill: var(--placeholder-color);
+}
+
+.searchInput {
+    padding: 1em;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+
+    /* Blend with the containing search box/card */
+    border: none;
+    background-color: transparent;
+}
+
+.searchInput::placeholder {
+    color: var(--placeholder-color);
+}
+
+.containerBox:focus-within {
+    box-shadow: 0 0 0 0.1em skyblue, var(--initial-box-shadow);
+}
+
+.searchInput:focus {
+    border: none;
+    outline: none;
+}

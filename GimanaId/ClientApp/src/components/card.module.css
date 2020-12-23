@@ -1,6 +1,51 @@
-.card {
+.card, .hoverableCard {
     background-color: white;
-    border: 0.2rem solid var(--black); /* or 0.25rem? */
-    border-radius: 0.5rem;
+    /* border: 0.2rem solid var(--black); /* or 0.25rem? */
+    border-radius: 0.25rem;
     box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.25); /* or 0 0.25rem 0.5rem? */
+}
+
+.hoverableCard {
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.hoverableCard::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+
+    z-index: -2;
+
+    box-shadow: 0 1rem 1rem rgb(0 0 0 / 0.5);
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+
+.hoverableCard::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+
+    z-index: -1;
+
+    box-shadow: 0 0 0 0.25rem skyblue;
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+.hoverableCard:hover {
+    transform: translateY(-0.25rem);
+}
+
+.hoverableCard:hover::before, .hoverableCard:hover::after {
+    opacity: 1;
 }

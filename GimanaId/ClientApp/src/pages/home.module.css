@@ -1,0 +1,76 @@
+.coloredSections {
+    background: linear-gradient(45deg, #ab1691, #d81bb7); /* Temporary styling */
+}
+
+.landingSection {
+    width: 100%;
+    height: 80vh;
+    padding: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+}
+
+.mainHeroText {
+    font-size: 2.5em;
+
+    margin: 0;
+    margin-bottom: 0.5em;
+}
+
+.complementaryHeroText {
+    font-family: "Barlow", sans-serif;
+    font-size: 1.5em;
+
+    margin: 0;
+    margin-bottom: 2em;
+}
+
+.mainSearchInput {
+    /* display: block;
+    border: none;
+    padding: 1em;
+
+    font-size: 1em;
+    font-family: inherit; */
+
+    width: 100%;
+    max-width: 600px;
+
+    /* border-radius: 0.5em;
+    box-shadow: 0 0.4em 1em rgb(0 0 0 / 0.25); */
+}
+
+/* .mainSearchInput:focus {
+    /* Override user-agent focus style/ring *
+    outline: none;
+    box-shadow: 0 0 0 0.2em #90CAF9,
+                0 0.4em 1em rgb(0 0 0 / 0.25);
+    
+} */
+
+.articlesSection {
+    padding: 2rem;
+}
+
+.articlesContainer, .articleListingContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.articlesSectionHeading {
+    font-weight: 300;
+}
+
+.popularArticlesSection {
+    composes: articlesSection;
+}
+
+.popularArticlesSection .articlesSectionHeading {
+    color: white;
+}

@@ -1,0 +1,79 @@
+.subHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 1rem 1.5rem;
+
+    background-color: #ab1691;
+}
+
+.subHeader h1 {
+    margin: 0;
+    font-size: 1.75em;
+
+    color: white;
+}
+
+.subHeader h1 span {
+    font-weight: normal;
+}
+
+/* :global(body) {
+    background-color: green;
+} */
+
+.heroSection {
+    composes: card from "../../components/card.module.css";
+
+    min-height: 50vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* background-color: white; */
+    margin: 2rem;
+    /* border-radius: 0.25rem; */
+}
+
+.userGreeting {
+    margin: 0;
+    font-weight: normal;
+    font-size: 2.5em;
+}
+
+.userAccompanyingText, .userSupportingText {
+    margin: 0;
+    margin-top: 0.3em;
+
+    font-family: "Barlow", "Nunito Sans", sans-serif;
+    font-weight: 300;
+    font-size: 1.5em;
+    color: gray;
+}
+
+.profileImage {
+    width: 10em;
+    height: 10em;
+    object-fit: cover;
+    border-radius: 50%;
+
+    /* Temporary styling */
+    box-shadow: 0 0.5em 1em rgb(0 0 0 / 0.25);
+
+    margin-right: 2em;
+}
+
+.createNewArticleButton {
+    background-color: #23CC20;
+    margin-top: 1rem;
+}
+
+.userContributionsSection h1 {
+    font-weight: normal;
+}
+
+.contributedArticlesListingContainer {
+    display: flex;
+}

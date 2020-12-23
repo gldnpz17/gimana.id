@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { createGlobalStyle } from "styled-components";
 
 import { fetchArticle } from "../api/article";
 
@@ -33,6 +34,11 @@ async function getArticleData(articleGuid, stateSetter) {
         console.log(err);
     }
 }
+
+// const BodyBackgroundColor = createGlobalStyle`
+//     body {
+//         background-color: rgb(245 245 245);
+//     }`;
 
 const ArticlePage = () => {
     const { articleGuid } = useParams();
@@ -75,7 +81,7 @@ const ArticlePage = () => {
                                 ) : null}
                                 <div className={c.stepExplanationWrapper}>
                                     <div className={c.stepNumberMarker}>{step.stepNumber}</div>
-                                <p className={c.stepText}>
+                                    <p className={c.stepText}>
                                         {step.title}
                                         <br />
                                         {step.description}
@@ -86,6 +92,24 @@ const ArticlePage = () => {
                     </ul>
                 </section>
             ))}
+            <section className={c.articleContributorsSection}>
+                <h2>Kontributor artikel ini</h2>
+                <p>Say thanks to them!</p>
+                <ul className={c.articleContributorsContainer}>
+                    {data.contributors.map(user => (
+                        <li className={c.articleContributorWrapper}>
+                            <img
+                                className={c.articleContributorAvatarImage}
+                                src="https://source.unsplash.com/random"
+                                alt={user.username}
+                                title={user.username}
+                                data-username={user.username}
+                            />
+                            <div className={c.articleContributorUsername}>{user.username}</div>
+                        </li>
+                    ))}
+                </ul>
+            </section>
         </article>
     ) : (
         <p>Memuat konten artikel dengan (gu)id {articleGuid}...</p>

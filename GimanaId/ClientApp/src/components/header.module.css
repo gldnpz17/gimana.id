@@ -1,0 +1,142 @@
+.mainContainer, :global(.gid-main-page-header) {
+    /* Declare the values in css variables to allow dynamically changing from specific/child pages */
+    --header-background-color: white;
+    --header-shadow: 0 0 0.25rem rgb(0 0 0 / 0.2);
+    --nav-text-color: var(--black);
+    --nav-highlight-background-color: rgb(0 0 0 / 0.05);
+    --search-box-text-color: var(--black);
+    --search-box-placeholder-color: grey;
+    --search-box-background-color: rgb(0 0 0 / 0.1);
+
+    width: 100%;
+    padding: 1rem;
+
+    background-color: var(--header-background-color);
+    box-shadow: var(--header-shadow);
+    /* backdrop-filter: blur(5px); */
+    background-color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    font-family: "Barlow", sans-serif;
+
+    /* transition: background-color 0.2s; */
+}
+
+.part {
+    display: flex;
+    align-items: center;
+}
+
+.logoWrapperAnchor {
+    margin-right: 1rem;
+}
+
+.searchBoxFormWrapper {
+    display: flex;
+    align-items: center;
+
+    color: var(--search-box-text-color);
+    background-color: var(--search-box-background-color);
+    border-radius: 0.25rem;
+}
+
+.searchBoxIcon {
+    height: 1em;
+    width: auto;
+    margin-left: 0.5em;
+    fill: var(--search-box-placeholder-color)
+}
+
+.visuallyHiddenSearchBoxLabel {
+    display: none;
+}
+
+.searchInput {
+    border: none;
+    background-color: transparent;
+    padding: 0.5em;
+
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.searchInput::placeholder {
+    color: var(--search-box-placeholder-color);
+}
+
+.searchInput:focus {
+    /* Get rid of the default UA focus ring/style */
+    outline: none;
+    border: none;
+}
+
+.searchBoxFormWrapper:focus-within .searchBoxIcon {
+    fill: var(--black);
+}
+
+.navItem {
+    display: block;
+
+    color: inherit;
+    text-decoration: none;
+    /* font-weight: 500; */
+
+    padding: 0.5em;
+    border-radius: 0.25rem;
+
+    transition: background-color 0.1s;
+}
+
+.navItem:hover {
+    background-color: var(--nav-highlight-background-color);
+    /* text-decoration: underline; */
+}
+
+/* .navItem:active {
+    background-color: rgb(0 0 0 / 0.1);
+} */
+
+.userProfileNavItem {
+    composes: navItem;
+
+    display: flex;
+    align-items: center;
+}
+
+.userProfileNavItem > img {
+    display: block;
+
+    width: 1.5rem;
+    height: 1.5rem;
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    margin-right: 0.25em;
+}
+
+.userProfileNavItem > span {
+    display: block;
+    font-weight: 600;
+
+    text-transform: capitalize; /* TEMPORARY, until the actual "Name" property is available (possibly front name?) */
+}
+
+.catchyRegisterNavItem {
+    composes: navItem;
+
+    background-color: lightseagreen;
+    color: white;
+    font-weight: 600;
+
+    padding: 0.5em 0.75em;
+    margin-left: 0.5em;
+}
+
+.catchyRegisterNavItem:hover {
+    background-color: lightseagreen;
+    filter: brightness(1.1);
+}
