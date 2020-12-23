@@ -4,7 +4,7 @@ Sebuah platform *crowdsourced* yang bertujuan untuk membantu orang-orang melakuk
 
 Preview: *(coming soon)*
 
-## Frameworks & Libraries used
+## Frameworks, Libraries & Technologies
 
 ### Front-end
 * React.js  
@@ -16,3 +16,8 @@ Preview: *(coming soon)*
 * AutoMapper (object-object mapper)
 * PostgreSQL (RDBMS)
 * NSwag (API preview and documentation)
+
+### Misc.
+* Apache
+* Docker
+* Ubuntu
