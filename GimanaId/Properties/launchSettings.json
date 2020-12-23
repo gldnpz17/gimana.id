@@ -32,12 +32,6 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "tetprod": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "Key": "Value"
-      }
-    },
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
