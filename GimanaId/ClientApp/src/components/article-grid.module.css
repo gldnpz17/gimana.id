@@ -1,5 +1,9 @@
 .mainContainer {
     padding: 2rem;
+
+    max-width: 75rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .headingText {

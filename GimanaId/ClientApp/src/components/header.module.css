@@ -41,6 +41,8 @@
     color: var(--search-box-text-color);
     background-color: var(--search-box-background-color);
     border-radius: 0.25rem;
+
+    margin-right: 1rem;
 }
 
 .searchBoxIcon {

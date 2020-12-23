@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 import c from "./home.module.css";
@@ -10,6 +10,8 @@ import ArticleGrid from "../components/article-grid";
 
 // Testing for the new logo concept/WIP (Logo in pure HTML and CSS)
 import TestLogo from "../components/logo-in-pure-html-css";
+
+import { fetchArticleList } from "../api/article";
 
 const Landing = () => {
     const history = useHistory();
@@ -40,7 +42,7 @@ const Landing = () => {
 // or: Newest(Submitted)Articles
 const MostPopularArticles = ({ data }) => (
     <section className={c.popularArticlesSection}>
-        <h1 className={c.articlesSectionHeading}>Artikel terbaru/terpopuler (minggu/bulan/hari ini?)</h1>
+        <h1 className={c.articlesSectionHeading}>Artikel terbaru</h1>
         <div className={c.articlesContainer}>
             {data.map(article => (
                 <ArticleCard
@@ -54,23 +56,32 @@ const MostPopularArticles = ({ data }) => (
 )
 
 const HomePage = () => {
-    const dummyArticleData = [];
+    const [articleList, setArticleList] = useState([]);
 
-    for (let asdnalkdn = 0; asdnalkdn < 8; asdnalkdn++) {
-        dummyArticleData.push({
-            id: asdnalkdn,
-            title: "bruh"
-        });
+    async function getData() {
+        try {
+            const retrievedData = await fetchArticleList();
+            setArticleList(retrievedData);
+        }
+        catch (err) {
+            console.error(err);
+            alert("Terjadi eror dalam meminta daftar artikel: " + `${err.status} ${err.statusText}`);
+        }
     }
+
+    useEffect(() => {
+        getData();
+    }, []);
+
 
     return (
         <>
             <div className={c.coloredSections}>
                 <Landing />
                 <ArticleGrid
-                    sectionTitle="Artikel terbaru / terakhir disubmit/diposting"
+                    sectionTitle="Artikel terbaru"
                     headingStyle={{ color: "white" }}
-                    articleList={dummyArticleData}
+                    articleList={articleList}
                 />
             </div>
         </>

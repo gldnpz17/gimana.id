@@ -72,8 +72,8 @@ const Header = () => {
                 <Link to="/" className={headerStyles.logoWrapperAnchor}><Logo /></Link>
                 {/* Is it okay to put the search box inside <nav> element? */}
                 <SearchBox />
-                <Link to="/artikel" className={headerStyles.navItem}>Jelajahi topik</Link>
-                <Link to="/tentang" className={headerStyles.navItem}>Tentang kami</Link>
+                <Link to="/artikel" className={headerStyles.navItem}>Jelajahi artikel</Link>
+                {/* <Link to="/tentang" className={headerStyles.navItem}>Tentang kami</Link> */}
             </nav>
             <nav className={headerStyles.part}>
                 {userInfo ? (
