@@ -56,7 +56,7 @@ const ContributionsPage = () => {
                 onChange={ev => { setSearchQuery(ev.target.value) }} /> */}
             <ArticleSearchBox
                 className={c.searchBox}
-                title="Cari artikel kontribusi kamu"
+                title="Cari artikel kontribusi Anda"
                 autoFocus
                 value={searchQuery}
                 onChange={ev => { setSearchQuery(ev.target.value) }}
