@@ -8,6 +8,8 @@ import Button from "../../components/button";
 import TestArticleCard from "../../components/article-entry-card";
 import ArticleGridSection from "../../components/article-grid";
 
+import genericAvatarImage from "../../assets/generic-avatar.png";
+
 import AuthContext from "../../components/auth-context";
 
 const GlobalStyle = createGlobalStyle`
@@ -43,7 +45,7 @@ const DashboardPage = () => {
                 }}>Tambah artikel baru</Button>
             </div> */}
             <section className={s.heroSection}>
-                <img className={s.profileImage} src="https://source.unsplash.com/random" alt="Gambar profil" />
+                <img className={s.profileImage} src={genericAvatarImage} alt="Gambar profil" />
                 <div>
                     <h1 className={s.userGreeting}>Hai, <b>{userInfo?.username}</b>.</h1>
                     <p className={s.userSupportingText}>

@@ -48,7 +48,7 @@ const MostPopularArticles = ({ data }) => (
                 <ArticleCard
                     path={"/artikel/" + article.id}
                     title="Lorem ipsum!"
-                    featuredImageUrl="https://source.unsplash.com/random"
+                    featuredImageUrl={null}
                 />
             ))}
         </div>

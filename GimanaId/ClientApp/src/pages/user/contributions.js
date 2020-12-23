@@ -68,7 +68,7 @@ const ContributionsPage = () => {
                         <ArticleEntryCardWithActions
                             articleUrlPath={`/artikel/${article.id}`}
                             title={article.title}
-                            featuredImageUrl="https://source.unsplash.com/random"
+                            featuredImageUrl={article.heroImage.base64EncodedData}
                             dateCreated={article.dateCreated}
                         />
                     ))}

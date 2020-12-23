@@ -8,6 +8,7 @@ import Logo from "./logo-in-pure-html-css";
 import headerStyles from "./header.module.css";
 
 import { ReactComponent as SearchIcon } from "../assets/svg/search.svg";
+import genericAvatarImage from "../assets/generic-avatar.png";
 
 const SearchBox = () => {
     const history = useHistory();
@@ -83,7 +84,7 @@ const Header = () => {
                     userInfo.isLoggedIn ? (
                         <>
                             <Link to="/anda" className={headerStyles.userProfileNavItem}>
-                                <img className={headerStyles.userAvatarImage} src="https://source.unsplash.com/random" alt={userInfo.username} />
+                                <img className={headerStyles.userAvatarImage} src={genericAvatarImage} alt={userInfo.username} />
                                 <span>{userInfo.username}</span>
                             </Link>
                             <Link to="#keluar-dari-akun" className={headerStyles.navItem} onClick={testHandleLogOut}>Keluar</Link>

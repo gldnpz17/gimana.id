@@ -11,6 +11,8 @@ import AuthContext from "../components/auth-context";
 
 import Button from "../components/button";
 
+import genericAvatarImage from "../assets/generic-avatar.png";
+
 // // Move these to a separate article-common.js file?
 // const HeroSection = ({ children, ...props }) => (
 //     <section {...props}>
@@ -106,7 +108,7 @@ const ArticlePage = () => {
                         <li className={c.articleContributorWrapper}>
                             <img
                                 className={c.articleContributorAvatarImage}
-                                src="https://source.unsplash.com/random"
+                                src={genericAvatarImage}
                                 alt={user.username}
                                 title={user.username}
                                 data-username={user.username}

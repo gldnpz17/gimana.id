@@ -10,7 +10,7 @@ const ArticleGridSection = ({ sectionTitle, headingStyle, articleList, ...rest }
                 <ArticleCard
                     path={`/artikel/${item.id}`}
                     title={item.title}
-                    featuredImageUrl="https://source.unsplash.com/random"
+                    featuredImageUrl={item.heroImage.base64EncodedData}
                 />
             ))}
         </div>
