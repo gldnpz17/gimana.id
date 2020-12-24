@@ -16,8 +16,5 @@ namespace DomainModel.Entities
         public virtual DateTime DateCreated { get; set; }
         public virtual IList<ArticlePart> Parts { get; set; } = new List<ArticlePart>();
         public virtual IList<User> Users { get; set; } = new List<User>();
-        public virtual IList<ArticleHistory> Histories { get; set; } = new List<ArticleHistory>();
-        public virtual IList<ArticleIssue> Issues { get; set; } = new List<ArticleIssue>();
-        public virtual IList<ArticleRating> Ratings { get; set; } = new List<ArticleRating>();
     }
 }

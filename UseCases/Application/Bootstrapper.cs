@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainModel.Services
+namespace Application
 {
-    public interface ISecureRng
+    public class Bootstrapper
     {
-        byte[] GenerateRandomBytes();
+        
     }
 }

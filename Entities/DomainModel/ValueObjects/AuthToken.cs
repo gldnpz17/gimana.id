@@ -9,7 +9,6 @@ namespace DomainModel.ValueObjects
 {
     public class AuthToken
     {
-        public virtual User User { get; set; }
         public virtual string Token { get; set; }
         public virtual DateTime CreatedAt { get; set; }
         public virtual string UserAgent { get; set; }

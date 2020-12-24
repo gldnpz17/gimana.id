@@ -1,7 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Articles\Commands\CreateArticle\" />
+    <Folder Include="Articles\Commands\DeleteArticle\" />
+    <Folder Include="Articles\Commands\UpdateArticle\" />
+    <Folder Include="Articles\Queries\ReadAllArticles\" />
+    <Folder Include="Articles\Queries\ReadArticleById\" />
+    <Folder Include="Auth\Commands\Login\" />
+    <Folder Include="Auth\Commands\Logout\" />
+    <Folder Include="Auth\Commands\ResetPassword\" />
+    <Folder Include="Auth\Commands\SendPasswordResetMessage\" />
+    <Folder Include="Auth\Commands\SignUp\" />
+    <Folder Include="Auth\Queries\" />
+    <Folder Include="Users\Commands\DeleteUser\" />
+    <Folder Include="Users\Commands\SendEmailVerificationMessage\" />
+    <Folder Include="Users\Privileges\Commands\CreatePrivilege\" />
+    <Folder Include="Users\Privileges\Commands\DeletePrivilege\" />
+    <Folder Include="Users\Privileges\Queries\ReadPrivilege\" />
+    <Folder Include="Users\Queries\CheckUsernameAvailability\" />
+    <Folder Include="Users\Queries\ReadCurrentUserId\" />
+    <Folder Include="Users\Queries\ReadUserById\" />
+    <Folder Include="Users\Queries\VerifyEmail\" />
+  </ItemGroup>
 
 </Project>

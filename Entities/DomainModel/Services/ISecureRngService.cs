@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainModel.ValueObjects
+namespace DomainModel.Services
 {
-    public class UserPrivilege
+    public interface ISecureRngService
     {
-        public virtual string PrivilegeName { get; set; }
+        byte[] GenerateRandomBytes();
     }
 }
