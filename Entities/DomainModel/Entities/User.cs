@@ -43,19 +43,5 @@ namespace DomainModel.Entities
                 throw new DomainModelException("Incorrect username or password.");
             }
         }
-
-        public void Logout(string token)
-        {
-            var foundToken = AuthTokens.FirstOrDefault(i => i.Token == token);
-
-            if (foundToken == null)
-            {
-                throw new Exception("Invalid token.");
-            }
-            else
-            {
-                AuthTokens.Remove(foundToken);
-            }
-        }
     }
 }

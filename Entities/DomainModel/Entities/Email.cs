@@ -55,7 +55,7 @@ namespace DomainModel.Entities
             User.PasswordCredential.PasswordResetToken = resetToken;
         }
 
-        public void SendEmailVerificationMessage(string domainName, IEmailSender emailSender, 
+        public void SendEmailVerificationMessage(string apiBaseAddress, IEmailSender emailSender, 
             IAlphanumericTokenGenerator alphanumericTokenGenerator, IDateTimeService dateTimeService)
         {
             var verificationToken = new EmailVerificationToken()
@@ -69,7 +69,7 @@ namespace DomainModel.Entities
                 Recipient = EmailAddress,
                 Subject = "Email Verification",
                 EmailBodyType = Services.EmailSender.EmailBodyType.HTML,
-                Body = $"<a href=\"{domainName}/api/Users/{User.Id}/verify-email?token={verificationToken.Token}\">click here to verify</a>"
+                Body = $"<a href=\"{apiBaseAddress}/Users/{User.Id}/verify-email?token={verificationToken.Token}\">click here to verify</a>"
             };
 
             VerificationToken = verificationToken;

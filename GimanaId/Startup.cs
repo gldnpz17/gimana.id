@@ -185,22 +185,6 @@ namespace GimanaIdApi
                         Environment.GetEnvironmentVariable("EMAIL_CREDENTIAL_PASSWORD")));
             }
 
-            services.AddSingleton(
-                typeof(IPasswordHasher),
-                new PasswordHasher());
-
-            services.AddSingleton(
-                typeof(IDateTimeService),
-                new DateTimeService());
-
-            services.AddSingleton(
-                typeof(ISecurePasswordSaltGenerator),
-                new SecurePasswordSaltGenerator());
-
-            services.AddSingleton(
-                typeof(IAlphanumericTokenGenerator),
-                new AlphanumericTokenGenerator());
-
             services.AddAuthorization(config =>
             {
                 config.AddPolicy(AuthorizationPolicyConstants.EmailVerifiedPolicy, policy => policy.RequireClaim("EmailVerified", "True"));

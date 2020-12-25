@@ -22,18 +22,8 @@ namespace GimanaIdApi.Controllers
     [ApiController]
     public class ArticlesController : ControllerBase
     {
-        private readonly AppDbContext _appDbContext;
-        private readonly IMapper _mapper;
-        private readonly IDateTimeService _dateTimeService;
-
-        public ArticlesController(
-            AppDbContext appDbContext,
-            IMapper mapper,
-            IDateTimeService dateTimeService)
+        public ArticlesController()
         {
-            _appDbContext = appDbContext;
-            _mapper = mapper;
-            _dateTimeService = dateTimeService;
         }
 
         /// <summary>
@@ -43,12 +33,7 @@ namespace GimanaIdApi.Controllers
         [HttpGet("")]
         public async Task<ActionResult<List<SimpleArticleDto>>> ReadAllArticles()
         {
-            var result = await _appDbContext.Articles.ToListAsync();
-            var output = new List<SimpleArticleDto>();
 
-            result.ForEach(i => output.Add(_mapper.Map<SimpleArticleDto>(i)));
-
-            return output;
         }
 
         /// <summary>
@@ -59,11 +44,7 @@ namespace GimanaIdApi.Controllers
         [HttpGet("{articleId}")]
         public async Task<ActionResult<DetailedArticleDto>> ReadArticlebyId([FromRoute]string articleId) 
         {
-            var result = await _appDbContext.Articles.FirstAsync(i => i.Id == Guid.Parse(articleId));
 
-            var output = _mapper.Map<DetailedArticleDto>(result);
-
-            return output;
         }
 
         /// <summary>
@@ -76,52 +57,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("")]
         public async Task<ActionResult<CreateArticleResponseDto>> CreateArticle([FromBody]CreateArticleDto dto)
         {
-            var newGuid = Guid.NewGuid();
 
-            var newArticle = new Article()
-            {
-                Id = newGuid,
-                Title = dto.Title,
-                Description = dto.Description,
-                HeroImage = _mapper.Map<Image>(dto.HeroImage),
-                DateCreated = _dateTimeService.GetCurrentDateTime()
-            };
-
-            for(int partCount = 0; partCount < dto.Parts.Count; partCount++)
-            {
-                var newPart = new ArticlePart()
-                {
-                    PartNumber = partCount + 1,
-                    Title = dto.Parts[partCount].Title,
-                    Description = dto.Parts[partCount].Description
-                };
-
-                for(int stepCount = 0; stepCount < dto.Parts[partCount].Steps.Count; stepCount++)
-                {
-                    var newStep = new ArticleStep()
-                    {
-                        StepNumber = stepCount + 1,
-                        Title = dto.Parts[partCount].Steps[stepCount].Title,
-                        Description = dto.Parts[partCount].Steps[stepCount].Description,
-                        Image = _mapper.Map<Image>(dto.Parts[partCount].Steps[stepCount].Image)
-                    };
-
-                    newPart.Steps.Add(newStep);
-                }
-
-                newArticle.Parts.Add(newPart);
-            }
-
-            var currentUser = await GetCurrentUser();
-
-            newArticle.Users.Add(currentUser);
-
-            await _appDbContext.Articles.AddAsync(newArticle);
-
-            await _appDbContext.SaveChangesAsync();
-
-            //fetch created article
-            return Ok(new CreateArticleResponseDto() { Id = newGuid });
         }
 
         /// <summary>
@@ -135,38 +71,7 @@ namespace GimanaIdApi.Controllers
         [HttpPut("{articleId}")]
         public async Task<ActionResult> UpdateArticle([FromRoute]string articleId, [FromBody]CreateArticleDto dto)
         {
-            var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            var currentUser = await GetCurrentUser();
-
-            if (!article.Users.Contains(currentUser))
-            {
-                article.Users.Add(currentUser);
-            }
-
-            var newHistory =
-                new ArticleHistory()
-                {
-                    Version = article.Histories.Count + 1,
-                    TimeStamp = DateTime.Now,
-                    Title = article.Title,
-                    Description = article.Description,
-                    HeroImage = article.HeroImage,
-                    Parts = article.Parts,
-                    Issues = article.Issues,
-                    Ratings = article.Ratings,
-                    Contributors = article.Users
-                };
-            article.Histories.Add(newHistory);
-
-            article.Title = dto.Title;
-            article.Description = dto.Description;
-            article.HeroImage = _mapper.Map<Image>(dto.HeroImage);
-            article.Parts = _mapper.Map<List<ArticlePart>>(dto.Parts);
-
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok();
         }
 
         /// <summary>
@@ -179,13 +84,7 @@ namespace GimanaIdApi.Controllers
         [HttpDelete("{articleId}")]
         public async Task<ActionResult> DeleteArticle([FromRoute]string articleId)
         {
-            var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            _appDbContext.Articles.Remove(article);
-
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok();
         }
         
         /// <summary>
@@ -199,32 +98,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("{articleId}")]
         public async Task<ActionResult> RevertArticle([FromRoute]string articleId, [FromBody]RevertArticleDto dto)
         {
-            var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            var history = article.Histories.FirstOrDefault(i => i.Version == dto.Version);
-
-            article.Title = history.Title;
-            article.Description = history.Description;
-            article.HeroImage = history.HeroImage;
-            article.Users = history.Contributors;
-            article.Parts = history.Parts;
-            article.Issues = history.Issues;
-            article.Ratings = history.Ratings;
-
-            //remove histories
-            var historiesToDelete = new List<ArticleHistory>();
-            foreach (var i in article.Histories)
-            {
-                if (i.Version >= dto.Version)
-                {
-                    historiesToDelete.Add(i);
-                }
-            }
-            historiesToDelete.ForEach(i => article.Histories.Remove(i));
-
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok();
         }
 
         /// <summary>
@@ -235,9 +109,7 @@ namespace GimanaIdApi.Controllers
         [HttpGet("{articleId}/issues")]
         public async Task<ActionResult<List<ArticleIssueDto>>> ReadAllArticleIssues([FromRoute]string articleId)
         {
-            var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            return _mapper.Map<List<ArticleIssueDto>>(article.Issues);
         }
 
         /// <summary>
@@ -251,22 +123,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("{articleId}/issues")]
         public async Task<ActionResult> CreateIssue([FromRoute]string articleId, [FromBody]CreateArticleIssueDto dto)
         {
-            var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            var newIssue = new ArticleIssue()
-            {
-                Article = article,
-                Title = dto.Title,
-                Content = dto.Content,
-                Resolved = false,
-                Submitter = await GetCurrentUser()
-            };
-
-            article.Issues.Add(newIssue);
-
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok();
         }
 
         /// <summary>
@@ -280,15 +137,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("{articleId}/issues/{issueId}/mark-as-resolved")]
         public async Task<ActionResult> MarkIssueAsResolved([FromRoute]string articleId, [FromRoute]string issueId)
         {
-            var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            var issue = article.Issues.FirstOrDefault(i => i.Id == Guid.Parse(issueId));
-
-            issue.Resolved = true;
-
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok();
         }
 
         /// <summary>
@@ -302,15 +151,7 @@ namespace GimanaIdApi.Controllers
         [HttpDelete("{articleId}/issues/{issueId}")]
         public async Task<ActionResult> DeleteIssue([FromRoute]string articleId, [FromRoute]string issueId)
         {
-            var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            var issue = article.Issues.FirstOrDefault(i => i.Id == Guid.Parse(issueId));
-
-            article.Issues.Remove(issue);
-
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok();
         }
 
         /// <summary>
@@ -321,11 +162,7 @@ namespace GimanaIdApi.Controllers
         [HttpGet("{articleId}/ratings")]
         public async Task<ActionResult<List<ArticleRatingDto>>> ReadAllRatings([FromRoute]string articleId)
         {
-            var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            var ratings = article.Ratings;
-
-            return Ok(_mapper.Map<List<ArticleRatingDto>>(ratings));
         }
 
         /// <summary>
@@ -339,22 +176,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("{articleId}/ratings")]
         public async Task<ActionResult> CreateRating([FromRoute]string articleId, [FromBody]CreateRatingDto dto)
         {
-            var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            var newRating = new ArticleRating()
-            {
-                Article = article,
-                Title = dto.Title,
-                Content = dto.Content,
-                Rating = dto.Rating,
-                Submitter = await GetCurrentUser()
-            };
-
-            article.Ratings.Add(newRating);
-
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok();
         }
         
         /// <summary>

@@ -5,11 +5,15 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GimanaId", "GimanaId\GimanaId.csproj", "{6829051C-E729-4ED3-83B4-73549071FD52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModel", "Entities\DomainModel\DomainModel.csproj", "{E2B811C0-CCA2-4BBC-AE2A-A239AE5865E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainModel", "Entities\DomainModel\DomainModel.csproj", "{E2B811C0-CCA2-4BBC-AE2A-A239AE5865E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostgresDatabase", "Infrastructure\PostgresDatabase\PostgresDatabase.csproj", "{5CD929BD-A77C-4C0F-B27F-CB2DF245FDC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostgresDatabase", "Infrastructure\PostgresDatabase\PostgresDatabase.csproj", "{5CD929BD-A77C-4C0F-B27F-CB2DF245FDC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "UseCases\Application\Application.csproj", "{C8492BA5-F10D-4EA5-8A94-321F56CC2016}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "UseCases\Application\Application.csproj", "{C8492BA5-F10D-4EA5-8A94-321F56CC2016}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InMemoryDatabase", "Infrastructure\InMemoryDatabase\InMemoryDatabase.csproj", "{40F643CB-02CB-4032-AC72-9C115D17EF09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDomainServiceImplementation", "Infrastructure\SimpleDomainServiceImplementation\SimpleDomainServiceImplementation.csproj", "{F1A5F213-0BB6-4522-B526-D65FAC05B682}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{C8492BA5-F10D-4EA5-8A94-321F56CC2016}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8492BA5-F10D-4EA5-8A94-321F56CC2016}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8492BA5-F10D-4EA5-8A94-321F56CC2016}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40F643CB-02CB-4032-AC72-9C115D17EF09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40F643CB-02CB-4032-AC72-9C115D17EF09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40F643CB-02CB-4032-AC72-9C115D17EF09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40F643CB-02CB-4032-AC72-9C115D17EF09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1A5F213-0BB6-4522-B526-D65FAC05B682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1A5F213-0BB6-4522-B526-D65FAC05B682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1A5F213-0BB6-4522-B526-D65FAC05B682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1A5F213-0BB6-4522-B526-D65FAC05B682}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
