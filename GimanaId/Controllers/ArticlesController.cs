@@ -10,10 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using GimanaIdApi.Common.Authentication;
 using GimanaIdApi.DTOs.Request;
 using GimanaIdApi.DTOs.Response;
-using GimanaIdApi.Entities.Entities;
-using GimanaIdApi.Entities.ValueObjects;
-using GimanaIdApi.Infrastructure.DataAccess;
-using GimanaId.Infrastructure.DateTimeService;
 using GimanaId.DTOs.Response;
 
 namespace GimanaIdApi.Controllers
@@ -190,15 +186,7 @@ namespace GimanaIdApi.Controllers
         [HttpDelete("{articleId}/ratings/{ratingId}")]
         public async Task<ActionResult> DeleteRating([FromRoute]string articleId, [FromRoute]string ratingId)
         {
-            var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            var rating = article.Ratings.FirstOrDefault(i => i.Id == Guid.Parse(ratingId));
-
-            article.Ratings.Remove(rating);
-
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok();
         }
 
         /// <summary>
@@ -211,18 +199,12 @@ namespace GimanaIdApi.Controllers
         [HttpGet("{articleId}/previous-versions")]
         public async Task<ActionResult<List<ArticleHistoryDto>>> ReadAllPreviousVersions([FromRoute]string articleId)
         {
-            var article = await _appDbContext.Articles.FirstOrDefaultAsync(i => i.Id == Guid.Parse(articleId));
 
-            var histories = article.Histories;
-
-            var output = _mapper.Map<List<ArticleHistoryDto>>(histories);
-
-            return Ok(output);
         }
 
         private async Task<User> GetCurrentUser()
         {
-            return await _appDbContext.Users.FirstOrDefaultAsync(i => i.Id == Guid.Parse(User.FindFirst("UserId").Value));
+
         }
     }
 }

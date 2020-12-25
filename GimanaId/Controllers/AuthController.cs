@@ -10,12 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using GimanaIdApi.Common.Config;
 using GimanaIdApi.DTOs.Request;
 using GimanaIdApi.DTOs.Response;
-using GimanaIdApi.Entities.Entities;
-using GimanaIdApi.Infrastructure.AlphanumericTokenGenerator;
-using GimanaIdApi.Infrastructure.DataAccess;
-using GimanaIdApi.Infrastructure.EmailSender;
-using GimanaIdApi.Infrastructure.PasswordHasher;
-using GimanaIdApi.Infrastructure.SecurePasswordSaltGenerator;
 
 namespace GimanaIdApi.Controllers
 {
@@ -23,33 +17,9 @@ namespace GimanaIdApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _appDbContext;
-        private readonly IPasswordHasher _passwordHasher;
-        private readonly ISecurePasswordSaltGenerator _securePasswordSaltGenerator;
-        private readonly IAlphanumericTokenGenerator _alphanumericTokenGenerator;
-        private readonly IEmailSender _emailSender;
-        private readonly ApiConfig _config;
-        private readonly IMapper _mapper;
-        private readonly UsersController _usersController;
-
-        public AuthController(
-            AppDbContext appDbContext,
-            IPasswordHasher passwordHasher,
-            ISecurePasswordSaltGenerator securePasswordSaltGenerator,
-            IAlphanumericTokenGenerator alphanumericTokenGenerator,
-            IEmailSender emailSender,
-            ApiConfig config,
-            IMapper mapper,
-            UsersController usersController)
+        public AuthController()
         {
-            _appDbContext = appDbContext;
-            _passwordHasher = passwordHasher;
-            _securePasswordSaltGenerator = securePasswordSaltGenerator;
-            _alphanumericTokenGenerator = alphanumericTokenGenerator;
-            _emailSender = emailSender;
-            _config = config;
-            _mapper = mapper;
-            _usersController = usersController;
+
         }
         
         /// <summary>
@@ -60,52 +30,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AuthTokenDto>> Login([FromBody]LoginDto dto)
         {
-            var user = await _appDbContext.Users.FirstOrDefaultAsync(i => i.Username == dto.Username);
 
-            var passwordCredential = user.PasswordCredential;
-
-            var passwordHash = _passwordHasher.HashPassword(dto.Password, passwordCredential.PasswordSalt);
-
-            if (passwordHash == passwordCredential.HashedPassword)
-            {
-                var newToken = new AuthToken()
-                {
-                    User = user,
-                    Token = _alphanumericTokenGenerator.GenerateAlphanumericToken(_config.PasswordResetTokenLength),
-                    CreatedAt = DateTime.Now,
-                    UserAgent = Request.Headers["User-Agent"].FirstOrDefault(),
-                    IPAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString()
-                };
-
-                user.AuthTokens.Add(newToken);
-                await _appDbContext.SaveChangesAsync();
-
-                CookieOptions tokenCookieOptions = new CookieOptions()
-                {
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    HttpOnly = true
-                };
-
-                if (dto.RememberMe)
-                {
-                    // I don't know if this alone is sufficient
-                    tokenCookieOptions.Expires = DateTime.Now.AddMonths(1);
-                }
-
-                // Temporary workaround to disable HTTPS requirement on dev environment
-                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-                {
-                    tokenCookieOptions.Secure = false;
-                }
-
-                Response.Cookies.Append("session-token", newToken.Token, tokenCookieOptions);
-                return Ok();
-            }
-            else
-            {
-                throw new Exception("Invalid login credentials");
-            }
         }
 
         /// <summary>
@@ -116,14 +41,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("logout")]
         public async Task<ActionResult> Logout()
         {
-            var currentToken = Request.Cookies["session-token"]; // Token stored on browser cookies
 
-            var authToken = await _appDbContext.AuthTokens.FirstOrDefaultAsync(i => i.Token == currentToken);
-            _appDbContext.AuthTokens.Remove(authToken);
-            await _appDbContext.SaveChangesAsync();
-
-            Response.Cookies.Delete("session-token");
-            return Ok();
         }
 
         /// <summary>
@@ -134,33 +52,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("sign-up")]
         public async Task<ActionResult> SignUp([FromBody]SignUpDto dto)
         {
-            var passwordSalt = _securePasswordSaltGenerator.GenerateSecureRandomString();
 
-            var newPasswordCredential = new PasswordCredential()
-            {
-                HashedPassword = _passwordHasher.HashPassword(dto.Password, passwordSalt),
-                PasswordSalt = passwordSalt
-            };
-
-            var newUser = new User()
-            {
-                Username = dto.Username,
-                PasswordCredential = newPasswordCredential,
-                Email = new UserEmail()
-                {
-                    EmailAddress = dto.Email,
-                    IsVerified = false
-                },
-                BanLiftedDate = DateTime.MinValue
-            };
-
-            await _appDbContext.Users.AddAsync(newUser);
-
-            await _appDbContext.SaveChangesAsync();
-
-            await _usersController.SendEmailVerificationMessage(newUser.Id.ToString());
-
-            return Ok();
         }
 
         /// <summary>
@@ -171,30 +63,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("send-password-reset-message")]
         public async Task<ActionResult> SendPasswordResetMessage([FromBody]SendPasswordResetMessageDto dto)
         {
-            var user = await _appDbContext.Users.FirstOrDefaultAsync(i => i.Username == dto.Username);
-            
-            var newToken = _alphanumericTokenGenerator.GenerateAlphanumericToken(_config.PasswordResetTokenLength);
 
-            var newResetToken = new PasswordResetToken()
-            {
-                Token = newToken,
-                CreatedAt = DateTime.Now
-            };
-
-            user.PasswordCredential.PasswordResetToken = newResetToken;
-
-            await _appDbContext.SaveChangesAsync();
-
-            _emailSender.SendEmail(
-                new Email()
-                {
-                    Recipient = user.Email.EmailAddress,
-                    Subject = "Password Reset",
-                    Body = $"your token: {newToken}",
-                    EmailBodyType = EmailBodyType.Plaintext
-                });
-
-            return Ok();
         }
 
         /// <summary>
@@ -205,26 +74,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("reset-password")]
         public async Task<ActionResult> ResetPassword([FromBody]ResetPasswordDto dto)
         {
-            var user = await _appDbContext.Users.FirstOrDefaultAsync(i => i.Username == dto.Username);
 
-            if (dto.Token == user.PasswordCredential.PasswordResetToken.Token)
-            {
-                var newSalt = _securePasswordSaltGenerator.GenerateSecureRandomString();
-
-                user.PasswordCredential = new PasswordCredential()
-                {
-                    HashedPassword = _passwordHasher.HashPassword(dto.NewPassword, newSalt),
-                    PasswordSalt = newSalt
-                };
-
-                await _appDbContext.SaveChangesAsync();
-
-                return Ok();
-            }
-            else
-            {
-                throw new Exception("Invalid Token.");
-            }
         }
     }
 }
