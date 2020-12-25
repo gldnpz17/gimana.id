@@ -95,7 +95,7 @@ const Header = () => {
                                 <Link to="/daftar" className={headerStyles.catchyRegisterNavItem}>Daftar</Link>
                             </>
                         )
-                ) : <p>Loading user info...</p>}
+                ) : <p>Memuat data pengguna...</p>}
 
             </nav>
         </header>

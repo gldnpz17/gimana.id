@@ -98,6 +98,18 @@ const ArticleEditorPage = ({ mode }) => {
                 originalArticleTitle.current = data.title;
                 setArticleTitle(data.title);
                 setArticleDescription(data.description);
+
+                // Make sure to properly sort the steps for each part beforehand
+                /*const sortedParts = */data.parts.sort(
+                    (a, b) => a.partNumber - b.partNumber
+                ); // Apparently it does in-place modification as well, so we don't need to assign the result to a new variable
+
+                for (let i = 0; i < data.parts.length; i++) {
+                    data.parts[i].steps.sort(
+                        (a, b) => a.stepNumber - b.stepNumber
+                    );
+                }
+
                 setParts(data.parts);
             });
         }
@@ -163,12 +175,12 @@ const ArticleEditorPage = ({ mode }) => {
                         )}
                 </p>
                 <div className={editor.actionButtons}>
-                    <Button backgroundColor="#c6262e" onClick={confirmExit}>Batalkan perubahan</Button>
+                    <Button backgroundColor="#c6262e" style={{ marginRight: "1rem" }} onClick={confirmExit}>Batalkan perubahan</Button>
                     <Button backgroundColor="#68b723" onClick={testHandleSubmit}>Simpan artikel</Button>
                 </div>
             </div>
             <section className={viewer.heroSection}>
-                <div>
+                <div className={viewer.heroTexts}>
                     <Editable
                         className={viewer.heroTitle}
                         placeholder="Judul artikel..."
@@ -206,7 +218,7 @@ const ArticleEditorPage = ({ mode }) => {
                 <section className={viewer.partCard}>
                     <div className={viewer.partHeading}>
                         <div className={editor.partActions}>
-                            <h2 className={viewer.partNumber}>Bagian {i + 1}</h2>
+                            <h2 className={viewer.partNumber}>Bagian {part.partNumber || i + 1}</h2>
                             <Button onClick={() => {
                                 const prev = [...parts];
                                 prev.splice(i, 1);
@@ -216,7 +228,7 @@ const ArticleEditorPage = ({ mode }) => {
 
                         <Editable
                             className={viewer.partTitle}
-                            placeholder={`Penjelasan step ke-${i + 1}`}
+                            placeholder={`Penjelasan part ke-${i + 1}`}
                             rows={1}
                             value={part.title}
                             onChange={ev => {
@@ -253,7 +265,7 @@ const ArticleEditorPage = ({ mode }) => {
                                     // console.log("yo");
                                 }} />
                                 <div className={viewer.stepExplanationWrapper}>
-                                    <div className={viewer.stepNumberMarker}>{j + 1}</div>
+                                    <div className={viewer.stepNumberMarker}>{step.stepNumber || j + 1}</div>
                                     <div style={{ flexGrow: "1" }}>
                                         <Editable
                                             placeholder={`Judul step ke-${j + 1}...`}
@@ -292,7 +304,6 @@ const ArticleEditorPage = ({ mode }) => {
                         <div className={viewer.stepNumberMarker}>+</div>
                         <p>Tambah step</p>
                     </div>
-                    {/* <Button style={{ margin: '0 auto' }}>Tambah step</Button> */}
                 </section>
             ))}
             <section role="button" className={`${viewer.partCard} ${editor.addPartButton}`} onClick={() => {
@@ -300,9 +311,8 @@ const ArticleEditorPage = ({ mode }) => {
                 prevPartsArr.push(blankPartItem);
                 setParts(prevPartsArr);
             }}>
-                + Tambah part baru
+                + Tambah bagian (part) baru
             </section>
-            {/* <Button style={{ margin: '0 auto' }} backgroundColor="green">Tambah part</Button> */}
         </article>
     )
 }
