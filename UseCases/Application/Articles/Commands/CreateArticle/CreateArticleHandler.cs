@@ -1,4 +1,5 @@
-﻿using DomainModel.Services;
+﻿using DomainModel.Entities;
+using DomainModel.Services;
 using MediatR;
 using PostgresDatabase;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Articles.Commands.CreateArticle
 {
-    public class CreateArticleHandler : IRequestHandler<CreateArticleCommand>
+    public class CreateArticleHandler : IRequestHandler<CreateArticleCommand, Article>
     {
         private readonly AppDbContext _appDbContext;
         private readonly IDateTimeService _dateTimeService;
@@ -21,7 +22,7 @@ namespace Application.Articles.Commands.CreateArticle
             _dateTimeService = dateTimeService;
         }
 
-        public async Task<Unit> Handle(CreateArticleCommand request, CancellationToken cancellationToken)
+        public async Task<Article> Handle(CreateArticleCommand request, CancellationToken cancellationToken)
         {
             var article = request.Article;
 
@@ -45,7 +46,7 @@ namespace Application.Articles.Commands.CreateArticle
 
             await _appDbContext.SaveChangesAsync();
 
-            return Unit.Value;
+            return article;
         }
     }
 }

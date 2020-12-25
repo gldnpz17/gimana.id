@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Articles.Commands.CreateArticle
+namespace Application.Users.Queries.ReadUserById
 {
-    public class CreateArticleCommand : IRequest<Article>
+    public class ReadUserByIdQuery : IRequest<User>
     {
-        public Article Article { get; set; }
+        public Guid Id { get; set; }
     }
 }

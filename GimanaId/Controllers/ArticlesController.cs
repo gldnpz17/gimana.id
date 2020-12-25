@@ -11,6 +11,14 @@ using GimanaIdApi.Common.Authentication;
 using GimanaIdApi.DTOs.Request;
 using GimanaIdApi.DTOs.Response;
 using GimanaId.DTOs.Response;
+using MediatR;
+using Application.Articles.Queries.ReadAllArticles;
+using Application.Articles.Queries.ReadArticleById;
+using Application.Articles.Commands.CreateArticle;
+using DomainModel.Entities;
+using Application.Articles.Commands.UpdateArticle;
+using Application.Users.Queries.ReadUserById;
+using Application.Articles.Commands.DeleteArticle;
 
 namespace GimanaIdApi.Controllers
 {
@@ -18,8 +26,13 @@ namespace GimanaIdApi.Controllers
     [ApiController]
     public class ArticlesController : ControllerBase
     {
-        public ArticlesController()
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
+
+        public ArticlesController(IMediator mediator, IMapper mapper)
         {
+            _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -29,7 +42,16 @@ namespace GimanaIdApi.Controllers
         [HttpGet("")]
         public async Task<ActionResult<List<SimpleArticleDto>>> ReadAllArticles()
         {
+            var result = await _mediator.Send(new ReadAllArticlesQuery());
 
+            var output = new List<SimpleArticleDto>();
+
+            result.ToList().ForEach(i =>
+            {
+                output.Add(_mapper.Map<SimpleArticleDto>(i));
+            });
+
+            return output;
         }
 
         /// <summary>
@@ -40,7 +62,14 @@ namespace GimanaIdApi.Controllers
         [HttpGet("{articleId}")]
         public async Task<ActionResult<DetailedArticleDto>> ReadArticlebyId([FromRoute]string articleId) 
         {
+            var result = await _mediator.Send(new ReadArticleByIdQuery() 
+            { 
+                Id = Guid.Parse(articleId) 
+            });
 
+            var output = _mapper.Map<DetailedArticleDto>(result);
+
+            return output;
         }
 
         /// <summary>
@@ -53,7 +82,12 @@ namespace GimanaIdApi.Controllers
         [HttpPost("")]
         public async Task<ActionResult<CreateArticleResponseDto>> CreateArticle([FromBody]CreateArticleDto dto)
         {
+            var result = await _mediator.Send(new CreateArticleCommand() 
+            { 
+                Article = _mapper.Map<Article>(dto) 
+            });
 
+            return new CreateArticleResponseDto() { Id = result.Id };
         }
 
         /// <summary>
@@ -67,7 +101,13 @@ namespace GimanaIdApi.Controllers
         [HttpPut("{articleId}")]
         public async Task<ActionResult> UpdateArticle([FromRoute]string articleId, [FromBody]CreateArticleDto dto)
         {
+            await _mediator.Send(new UpdateArticleCommand()
+            {
+                User = await GetCurrentUser(),
+                Article = _mapper.Map<Article>(dto)
+            });
 
+            return Ok();
         }
 
         /// <summary>
@@ -80,7 +120,12 @@ namespace GimanaIdApi.Controllers
         [HttpDelete("{articleId}")]
         public async Task<ActionResult> DeleteArticle([FromRoute]string articleId)
         {
+            await _mediator.Send(new DeleteArticleCommand() 
+            { 
+                Id = Guid.Parse(articleId) 
+            });
 
+            return Ok();
         }
         
         /// <summary>
@@ -94,7 +139,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("{articleId}")]
         public async Task<ActionResult> RevertArticle([FromRoute]string articleId, [FromBody]RevertArticleDto dto)
         {
-
+            return StatusCode(501); //not implemented
         }
 
         /// <summary>
@@ -105,7 +150,7 @@ namespace GimanaIdApi.Controllers
         [HttpGet("{articleId}/issues")]
         public async Task<ActionResult<List<ArticleIssueDto>>> ReadAllArticleIssues([FromRoute]string articleId)
         {
-
+            return StatusCode(501); //not implemented
         }
 
         /// <summary>
@@ -119,7 +164,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("{articleId}/issues")]
         public async Task<ActionResult> CreateIssue([FromRoute]string articleId, [FromBody]CreateArticleIssueDto dto)
         {
-
+            return StatusCode(501); //not implemented
         }
 
         /// <summary>
@@ -133,7 +178,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("{articleId}/issues/{issueId}/mark-as-resolved")]
         public async Task<ActionResult> MarkIssueAsResolved([FromRoute]string articleId, [FromRoute]string issueId)
         {
-
+            return StatusCode(501); //not implemented
         }
 
         /// <summary>
@@ -147,7 +192,7 @@ namespace GimanaIdApi.Controllers
         [HttpDelete("{articleId}/issues/{issueId}")]
         public async Task<ActionResult> DeleteIssue([FromRoute]string articleId, [FromRoute]string issueId)
         {
-
+            return StatusCode(501); //not implemented
         }
 
         /// <summary>
@@ -158,7 +203,7 @@ namespace GimanaIdApi.Controllers
         [HttpGet("{articleId}/ratings")]
         public async Task<ActionResult<List<ArticleRatingDto>>> ReadAllRatings([FromRoute]string articleId)
         {
-
+            return StatusCode(501); //not implemented
         }
 
         /// <summary>
@@ -172,7 +217,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("{articleId}/ratings")]
         public async Task<ActionResult> CreateRating([FromRoute]string articleId, [FromBody]CreateRatingDto dto)
         {
-
+            return StatusCode(501); //not implemented
         }
         
         /// <summary>
@@ -186,7 +231,7 @@ namespace GimanaIdApi.Controllers
         [HttpDelete("{articleId}/ratings/{ratingId}")]
         public async Task<ActionResult> DeleteRating([FromRoute]string articleId, [FromRoute]string ratingId)
         {
-
+            return StatusCode(501); //not implemented
         }
 
         /// <summary>
@@ -199,12 +244,17 @@ namespace GimanaIdApi.Controllers
         [HttpGet("{articleId}/previous-versions")]
         public async Task<ActionResult<List<ArticleHistoryDto>>> ReadAllPreviousVersions([FromRoute]string articleId)
         {
-
+            return StatusCode(501); //not implemented
         }
 
         private async Task<User> GetCurrentUser()
         {
+            var result = await _mediator.Send(new ReadUserByIdQuery()
+            {
+                Id = Guid.Parse(User.FindFirst("UserId").Value)
+            });
 
+            return result;
         }
     }
 }
