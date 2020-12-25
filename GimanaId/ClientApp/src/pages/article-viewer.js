@@ -20,14 +20,6 @@ import genericAvatarImage from "../assets/generic-avatar.png";
 //     </section>
 // );
 
-// const Text = ({ mode, component, className, rows, children, onChange, ...rest }) => {
-//     if (mode === "edit" || mode === "new") {
-//         return <textarea className={[c.editable, className].join(" ")} rows={rows} value={children} onChange={onChange} />;
-//     }
-//     const Component = component;
-//     return <Component className={className} {...rest}>{children}</Component>;
-// }
-
 async function getArticleData(articleGuid, stateSetter) {
     try {
         const jsonResponse = await fetchArticle(articleGuid);
@@ -75,14 +67,14 @@ const ArticlePage = () => {
                     <img className={c.heroImage} src={data.heroImage.base64EncodedData} alt="Featured image" />
                 ) : null}
             </section>
-            {data.parts?.map(part => (
+            {data.parts?.sort((a, b) => a.partNumber - b.partNumber).map(part => (
                 <section key={`part${part.partNumber}`} className={c.partCard}>
                     <div className={c.partHeading}>
                         <h2 className={c.partNumber}>Bagian {part.partNumber}</h2>
                         <p className={c.partTitle}>{part.title}</p>
                     </div>
                     <ul className={c.stepsContainer}>
-                        {part.steps?.map(step => (
+                        {part.steps?.sort((a, b) => a.stepNumber - b.stepNumber).map(step => (
                             <li key={`part${part.partNumber}-step${step.stepNumber}`} className={c.stepItemContainer}>
                                 {step.image.base64EncodedData ? (
                                     <img className={c.stepImage} src={step.image.base64EncodedData} alt={step.title} />

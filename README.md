@@ -2,14 +2,18 @@
 
 Sebuah platform *crowdsourced* yang bertujuan untuk membantu orang-orang melakukan sesuatu.
 
-Preview: *(coming soon)*
+Saat ini, proyek sedang dalam masa uji coba (*trial phase*).
 
 ## Frameworks, Libraries & Technologies
 
-### Front-end
-* React.js  
+### Front End
+* React (<!--bootstrapped using -->`create-react-app`)
+* Babel
+* Webpack
+* SVGR
+* Autoprefixer
 
-### Back-end
+### Back End
 * .NET Standard
 * ASP.NET Core (web framework)
 * Entity Framework Core (O/RM)
@@ -17,7 +21,7 @@ Preview: *(coming soon)*
 * PostgreSQL (RDBMS)
 * NSwag (API preview and documentation)
 
-### Misc.
+### Deployment and Service
 * Apache
 * Docker
 * Ubuntu
