@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DomainModel.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,13 +11,17 @@ namespace DomainModel.Entities
     {
         public User User { get; set; }
         public virtual string Token { get; set; }
-        public virtual DateTime CreatedAt { get; set; }
+        public virtual DateTime ExpireDate { get; set; }
         public virtual string UserAgent { get; set; }
         public virtual string IPAddress { get; set; }
+        public virtual bool IsRemembered { get; set; }
 
-        public virtual void Extend()
+        public virtual void Extend(IDateTimeService _dateTimeService)
         {
-            CreatedAt.AddDays(7);
+            if (IsRemembered)
+            {
+                ExpireDate = _dateTimeService.GetCurrentDateTime().AddDays(30);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DomainModel.Services;
+﻿using DomainModel.Entities;
+using DomainModel.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PostgresDatabase;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Auth.Commands.Login
 {
-    public class LoginHandler : IRequestHandler<LoginCommand>
+    public class LoginHandler : IRequestHandler<LoginCommand, AuthToken>
     {
         private readonly AppDbContext _appDbContext;
         private readonly IPasswordHashingService _passwordHashingService;
@@ -27,7 +28,7 @@ namespace Application.Auth.Commands.Login
             _alphanumericTokenGenerator = alphanumericTokenGenerator;
         }
 
-        public async Task<Unit> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<AuthToken> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var user = await _appDbContext.Users.FirstOrDefaultAsync(i => i.Username == request.Username);
 
@@ -36,12 +37,12 @@ namespace Application.Auth.Commands.Login
                 throw new ApplicationException("Incorrect username or password");
             }
 
-            user.Login(request.Password, request.IpAddress, request.UserAgent, _dateTimeService,
+            var token = user.Login(request.Password, request.IpAddress, request.UserAgent, _dateTimeService,
                 _passwordHashingService, _alphanumericTokenGenerator);
 
             await _appDbContext.SaveChangesAsync();
 
-            return Unit.Value;
+            return token;
         }
     }
 }

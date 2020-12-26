@@ -11,23 +11,26 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using GimanaIdApi.Infrastructure.DataAccess;
 using System.Net;
+using MediatR;
+using Application.Auth.Queries.ReadUserByAuthToken;
+using Application.Auth.Commands.VerifyAuthToken;
+using DomainModel.Entities;
 
 namespace GimanaIdApi.Common.Authentication
 {
     public class ValidateRandomTokenAuthenticationHandler : AuthenticationHandler<RandomTokenAuthenticationSchemeOptions>
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly IMediator _mediator;
 
         public ValidateRandomTokenAuthenticationHandler(
             IOptionsMonitor<RandomTokenAuthenticationSchemeOptions> options, 
             ILoggerFactory logger, 
             UrlEncoder encoder, 
             ISystemClock clock,
-            AppDbContext appDbContext) : base(options, logger, encoder, clock)
+            IMediator mediator) : base(options, logger, encoder, clock)
         {
-            _appDbContext = appDbContext;
+            _mediator = mediator;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -39,55 +42,51 @@ namespace GimanaIdApi.Common.Authentication
                 return AuthenticateResult.Fail("No session token found in request cookies.");
             }
 
-            var token = await _appDbContext.AuthTokens.FirstOrDefaultAsync(i => i.Token == tokenString);
+            AuthToken token;
 
-            if (token == null)
+            try 
             {
-                // Probably place a mechanism for removing the existing cookie here?
-                return AuthenticateResult.Fail("Invalid session token supplied.");
+                token = await _mediator.Send(new VerifyAuthTokenCommand()
+                {
+                    Token = tokenString
+                });
             }
-            else
+            catch (ApplicationException ex)
             {
-                //verify user agent
-                var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
-                if (token.UserAgent != userAgent) 
-                {
-                    return AuthenticateResult.Fail("User agent in token doesn't match the user agent used.");
-                }
+                Response.Cookies.Delete("session-token");
 
-                //verify ip address
-                var ipAddress = Request.HttpContext.Connection.RemoteIpAddress;
-                if (token.IPAddress != ipAddress.ToString()) 
-                {
-                    return AuthenticateResult.Fail("IP address registered in token doesn't match the ip address the request is sent from.");
-                }
-
-                var user = token.User;
-
-                var claims = 
-                    new List<Claim>()
-                    {
-                        new Claim("UserId", user.Id.ToString()),
-                        new Claim("IsAdmin", user.Privileges.Where(i => i.PrivilegeName == "Admin").Any().ToString()),
-                        new Claim("IsModerator", user.Privileges.Where(i => i.PrivilegeName == "Moderator").Any().ToString()),
-                        new Claim("EmailVerified", user.Email.IsVerified.ToString())
-                    };
-
-                if (user.BanLiftedDate <= DateTime.Now)
-                {
-                    claims.Add(new Claim("IsBanned", false.ToString()));
-                }
-                else
-                {
-                    claims.Add(new Claim("IsBanned", true.ToString()));
-                }
-
-                var claimsIdentity = new ClaimsIdentity(claims);
-
-                var ticket = new AuthenticationTicket(new ClaimsPrincipal(claimsIdentity), Scheme.Name);
-
-                return AuthenticateResult.Success(ticket);
+                return AuthenticateResult.Fail(ex.Message);
             }
+
+            //verify user agent
+            var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
+            if (token.UserAgent != userAgent) 
+            {
+                return AuthenticateResult.Fail("User agent in token doesn't match the user agent used.");
+            }
+
+            //verify ip address
+            var ipAddress = Request.HttpContext.Connection.RemoteIpAddress;
+            if (token.IPAddress != ipAddress.ToString()) 
+            {
+                return AuthenticateResult.Fail("IP address registered in token doesn't match the ip address the request is sent from.");
+            }
+
+            var user = token.User;
+
+            var claims = 
+                new List<Claim>()
+                {
+                    new Claim("AuthToken", tokenString),
+                    new Claim("UserId", user.Id.ToString()),
+                    new Claim("EmailVerified", user.Email.IsVerified.ToString())
+                };
+
+            var claimsIdentity = new ClaimsIdentity(claims);
+
+            var ticket = new AuthenticationTicket(new ClaimsPrincipal(claimsIdentity), Scheme.Name);
+
+            return AuthenticateResult.Success(ticket);
         }
     }
 }

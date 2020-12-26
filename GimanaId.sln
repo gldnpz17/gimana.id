@@ -11,9 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostgresDatabase", "Infrast
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "UseCases\Application\Application.csproj", "{C8492BA5-F10D-4EA5-8A94-321F56CC2016}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InMemoryDatabase", "Infrastructure\InMemoryDatabase\InMemoryDatabase.csproj", "{40F643CB-02CB-4032-AC72-9C115D17EF09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InMemoryDatabase", "Infrastructure\InMemoryDatabase\InMemoryDatabase.csproj", "{40F643CB-02CB-4032-AC72-9C115D17EF09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDomainServiceImplementation", "Infrastructure\SimpleDomainServiceImplementation\SimpleDomainServiceImplementation.csproj", "{F1A5F213-0BB6-4522-B526-D65FAC05B682}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleDomainServiceImplementation", "Infrastructure\SimpleDomainServiceImplementation\SimpleDomainServiceImplementation.csproj", "{F1A5F213-0BB6-4522-B526-D65FAC05B682}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{82E315E9-C6F6-4BDA-AABC-B173D4E2D35B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

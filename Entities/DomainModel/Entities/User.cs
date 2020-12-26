@@ -20,7 +20,7 @@ namespace DomainModel.Entities
         public virtual IList<AuthToken> AuthTokens { get; set; } = new List<AuthToken>();
         public virtual IList<Article> Articles { get; set; } = new List<Article>();
 
-        public AuthToken Login(string password, string IpAddress, string userAgent, IDateTimeService dateTimeService,
+        public AuthToken Login(string password, string IpAddress, string userAgent, bool IsRemembered, IDateTimeService dateTimeService,
             IPasswordHashingService passwordHashingService, IAlphanumericTokenGenerator alphanumericTokenGenerator)
         {
             if (PasswordCredential.Verify(password, passwordHashingService) == true)
@@ -29,9 +29,10 @@ namespace DomainModel.Entities
                 var token = new AuthToken()
                 {
                     Token = alphanumericTokenGenerator.GenerateAlphanumericToken(64),
-                    CreatedAt = dateTimeService.GetCurrentDateTime(),
+                    ExpireDate = IsRemembered ? dateTimeService.GetCurrentDateTime().AddDays(30) : dateTimeService.GetCurrentDateTime().AddDays(1),
                     IPAddress = IpAddress,
-                    UserAgent = userAgent
+                    UserAgent = userAgent,
+                    IsRemembered = IsRemembered
                 };
 
                 AuthTokens.Add(token);

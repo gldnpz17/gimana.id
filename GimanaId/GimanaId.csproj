@@ -35,6 +35,9 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Entities\DomainModel\DomainModel.csproj" />
     <ProjectReference Include="..\UseCases\Application\Application.csproj" />
   </ItemGroup>

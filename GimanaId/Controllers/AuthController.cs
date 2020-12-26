@@ -10,6 +10,10 @@ using Microsoft.EntityFrameworkCore;
 using GimanaIdApi.Common.Config;
 using GimanaIdApi.DTOs.Request;
 using GimanaIdApi.DTOs.Response;
+using MediatR;
+using Application.Auth.Commands.Login;
+using Application.Auth.Commands.Logout;
+using Application.Auth.Commands.SignUp;
 
 namespace GimanaIdApi.Controllers
 {
@@ -17,9 +21,13 @@ namespace GimanaIdApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public AuthController()
-        {
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
+        public AuthController(IMediator mediator, IMapper mapper)
+        {
+            _mediator = mediator;
+            _mapper = mapper;
         }
         
         /// <summary>
@@ -30,7 +38,25 @@ namespace GimanaIdApi.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AuthTokenDto>> Login([FromBody]LoginDto dto)
         {
+            var token = await _mediator.Send(new LoginCommand()
+            {
+                Username = dto.Username,
+                Password = dto.Password,
+                IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
+                UserAgent = Request.Headers["User-Agent"]
+            });
 
+            Response.Cookies.Append("session-token", token.Token, new CookieOptions()
+            {
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                HttpOnly = true,
+                Expires = dto.RememberMe ? DateTime.Now.AddMonths(1) : DateTime.Now.AddDays(1)
+            });
+
+            var output = _mapper.Map<AuthTokenDto>(token);
+
+            return output;
         }
 
         /// <summary>
@@ -41,7 +67,12 @@ namespace GimanaIdApi.Controllers
         [HttpPost("logout")]
         public async Task<ActionResult> Logout()
         {
+            await _mediator.Send(new LogoutCommand()
+            {
+                AuthToken = User.FindFirst("AuthToken").Value
+            });
 
+            return Ok();
         }
 
         /// <summary>
@@ -52,7 +83,14 @@ namespace GimanaIdApi.Controllers
         [HttpPost("sign-up")]
         public async Task<ActionResult> SignUp([FromBody]SignUpDto dto)
         {
+            await _mediator.Send(new SignUpCommand()
+            {
+                Username = dto.Username,
+                Password = dto.Password,
+                EmailAddress = dto.Email
+            });
 
+            return Ok();
         }
 
         /// <summary>
@@ -63,7 +101,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("send-password-reset-message")]
         public async Task<ActionResult> SendPasswordResetMessage([FromBody]SendPasswordResetMessageDto dto)
         {
-
+            return StatusCode(501); //not implemented
         }
 
         /// <summary>
@@ -74,7 +112,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("reset-password")]
         public async Task<ActionResult> ResetPassword([FromBody]ResetPasswordDto dto)
         {
-
+            return StatusCode(501); //not implemented
         }
     }
 }
