@@ -82,25 +82,28 @@ namespace Application
                     break;
             }
 
-            var user = new User()
+            if (dbContext.Users.ToList().Count == 0)
             {
-                Id = Guid.NewGuid(),
-                Username = "admin",
-                Email = new Email()
+                var user = new User()
                 {
-                    EmailAddress = "admin@mail.com",
-                    IsVerified = true
-                },
-                PasswordCredential = new PasswordCredential(
-                    "password",
-                    new PasswordHashingService(),
-                    new SecureRngService()),
-                Privileges = new List<UserPrivilege>() { new UserPrivilege() { PrivilegeName = "ADMIN" } }
-            };
+                    Id = Guid.NewGuid(),
+                    Username = "admin",
+                    Email = new Email()
+                    {
+                        EmailAddress = "admin@mail.com",
+                        IsVerified = true
+                    },
+                    PasswordCredential = new PasswordCredential(
+                        "password",
+                        new PasswordHashingService(),
+                        new SecureRngService()),
+                    Privileges = new List<UserPrivilege>() { new UserPrivilege() { PrivilegeName = "ADMIN" } }
+                };
 
-            dbContext.Users.AddAsync(user);
+                dbContext.Users.AddAsync(user);
 
-            dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
 
             switch (_config.TypeOfEnvironment)
             {
