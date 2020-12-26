@@ -16,7 +16,7 @@ Saat ini, proyek sedang dalam masa uji coba (*trial phase*).
 ### Back End
 * ASP.NET Core (Web framework)
 * Entity Framework Core (O/RM)
-* AUtofac (Dependency injection)
+* Autofac (Dependency injection)
 * MediatR (Mediator implementation for CQRS)
 * AutoMapper (object-object mapper)
 * PostgreSQL (RDBMS)
