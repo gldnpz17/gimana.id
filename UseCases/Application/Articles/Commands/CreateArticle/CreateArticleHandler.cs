@@ -30,13 +30,13 @@ namespace Application.Articles.Commands.CreateArticle
             article.DateCreated = _dateTimeService.GetCurrentDateTime();
 
             //number each part and step
-            for (int partCount = 0; partCount < article.Parts.Count; partCount++)
+            for (int partCount = 1; partCount <= article.Parts.Count; partCount++)
             {
                 var part = article.Parts[partCount];
 
                 part.PartNumber = partCount;
 
-                for (int stepCount = 0; stepCount < part.Steps.Count; stepCount++)
+                for (int stepCount = 1; stepCount <= part.Steps.Count; stepCount++)
                 {
                     part.Steps[stepCount].StepNumber = stepCount;
                 }
