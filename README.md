@@ -14,10 +14,11 @@ Saat ini, proyek sedang dalam masa uji coba (*trial phase*).
 * Autoprefixer
 
 ### Back End
-* .NET Standard
-* ASP.NET Core (web framework)
+* ASP.NET Core (Web framework)
 * Entity Framework Core (O/RM)
-* AutoMapper (object-object mapper)
+* Autofac (Dependency injection)
+* MediatR (Mediator implementation for CQRS)
+* AutoMapper (Object-object mapper)
 * PostgreSQL (RDBMS)
 * NSwag (API preview and documentation)
 
