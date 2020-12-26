@@ -37,11 +37,11 @@ namespace GimanaIdApi.Common.Mapper
                     config.CreateMap<User, SimpleUserDto>();
                     config.CreateMap<Email, UserEmailDto>();
                     config.CreateMap<User, UserIdDto>();
-                    //config.CreateMap<UserPrivilege, UserPrivilegeDto>();
+                    config.CreateMap<UserPrivilege, UserPrivilegeDto>();
 
                     config.CreateMap<CreateImageDto, Image>();
 
-                    config.CreateMap<CreateArticlePartDto, ArticlePart>();
+                    config.CreateMap<CreateArticleDto, Article>();
                     //config.CreateMap<CreateArticleStepDto, ArticleIssue>();
                     config.CreateMap<CreateArticlePartDto, ArticlePart>();
                     config.CreateMap<CreateArticleStepDto, ArticleStep>();

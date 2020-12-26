@@ -8,6 +8,6 @@ namespace DomainModel.Services
 {
     public interface ISecureRngService
     {
-        byte[] GenerateRandomBytes();
+        byte[] GenerateRandomBytes(int length);
     }
 }

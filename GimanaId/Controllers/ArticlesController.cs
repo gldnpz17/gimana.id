@@ -84,7 +84,8 @@ namespace GimanaIdApi.Controllers
         {
             var result = await _mediator.Send(new CreateArticleCommand() 
             { 
-                Article = _mapper.Map<Article>(dto) 
+                User = await GetCurrentUser(),
+                Article = _mapper.Map<Article>(dto)
             });
 
             return new CreateArticleResponseDto() { Id = result.Id };

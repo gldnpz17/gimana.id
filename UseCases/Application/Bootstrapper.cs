@@ -1,8 +1,11 @@
 ﻿using Application.Common.Config;
 using Autofac;
+using DomainModel.Entities;
 using DomainModel.Services;
+using DomainModel.ValueObjects;
 using InMemoryDatabase;
 using MediatR;
+using MediatR.Extensions.Autofac.DependencyInjection;
 using PostgresDatabase;
 using SimpleDomainServiceImplementation;
 using System;
@@ -25,12 +28,13 @@ namespace Application
 
         public Bootstrapper(ApplicationConfig config)
         {
+            _config = config;
+
             RegisterDependencies();
 
             _scope = _container.BeginLifetimeScope();
 
             Mediator = _scope.Resolve<IMediator>();
-            _config = config;
         }
 
         private void RegisterDependencies()
@@ -41,26 +45,7 @@ namespace Application
             builder.RegisterInstance(_config).As<ApplicationConfig>().SingleInstance();
 
             //register mediator components
-            builder.RegisterType<Mediator>().As<IMediator>().InstancePerLifetimeScope();
-
-            // request & notification handlers
-            builder.Register<ServiceFactory>(context =>
-            {
-                var c = context.Resolve<IComponentContext>();
-                return t => c.Resolve(t);
-            });
-
-            // finally register our custom code (individually, or via assembly scanning)
-            // - requests & handlers as transient, i.e. InstancePerDependency()
-            // - pre/post-processors as scoped/per-request, i.e. InstancePerLifetimeScope()
-            // - behaviors as transient, i.e. InstancePerDependency()
-            //builder.RegisterAssemblyTypes(typeof(IRequestHandler<>).GetTypeInfo().Assembly).AsImplementedInterfaces().InstancePerDependency();
-            //builder.RegisterAssemblyTypes(typeof(IRequestHandler<,>).GetTypeInfo().Assembly).AsImplementedInterfaces().InstancePerDependency();
-
-            //register request handlers
-            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-                .Where(t => t.IsAssignableFrom(typeof(IRequestHandler<>)))
-                .AsSelf();
+            builder.RegisterMediatR(Assembly.GetExecutingAssembly());
 
             //register domain service implementations
             builder.RegisterInstance(new AlphanumericTokenGenerator()).As<IAlphanumericTokenGenerator>().SingleInstance();
@@ -97,22 +82,23 @@ namespace Application
                     break;
             }
 
-            dbContext.Users.Add(
-                new DomainModel.Entities.User()
+            var user = new User()
+            {
+                Id = Guid.NewGuid(),
+                Username = "admin",
+                Email = new Email()
                 {
-                    Id = Guid.NewGuid(),
-                    Username = "admin",
-                    Email = new DomainModel.Entities.Email()
-                    {
-                        EmailAddress = "admin@mail.com",
-                        IsVerified = true
-                    },
-                    PasswordCredential = new DomainModel.Entities.PasswordCredential(
-                        "password",
-                        new PasswordHashingService(),
-                        new SecureRngService()),
-                    Privileges = new List<string>() { "ADMIN" }
-                });
+                    EmailAddress = "admin@mail.com",
+                    IsVerified = true
+                },
+                PasswordCredential = new PasswordCredential(
+                    "password",
+                    new PasswordHashingService(),
+                    new SecureRngService()),
+                Privileges = new List<UserPrivilege>() { new UserPrivilege() { PrivilegeName = "ADMIN" } }
+            };
+
+            dbContext.Users.AddAsync(user);
 
             dbContext.SaveChanges();
 

@@ -9,7 +9,7 @@ namespace DomainModel.Entities
 {
     public class AuthToken
     {
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public virtual string Token { get; set; }
         public virtual DateTime ExpireDate { get; set; }
         public virtual string UserAgent { get; set; }

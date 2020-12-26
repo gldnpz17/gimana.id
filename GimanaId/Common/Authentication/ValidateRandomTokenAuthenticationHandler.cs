@@ -48,7 +48,9 @@ namespace GimanaIdApi.Common.Authentication
             {
                 token = await _mediator.Send(new VerifyAuthTokenCommand()
                 {
-                    Token = tokenString
+                    Token = tokenString,
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
+                    UserAgent = Request.Headers["User-Agent"]
                 });
             }
             catch (ApplicationException ex)
@@ -79,7 +81,8 @@ namespace GimanaIdApi.Common.Authentication
                 {
                     new Claim("AuthToken", tokenString),
                     new Claim("UserId", user.Id.ToString()),
-                    new Claim("EmailVerified", user.Email.IsVerified.ToString())
+                    new Claim("EmailVerified", user.Email.IsVerified.ToString()),
+                    new Claim("IsBanned", false.ToString())
                 };
 
             var claimsIdentity = new ClaimsIdentity(claims);

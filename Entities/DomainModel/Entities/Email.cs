@@ -11,6 +11,7 @@ namespace DomainModel.Entities
 {
     public class Email
     {
+        public virtual Guid UserId { get; set; }
         public virtual User User { get; set; }
         public virtual string EmailAddress { get; set; }
         public virtual bool IsVerified { get; set; }

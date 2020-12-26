@@ -11,13 +11,18 @@ namespace DomainModel.Entities
 {
     public class PasswordCredential
     {
+        public PasswordCredential() 
+        {
+
+        }
         public PasswordCredential(string password, IPasswordHashingService passwordHashingService, ISecureRngService secureRngService)
         {
-            PasswordSalt = Convert.ToBase64String(secureRngService.GenerateRandomBytes());
+            PasswordSalt = Convert.ToBase64String(secureRngService.GenerateRandomBytes(64));
 
             HashedPassword = passwordHashingService.HashPassword(password, PasswordSalt);
         }
 
+        public virtual Guid UserId { get; set; }
         public virtual User User { get; set; }
         public virtual string HashedPassword { get; set; }
         public virtual string PasswordSalt { get; set; }
@@ -40,7 +45,7 @@ namespace DomainModel.Entities
         {
             if (dateTimeService.GetCurrentDateTime() < PasswordResetToken.CreatedAt.AddHours(6))
             {
-                PasswordSalt = Convert.ToBase64String(secureRngService.GenerateRandomBytes());
+                PasswordSalt = Convert.ToBase64String(secureRngService.GenerateRandomBytes(64));
 
                 HashedPassword = passwordHashingService.HashPassword(newPassword, PasswordSalt);
             }

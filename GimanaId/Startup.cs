@@ -12,17 +12,11 @@ using NSwag.Generation.Processors.Security;
 using GimanaIdApi.Common.Authentication;
 using GimanaIdApi.Common.Config;
 using GimanaIdApi.Common.Mapper;
-using GimanaIdApi.Entities.Entities;
-using GimanaIdApi.Infrastructure.AlphanumericTokenGenerator;
-using GimanaIdApi.Infrastructure.DataAccess;
-using GimanaIdApi.Infrastructure.EmailSender;
-using GimanaIdApi.Infrastructure.PasswordHasher;
-using GimanaIdApi.Infrastructure.SecurePasswordSaltGenerator;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using GimanaId.Infrastructure.Mocks.MockEmailSender;
-using GimanaId.Infrastructure.Mocks.InMemoryDataAccess;
 using Microsoft.Net.Http.Headers;
-using GimanaId.Infrastructure.DateTimeService;
+using Application;
+using Application.Common.Config;
+using MediatR;
 
 namespace GimanaIdApi
 {
@@ -80,84 +74,6 @@ namespace GimanaIdApi
                     };
                 });
 
-            #region init db
-            AppDbContext dbContext = null;
-            if (_env.IsDevelopment())
-            {
-                var devDatabaseType = Environment.GetEnvironmentVariable("DEV_DATABASE_TYPE");
-
-                switch (devDatabaseType)
-                {
-                    case "Concrete":
-                        dbContext = new AppDbContext();
-                        break;
-                    case "InMemory":
-                        dbContext = new InMemoryAppDbContext();
-                        break;
-                    default:
-                        throw new Exception($"environment variable DEV_DATABASE_TYPE has invalid value({devDatabaseType}).");
-                }
-            }
-            else if (_env.IsProduction())
-            {
-                dbContext = new AppDbContext();
-            }
-
-            if (dbContext.Users.Count() == 0)
-            {
-                var salt = new SecurePasswordSaltGenerator().GenerateSecureRandomString();
-                var hasher = new PasswordHasher();
-
-                dbContext.Users.Add(
-                new User()
-                {
-                    Id = Guid.NewGuid(),
-                    Username = Environment.GetEnvironmentVariable("INIT_ADMIN_USERNAME"),
-                    Email = new UserEmail()
-                    {
-                        EmailAddress = Environment.GetEnvironmentVariable("INIT_ADMIN_EMAIL"),
-                        IsVerified = true
-                    },
-                    BanLiftedDate = DateTime.MinValue,
-                    Privileges = new List<UserPrivilege>() { new UserPrivilege() { PrivilegeName = "Admin" } },
-                    PasswordCredential = new PasswordCredential()
-                    {
-                        HashedPassword = hasher.HashPassword(Environment.GetEnvironmentVariable("INIT_ADMIN_PASSWORD"), salt),
-                        PasswordSalt = salt
-                    }
-                });
-
-                dbContext.SaveChanges();
-            }
-            #endregion
-            services.AddTransient(
-                typeof(AppDbContext), 
-                (serviceProvider) => 
-                {
-                    if (_env.IsDevelopment())
-                    {
-                        var devDatabaseType = Environment.GetEnvironmentVariable("DEV_DATABASE_TYPE");
-
-                        switch (devDatabaseType)
-                        {
-                            case "Concrete":
-                                return new AppDbContext();
-                            case "InMemory":
-                                return new InMemoryAppDbContext();
-                            default:
-                                throw new Exception($"environment variable DEV_DATABASE_TYPE has invalid value({devDatabaseType}).");
-                        }
-                    }
-                    else if (_env.IsProduction())
-                    {
-                        return new AppDbContext();
-                    }
-                    else
-                    {
-                        throw new Exception("unknown environment type.");
-                    }                    
-                });
-
             services.AddSingleton(
                 typeof(IMapper), 
                 new Mapper(new MapperConfig().GetConfiguration()));
@@ -168,22 +84,26 @@ namespace GimanaIdApi
                     config.DefaultScheme = "RandomTokenScheme";
                 })
                 .AddScheme<RandomTokenAuthenticationSchemeOptions, ValidateRandomTokenAuthenticationHandler>("RandomTokenScheme", (options) => { });
-                // Do we need to add `.AddCookie()` here?
 
-            if (_env.IsDevelopment())
+            var applicationConfig = new ApplicationConfig()
             {
-                services.AddSingleton(
-                    typeof(IEmailSender),
-                    new MockEmailSender());
+                ApiBaseAddress = Environment.GetEnvironmentVariable("API_BASE_ADDRESS")
+            };
+
+            if (_env.IsDevelopment()) 
+            {
+                applicationConfig.TypeOfEnvironment = TypeOfEnvironment.Development;
             }
             else if (_env.IsProduction()) 
             {
-                services.AddSingleton(
-                    typeof(IEmailSender),
-                    new SmtpEmailSender(
-                        Environment.GetEnvironmentVariable("EMAIL_CREDENTIAL_ADDRESS"),
-                        Environment.GetEnvironmentVariable("EMAIL_CREDENTIAL_PASSWORD")));
+                applicationConfig.TypeOfEnvironment = TypeOfEnvironment.Production;
             }
+            else
+            {
+                throw new Exception("Invalid environment type.");
+            }
+
+            services.AddSingleton(typeof(IMediator), new Bootstrapper(applicationConfig).Mediator);
 
             services.AddAuthorization(config =>
             {

@@ -29,6 +29,9 @@ namespace Application.Articles.Commands.CreateArticle
             article.Id = Guid.NewGuid();
             article.DateCreated = _dateTimeService.GetCurrentDateTime();
 
+            article.Users.Add(request.User);
+            request.User.Articles.Add(article);
+
             //number each part and step
             for (int partCount = 0; partCount < article.Parts.Count; partCount++)
             {

@@ -47,13 +47,19 @@ namespace GimanaIdApi.Controllers
                 IsRemembered = dto.RememberMe
             });
 
-            Response.Cookies.Append("session-token", token.Token, new CookieOptions()
+            var cookieOptions = new CookieOptions()
             {
-                Secure = true,
+                //Secure = true,
                 SameSite = SameSiteMode.Strict,
-                HttpOnly = true,
-                Expires = dto.RememberMe ? DateTime.Now.AddMonths(1) : DateTime.Now.AddDays(1)
-            });
+                HttpOnly = true
+            };
+
+            if (dto.RememberMe)
+            {
+                cookieOptions.Expires = DateTime.Now.AddYears(10);
+            }
+
+            Response.Cookies.Append("session-token", token.Token, cookieOptions);
 
             var output = _mapper.Map<AuthTokenDto>(token);
 

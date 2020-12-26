@@ -13,7 +13,7 @@ namespace DomainModel.Entities
     {
         public virtual Guid Id { get; set; }
         public virtual string Username { get; set; }
-        public virtual IList<string> Privileges { get; set; } = new List<string>();
+        public virtual IList<UserPrivilege> Privileges { get; set; } = new List<UserPrivilege>();
         public virtual Image ProfilePicture { get; set; }
         public virtual Email Email { get; set; }
         public virtual PasswordCredential PasswordCredential { get; set; }
