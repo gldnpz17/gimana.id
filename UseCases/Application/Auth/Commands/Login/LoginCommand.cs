@@ -14,5 +14,6 @@ namespace Application.Auth.Commands.Login
         public string Password { get; set; }
         public string IpAddress { get; set; }
         public string UserAgent { get; set; }
+        public bool IsRemembered { get; set; }
     }
 }

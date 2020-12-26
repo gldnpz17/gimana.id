@@ -85,19 +85,19 @@ namespace Application
             builder.RegisterInstance(new SecureRngService()).As<ISecureRngService>().SingleInstance();
 
             //initialize and register database
-            AppDbContext context = null; 
+            AppDbContext dbContext = null; 
             switch (_config.TypeOfEnvironment)
             {
                 case TypeOfEnvironment.Development:
-                    context = new InMemoryAppDbContext();
+                    dbContext = new InMemoryAppDbContext();
                     break;
 
                 case TypeOfEnvironment.Production:
-                    context = new AppDbContext();
+                    dbContext = new AppDbContext();
                     break;
             }
 
-            context.Users.Add(
+            dbContext.Users.Add(
                 new DomainModel.Entities.User()
                 {
                     Id = Guid.NewGuid(),
@@ -114,7 +114,7 @@ namespace Application
                     Privileges = new List<string>() { "ADMIN" }
                 });
 
-            context.SaveChanges();
+            dbContext.SaveChanges();
 
             switch (_config.TypeOfEnvironment)
             {

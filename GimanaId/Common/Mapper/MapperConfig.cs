@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using GimanaIdApi.DTOs.Request;
 using GimanaIdApi.DTOs.Response;
-using GimanaIdApi.Entities.Entities;
-using GimanaIdApi.Entities.ValueObjects;
+using DomainModel.ValueObjects;
+using DomainModel.Entities;
 
 namespace GimanaIdApi.Common.Mapper
 {
@@ -18,10 +18,10 @@ namespace GimanaIdApi.Common.Mapper
             return new MapperConfiguration(
                 (config) =>
                 {
-                    config.CreateMap<ArticleHistory, ArticleHistoryDto>();
-                    config.CreateMap<ArticleIssue, ArticleIssueDto>();
-                    config.CreateMap<ArticlePart, ArticlePartDto>();
-                    config.CreateMap<ArticleRating, ArticleRatingDto>();
+                    //config.CreateMap<ArticleHistory, ArticleHistoryDto>();
+                    //config.CreateMap<ArticleIssue, ArticleIssueDto>();
+                    //config.CreateMap<ArticlePart, ArticlePartDto>();
+                    //config.CreateMap<ArticleRating, ArticleRatingDto>();
                     config.CreateMap<ArticleStep, ArticleStepDto>();
                     config.CreateMap<AuthToken, AuthTokenDto>();
                     config.CreateMap<Article, DetailedArticleDto>()
@@ -35,14 +35,14 @@ namespace GimanaIdApi.Common.Mapper
                     config.CreateMap<Image, ImageDto>();
                     config.CreateMap<Article, SimpleArticleDto>();
                     config.CreateMap<User, SimpleUserDto>();
-                    config.CreateMap<UserEmail, UserEmailDto>();
+                    config.CreateMap<Email, UserEmailDto>();
                     config.CreateMap<User, UserIdDto>();
-                    config.CreateMap<UserPrivilege, UserPrivilegeDto>();
+                    //config.CreateMap<UserPrivilege, UserPrivilegeDto>();
 
                     config.CreateMap<CreateImageDto, Image>();
 
                     config.CreateMap<CreateArticlePartDto, ArticlePart>();
-                    config.CreateMap<CreateArticleStepDto, ArticleIssue>();
+                    //config.CreateMap<CreateArticleStepDto, ArticleIssue>();
                     config.CreateMap<CreateArticlePartDto, ArticlePart>();
                     config.CreateMap<CreateArticleStepDto, ArticleStep>();
                 });

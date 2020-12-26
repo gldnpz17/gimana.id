@@ -37,7 +37,7 @@ namespace Application.Auth.Commands.Login
                 throw new ApplicationException("Incorrect username or password");
             }
 
-            var token = user.Login(request.Password, request.IpAddress, request.UserAgent, _dateTimeService,
+            var token = user.Login(request.Password, request.IpAddress, request.UserAgent, request.IsRemembered, _dateTimeService,
                 _passwordHashingService, _alphanumericTokenGenerator);
 
             await _appDbContext.SaveChangesAsync();

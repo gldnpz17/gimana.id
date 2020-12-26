@@ -43,7 +43,8 @@ namespace GimanaIdApi.Controllers
                 Username = dto.Username,
                 Password = dto.Password,
                 IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
-                UserAgent = Request.Headers["User-Agent"]
+                UserAgent = Request.Headers["User-Agent"],
+                IsRemembered = dto.RememberMe
             });
 
             Response.Cookies.Append("session-token", token.Token, new CookieOptions()

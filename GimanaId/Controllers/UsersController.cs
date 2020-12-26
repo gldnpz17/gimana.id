@@ -15,6 +15,12 @@ using GimanaIdApi.DTOs.Request;
 using GimanaIdApi.DTOs.Response;
 using GimanaId.DTOs.Response;
 using GimanaId.DTOs.Request;
+using MediatR;
+using Application.Users.Queries.ReadUserById;
+using Application.Users.Commands.SendEmailVerificationMessage;
+using Application.Users.Commands.VerifyEmail;
+using DomainModel.Entities;
+using Application.Users.Queries.CheckUsernameAvailability;
 
 namespace GimanaIdApi.Controllers
 {
@@ -22,9 +28,13 @@ namespace GimanaIdApi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        public UsersController()
-        {
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
+        public UsersController(IMediator mediator, IMapper mapper)
+        {
+            _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -32,11 +42,14 @@ namespace GimanaIdApi.Controllers
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [Authorize(Policy = AuthorizationPolicyConstants.AuthenticatedUsersOnlyPolicy)]
         [HttpGet("{userId}")]
         public async Task<ActionResult<DetailedUserDto>> ReadUserById([FromRoute]string userId) 
         {
+            var result = await _mediator.Send(new ReadUserByIdQuery() { Id = Guid.Parse(userId) });
 
+            var output = _mapper.Map<DetailedUserDto>(result);
+
+            return output;
         }
 
         /// <summary>
@@ -48,7 +61,12 @@ namespace GimanaIdApi.Controllers
         [HttpPost("{userId}/send-email-verification-message")]
         public async Task<ActionResult> SendEmailVerificationMessage([FromRoute]string userId)
         {
+            await _mediator.Send(new SendEmailVerificationMessageCommand()
+            {
+                UserId = Guid.Parse(userId)
+            });
 
+            return Ok();
         }
 
         /// <summary>
@@ -60,7 +78,12 @@ namespace GimanaIdApi.Controllers
         [HttpGet("{userId}/verify-email")]
         public async Task<ActionResult> VerifyEmail([FromRoute]string userId, [FromQuery]string token)
         {
+            await _mediator.Send(new VerifyEmailCommand()
+            {
+                VerificationToken = token
+            });
 
+            return Ok();
         }
 
         /// <summary>
@@ -74,7 +97,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("{userId}/ban")]
         public async Task<ActionResult> BanUser([FromRoute]string userId, [FromBody]BanDto dto)
         {
-
+            return StatusCode(501); //not yet implemented
         }
 
         /// <summary>
@@ -87,7 +110,7 @@ namespace GimanaIdApi.Controllers
         [HttpPost("{userId}/privileges")]
         public async Task<ActionResult> GrantPrivilege([FromRoute]string userId, [FromBody]GrantPrivilegeDto dto)
         {
-
+            return StatusCode(501); //not yet implemented
         }
 
         /// <summary>
@@ -100,7 +123,7 @@ namespace GimanaIdApi.Controllers
         [HttpDelete("{userId}/privileges")]
         public async Task<ActionResult> RevokePrivilege([FromRoute]string userId, [FromBody]RevokePrivilegeDto dto)
         {
-
+            return StatusCode(501); //not yet implemented
         }
 
         /// <summary>
@@ -111,7 +134,7 @@ namespace GimanaIdApi.Controllers
         [HttpDelete("{userId}")]
         public async Task<ActionResult> DeleteUser([FromRoute]string userId) 
         {
-
+            return StatusCode(501); //not yet implemented
         }
 
         /// <summary>
@@ -122,7 +145,12 @@ namespace GimanaIdApi.Controllers
         [HttpGet("get-user-id")]
         public async Task<ActionResult<UserIdDto>> GetUserId()
         {
+            var result = await GetCurrentUser();
 
+            return new UserIdDto()
+            {
+                Id = result.Id
+            };
         }
         
         /// <summary>
@@ -133,7 +161,16 @@ namespace GimanaIdApi.Controllers
         [HttpGet("check-username-availability/{username}")]
         public async Task<ActionResult<UsernameAvailabilityDto>> CheckUsernameAvailability([FromRoute]string username)
         {
+            var result = await _mediator.Send(new CheckUsernameAvailabilityQuery()
+            {
+                Username = username
+            });
 
+            return new UsernameAvailabilityDto()
+            {
+                Username = username,
+                IsAvailable = result
+            };
         }
 
         /// <summary>
@@ -145,12 +182,17 @@ namespace GimanaIdApi.Controllers
         [HttpPut("{userId}")]
         public async Task<ActionResult> UpdateUser([FromRoute]string userId, [FromBody]UpdateUserDto dto)
         {
-
+            return StatusCode(501); //not yet implemented
         }
 
         private async Task<User> GetCurrentUser()
         {
+            var result = await _mediator.Send(new ReadUserByIdQuery()
+            {
+                Id = Guid.Parse(User.FindFirst("UserId").Value)
+            });
 
+            return result;
         }
     }
 }
