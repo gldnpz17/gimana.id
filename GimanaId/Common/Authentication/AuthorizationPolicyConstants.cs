@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GimanaIdApi.Common.Authentication
+﻿namespace GimanaIdApi.Common.Authentication
 {
     public static class AuthorizationPolicyConstants
     {

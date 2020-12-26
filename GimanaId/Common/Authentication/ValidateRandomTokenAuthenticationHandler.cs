@@ -1,19 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using System.Net;
 using MediatR;
-using Application.Auth.Queries.ReadUserByAuthToken;
 using Application.Auth.Commands.VerifyAuthToken;
 using DomainModel.Entities;
 
