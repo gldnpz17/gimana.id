@@ -18,20 +18,20 @@ namespace InMemoryDatabase
         {
             builder.Entity<User>(b =>
             {
-                b.OwnsOne(e => e.ProfilePicture);
+                b.HasOne(e => e.ProfilePicture).WithMany();
 
                 b.OwnsMany(e => e.Privileges);
             });
 
             builder.Entity<Article>(b =>
             {
-                b.OwnsOne(e => e.HeroImage);
+                b.HasOne(e => e.HeroImage).WithMany();
 
                 b.OwnsMany(e => e.Parts, part =>
                 {
                     part.OwnsMany(e => e.Steps, step => 
                     {
-                        step.OwnsOne(e => e.Image);
+                        step.HasOne(e => e.Image).WithMany();
                     });
                 });
             });
@@ -41,6 +41,13 @@ namespace InMemoryDatabase
                 b.HasKey(e => e.EmailAddress);
 
                 b.OwnsOne(e => e.VerificationToken);
+            });
+
+            builder.Entity<Image>(b =>
+            {
+                b.HasKey(e => e.Id);
+
+                b.Property(e => e.Id).HasDefaultValue(Guid.NewGuid());
             });
 
             builder.Entity<AuthToken>(b =>

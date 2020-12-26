@@ -102,10 +102,13 @@ namespace GimanaIdApi.Controllers
         [HttpPut("{articleId}")]
         public async Task<ActionResult> UpdateArticle([FromRoute]string articleId, [FromBody]CreateArticleDto dto)
         {
+            var newArticle = _mapper.Map<Article>(dto);
+            newArticle.Id = Guid.Parse(articleId);
+
             await _mediator.Send(new UpdateArticleCommand()
             {
                 User = await GetCurrentUser(),
-                Article = _mapper.Map<Article>(dto)
+                Article = newArticle
             });
 
             return Ok();

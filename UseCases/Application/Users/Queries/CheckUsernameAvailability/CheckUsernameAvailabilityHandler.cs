@@ -23,7 +23,7 @@ namespace Application.Users.Queries.CheckUsernameAvailability
         {
             var user = await _appDbContext.Users.FirstOrDefaultAsync(i => i.Username == request.Username);
 
-            if (user != null)
+            if (user == null)
             {
                 return true;
             }

@@ -79,6 +79,8 @@ namespace GimanaIdApi.Controllers
                 AuthToken = User.FindFirst("AuthToken").Value
             });
 
+            Response.Cookies.Delete("session-token");
+
             return Ok();
         }
 

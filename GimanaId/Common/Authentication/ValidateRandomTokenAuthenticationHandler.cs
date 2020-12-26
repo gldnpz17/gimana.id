@@ -55,7 +55,7 @@ namespace GimanaIdApi.Common.Authentication
             }
             catch (ApplicationException ex)
             {
-                Response.Cookies.Delete("session-token");
+                //Response.Cookies.Delete("session-token");
 
                 return AuthenticateResult.Fail(ex.Message);
             }

@@ -73,6 +73,8 @@ namespace DomainModel.Entities
                 Body = $"<a href=\"{apiBaseAddress}/Users/{User.Id}/verify-email?token={verificationToken.Token}\">click here to verify</a>"
             };
 
+            emailSender.SendEmail(email);
+
             VerificationToken = verificationToken;
         }
     }

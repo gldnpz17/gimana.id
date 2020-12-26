@@ -9,7 +9,7 @@ namespace DomainModel.ValueObjects
 {
     public class UserPrivilege : ValueObject
     {
-        public string PrivilegeName { get; set; }
+        public virtual string PrivilegeName { get; set; }
 
         protected override IEnumerable<object> GetAtomicValues()
         {

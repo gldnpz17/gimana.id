@@ -34,7 +34,7 @@ namespace Application.Articles.Commands.UpdateArticle
             article.HeroImage = request.Article.HeroImage;
             article.Parts = request.Article.Parts;
             
-            if (!article.Users.Contains(request.User))
+            if (article.Users.FirstOrDefault(i => i.Id == request.User.Id) == null)
             {
                 article.Users.Add(request.User);
             }

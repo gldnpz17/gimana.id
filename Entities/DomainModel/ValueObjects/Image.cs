@@ -9,8 +9,9 @@ namespace DomainModel.ValueObjects
 {
     public class Image : ValueObject
     {
-        public string FileFormat { get; set; }
-        public string Base64EncodedData { get; set; }
+        public Guid Id { get; set; }
+        public virtual string FileFormat { get; set; }
+        public virtual string Base64EncodedData { get; set; }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
