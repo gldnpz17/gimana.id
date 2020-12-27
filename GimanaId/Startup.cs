@@ -19,8 +19,7 @@ namespace GimanaIdApi
     {
         private IWebHostEnvironment _env;
 
-        public Startup(
-            IWebHostEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             _env = env;
         }
@@ -29,56 +28,52 @@ namespace GimanaIdApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            var config =
-                new ApiConfig()
-                {
-                    AuthTokenLength = 32,
-                    PasswordResetTokenLength = 32,
-                    EmailVerificationTokenLength = 32,
-                    EmailVerificationTokenLifetime = new TimeSpan(30, 0, 0, 0),
-                    PasswordResetTokenLifetime = new TimeSpan(2, 0, 0),
-                    ApiBaseAddress = Environment.GetEnvironmentVariable("API_BASE_ADDRESS")
-                };
+            var config = new ApiConfig()
+            {
+                AuthTokenLength = 32,
+                PasswordResetTokenLength = 32,
+                EmailVerificationTokenLength = 32,
+                EmailVerificationTokenLifetime = new TimeSpan(30, 0, 0, 0),
+                PasswordResetTokenLifetime = new TimeSpan(2, 0, 0),
+                ApiBaseAddress = Environment.GetEnvironmentVariable("API_BASE_ADDRESS")
+            };
 
             services.AddSingleton(typeof(ApiConfig), config);
 
-            services.AddSwaggerDocument(
-                (config) =>
+            services.AddSwaggerDocument((config) =>
+            {
+                config.DocumentProcessors.Add(
+                new SecurityDefinitionAppender("AuthToken",
+                new NSwag.OpenApiSecurityScheme
                 {
-                    config.DocumentProcessors.Add(
-                    new SecurityDefinitionAppender("AuthToken",
-                    new NSwag.OpenApiSecurityScheme
-                    {
-                        Type = NSwag.OpenApiSecuritySchemeType.ApiKey,
-                        Name = "Auth-Token",
-                        In = NSwag.OpenApiSecurityApiKeyLocation.Header,
-                    }));
-                    config.OperationProcessors.Add(new OperationSecurityScopeProcessor("AuthToken"));
+                    Type = NSwag.OpenApiSecuritySchemeType.ApiKey,
+                    Name = "Auth-Token",
+                    In = NSwag.OpenApiSecurityApiKeyLocation.Header,
+                }));
+                config.OperationProcessors.Add(new OperationSecurityScopeProcessor("AuthToken"));
 
-                    config.PostProcess =
-                    (document) =>
+                config.PostProcess = (document) =>
+                {
+                    document.Info.Version = "v1";
+                    document.Info.Title = "gimana.id API";
+                    document.Info.Description = "The backend API for gimana.id, a group project for DTETI FT UGM's enterpreunership course.";
+                    document.Info.Contact = new NSwag.OpenApiContact()
                     {
-                        document.Info.Version = "v1";
-                        document.Info.Title = "gimana.id API";
-                        document.Info.Description = "The backend API for gimana.id, a group project for DTETI FT UGM's enterpreunership course.";
-                        document.Info.Contact = new NSwag.OpenApiContact()
-                        {
-                            Name = "Firdaus Bisma Suryakusuma",
-                            Email = "firdausbismasuryakusuma@mail.ugm.ac.id"
-                        };
+                        Name = "Firdaus Bisma Suryakusuma",
+                        Email = "firdausbismasuryakusuma@mail.ugm.ac.id"
                     };
-                });
+                };
+            });
 
             services.AddSingleton(
                 typeof(IMapper), 
                 new Mapper(new MapperConfig().GetConfiguration()));
 
-            services.AddAuthentication(
-                (config) =>
-                {
-                    config.DefaultScheme = "RandomTokenScheme";
-                })
-                .AddScheme<RandomTokenAuthenticationSchemeOptions, ValidateRandomTokenAuthenticationHandler>("RandomTokenScheme", (options) => { });
+            services.AddAuthentication((config) =>
+            {
+                config.DefaultScheme = "RandomTokenScheme";
+            })
+            .AddScheme<RandomTokenAuthenticationSchemeOptions, ValidateRandomTokenAuthenticationHandler>("RandomTokenScheme", (options) => { });
 
             var applicationConfig = new ApplicationConfig()
             {

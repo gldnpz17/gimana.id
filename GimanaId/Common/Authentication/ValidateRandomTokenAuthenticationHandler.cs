@@ -70,14 +70,13 @@ namespace GimanaIdApi.Common.Authentication
 
             var user = token.User;
 
-            var claims = 
-                new List<Claim>()
-                {
-                    new Claim("AuthToken", tokenString),
-                    new Claim("UserId", user.Id.ToString()),
-                    new Claim("EmailVerified", user.Email.IsVerified.ToString()),
-                    new Claim("IsBanned", false.ToString())
-                };
+            var claims = new List<Claim>()
+            {
+                new Claim("AuthToken", tokenString),
+                new Claim("UserId", user.Id.ToString()),
+                new Claim("EmailVerified", user.Email.IsVerified.ToString()),
+                new Claim("IsBanned", false.ToString())
+            };
 
             var claimsIdentity = new ClaimsIdentity(claims);
 

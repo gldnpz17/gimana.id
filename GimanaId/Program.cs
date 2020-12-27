@@ -15,12 +15,7 @@ namespace GimanaIdApi
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder
-                    .ConfigureLogging(logging =>
-                    {
-                        logging.AddAzureWebAppDiagnostics();
-                    })
-                    .UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }
